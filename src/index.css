@@ -1,0 +1,29 @@
+@import "@mantine/core/styles.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* For Chrome, Edge, Safari */
+::-webkit-scrollbar {
+  width: 6px; /* ⬅️ make it very thin */
+}
+
+::-webkit-scrollbar-track {
+  background: transparent; /* clean track */
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.35);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.55);
+}
+
+/* For Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.4) transparent;
+}
