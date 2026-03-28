@@ -210,7 +210,7 @@ const BubbleSort = () => {
     <div className={`container ${darkMode ? 'dark' : 'light'}`}>
       {/* Header */}
       <div className="header">
-        <button onClick={() => navigate('/dsa/sorting')} className="back-button">
+        <button onClick={() => navigate(-1)} className="back-button">
           ← Back to Sorting
         </button>
         <h1 className="page-title">🫧 Bubble Sort Visualizer</h1>

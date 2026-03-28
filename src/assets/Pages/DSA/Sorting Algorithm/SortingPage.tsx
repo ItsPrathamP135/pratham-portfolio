@@ -86,7 +86,7 @@ const SortingPage = () => {
         {algorithms.map((algo) => (
           <div
             key={algo.id}
-            onClick={() => navigate(`/dsa/sorting/${algo.id}`)}
+            onClick={() => navigate(`/pratham-portfolio/dsa/sorting/${algo.id}`)}
             className={`${
               darkMode ? "bg-gray-800 border-gray-700 hover:border-teal-500" : "bg-white border-gray-200 hover:border-teal-400"
             } border-2 rounded-xl p-6 cursor-pointer transition-all duration-300 hover:shadow-xl hover:scale-105`}

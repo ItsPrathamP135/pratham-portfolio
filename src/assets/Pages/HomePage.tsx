@@ -20,7 +20,7 @@ const HomePage: React.FC = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* DSA Card */}
         <div
-          onClick={() => navigate('/dsa')}
+          onClick={() => navigate('/pratham-portfolio/dsa')}
           className={`${
             darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'
           } border-2 rounded-2xl p-8 cursor-pointer hover:shadow-xl transition-all hover:scale-103`}

@@ -40,7 +40,7 @@ const GraphsPage = () => {
         {algorithms.map((algo) => (
           <div
             key={algo.id}
-            onClick={() => navigate(`/dsa/graphs/${algo.id}`)}
+            onClick={() => navigate(`/pratham-portfolio/dsa/graphs/${algo.id}`)}
             className={`${
               darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'
             } border-2 rounded-xl p-6 cursor-pointer hover:shadow-xl transition-all hover:scale-105`}

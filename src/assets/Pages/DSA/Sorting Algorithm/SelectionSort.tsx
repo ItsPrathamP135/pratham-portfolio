@@ -257,7 +257,7 @@ const SelectionSort = () => {
       {/* Header */}
       <div className="header">
         <button
-          onClick={() => navigate("/dsa/sorting")}
+          onClick={() => navigate(-1)}
           className="back-button"
         >
           ← Back to Sorting
