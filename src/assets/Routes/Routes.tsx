@@ -2,7 +2,7 @@ import { Routes, Route } from "react-router-dom";
 import Layout from "../Components/Layout/Layout";
 import HomePage from "../Pages/HomePage";
 import NotesPage from "../Pages/NotesPage";
-import SortingPage from "../Pages/DSA/Sorting Algorithm/SortingPage";
+// import SortingPage from "../Pages/DSA/Sorting Algorithm/SortingPage";
 import DSAPage from "../Pages/DSA/DSAPage";
 import TreesPage from "../Pages/DSA/TreesPage";
 import GraphsPage from "../Pages/DSA/GraphPage";
@@ -11,6 +11,7 @@ import BubbleSort from "../Pages/DSA/Sorting Algorithm/BubbleSort";
 import SelectionSort from "../Pages/DSA/Sorting Algorithm/SelectionSort";
 import InsertionSort from "../Pages/DSA/Sorting Algorithm/InsertionSort";
 import QuickSort from "../Pages/DSA/Sorting Algorithm/QuickSort";
+import CAGRCalculator from "../Caxulator/CAGRCalculator";
 
 const AppRoutes = () => {
   return (
@@ -19,7 +20,7 @@ const AppRoutes = () => {
         <Route index element={<HomePage />} />
         <Route path="notes" element={<NotesPage />} />
         <Route path="dsa" element={<DSAPage />} />
-        <Route path="dsa/sorting" element={<SortingPage />} />
+        <Route path="dsa/sorting" element={<CAGRCalculator />} />
         <Route path="dsa/sorting/bubble-sort" element={<BubbleSort />} />
         <Route path="dsa/sorting/selection-sort" element={<SelectionSort />} />
         <Route path="dsa/sorting/insertion-sort" element={<InsertionSort />} />
@@ -35,6 +36,7 @@ const AppRoutes = () => {
           path="dsa/graphs/:algorithmId"
           element={<AlgorithmDetailPage />}
         />
+        <Route path="dsa/calculator" element={<CAGRCalculator />} />
       </Route>
     </Routes>
   );
