@@ -1,0 +1,45 @@
+.cards {
+  @apply grid grid-cols-5 gap-5 p-5;
+}
+
+.heading2 {
+  @apply text-center text-2xl font-bold text-[rgba(4,47,72,1)] mb-1 mt-2 col-span-3;
+}
+
+/* Largest breakpoint first → smallest last */
+
+/* 1024px */
+@media (max-width: 1024px) {
+  .cards {
+    @apply grid grid-cols-4 gap-5 p-5;
+  }
+}
+
+/* 850px */
+@media (max-width: 850px) {
+  .cards {
+    @apply grid grid-cols-3 gap-5 p-5;
+  }
+}
+
+/* 700px */
+@media (max-width: 700px) {
+  .cards {
+    @apply grid grid-cols-2 gap-5 p-5;
+  }
+
+  .heading2 {
+    @apply col-span-1 text-xl mb-2;
+  }
+}
+
+/* 450px */
+@media (max-width: 450px) {
+  .cards {
+    @apply grid grid-cols-1 p-5;
+  }
+
+  .heading2 {
+    @apply col-span-1 text-xl mb-2;
+  }
+}
