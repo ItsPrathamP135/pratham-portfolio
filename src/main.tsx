@@ -4,7 +4,7 @@ import App from "./App.tsx";
 import React from "react";
 import { MantineProvider } from "@mantine/core";
 import { BrowserRouter } from "react-router-dom";
-import { ThemeProvider } from "./assets/Context/ThemeContext.tsx";
+import { ThemeProvider } from "./Context/ThemeContext.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
@@ -15,5 +15,5 @@ createRoot(document.getElementById("root")!).render(
         </BrowserRouter>
       </ThemeProvider>
     </MantineProvider>
-  </React.StrictMode>
+  </React.StrictMode>,
 );
