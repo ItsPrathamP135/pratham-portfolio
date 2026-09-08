@@ -1,20 +1,7 @@
 
 
-// ============================================================
-// System Design — Structural Data
-// ============================================================
-// This file is the SINGLE SOURCE OF TRUTH for the category/block
-// hierarchy. It intentionally contains NO topic content (What/
-// Why/How/etc.) and NO diagram data — those will live in
-// `systemDesignData.ts` (topic layer) and `systemDesignVisuals.ts`
-// respectively, once you're ready to start writing topic pages.
-//
-// To mark a block as done while you study, just flip its status:
-//   status: "PENDING" -> "IN_PROGRESS" -> "COMPLETED"
-// and optionally set completedOn: "2026-09-05" so it counts
-// toward "last 7 days activity" on the landing page.
-
 import type { CategoryProgress, SystemDesignBlock, SystemDesignCategory } from "../Type/systemDesign";
+
 
 const block = (
   blockNumber: number,
@@ -46,8 +33,8 @@ export const systemDesignData: SystemDesignCategory[] = [
     blocks: [
       { ...block(1, "System Design Introduction"), targetDate: "September 9, 2026", hasContent: true },
       { ...block(2, "Functional & Non-Functional Requirements"), targetDate: "September 10, 2026", hasContent: true },
-      block(3, "Scalability"),
-      block(4, "Load Balancer"),
+      { ...block(3, "Scalability", "COMPLETED"), targetDate: "September 10, 2026", hasContent: true, completedOn: "2026-09-08" },
+      { ...block(4, "Load Balancer", "COMPLETED"), targetDate: "September 11, 2026", hasContent: true, completedOn: "2026-09-08" },
       block(5, "CDN"),
       block(6, "Database Replication"),
       block(7, "Database Sharding"),

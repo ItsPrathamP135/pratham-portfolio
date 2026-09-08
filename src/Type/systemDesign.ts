@@ -11,6 +11,7 @@
 
 export type BlockStatus = "PENDING" | "IN_PROGRESS" | "COMPLETED";
 
+
 export interface SystemDesignBlock {
   /** URL-safe slug, unique within its category, e.g. "load-balancer" */
   id: string;

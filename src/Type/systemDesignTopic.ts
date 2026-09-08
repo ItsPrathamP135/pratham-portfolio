@@ -79,29 +79,35 @@ export interface InterviewTrap {
   betterApproach: string;
 }
 
+
 export interface TopicContent {
   /** Matches SystemDesignBlock.id */
   blockId: string;
   /** Matches SystemDesignCategory.id */
   categoryId: string;
-
+ 
   what: string[]; // scannable paragraphs/bullets
   why: string[];
   how: HowStep[]; // ordered pipeline
   when: string[];
   tradeOffs: TradeOffItem[];
-
+ 
   thirtySecondAnswer: string;
   /** Optional second rehearsed answer, e.g. "How do you gather requirements?" */
   secondaryAnswer?: { question: string; answer: string };
-
+ 
   keyTakeaways: string[];
   interviewQuestions: InterviewQuestionGroup[];
-
+ 
   // Optional deep-dive sections, rendered inside WHAT/HOW when present
   deepConcepts?: DeepConcept[]; // rendered under WHAT
   frNfrExamples?: ComparisonExample[]; // rendered under WHAT
+  hldVsLldComparison?: ComparisonExample[]; // rendered under WHAT — reuses ComparisonExample generically
+  comparisonTables?: { title: string; items: ComparisonExample[] }[]; // generic named comparison tables (e.g. L4 vs L7, algorithm selection), rendered under WHAT
   quantitativeReference?: { title: string; rows: QuantitativeRow[] }; // rendered under WHAT
   systemBreakdowns?: SystemBreakdown[]; // rendered under WHAT
   interviewTraps?: InterviewTrap[]; // rendered under HOW
-}
+  scalingStrategies?: TradeOffItem[]; // rendered under HOW — reuses TradeOffItem generically as name+points cards
+  additionalAnswers?: { question: string; answer: string }[]; // extra rehearsed 30-second answers, rendered as a compact list
+ }
+ 

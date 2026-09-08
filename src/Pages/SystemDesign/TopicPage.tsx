@@ -15,6 +15,8 @@ import InterviewTraps from "../../Components/SystemDesign/InterviewTraps";
 import { getAdjacentBlocks, getBlockById } from "../../data/systemDesignData";
 import { getTopicContent } from "../../data/systemDesignTopics";
 import { getTopicVisualization } from "../../data/systemDesignVisuals";
+import QuickAnswerList from "../../Components/SystemDesign/Quickanswerlist";
+
 
 const SectionTitle = ({ children }: { children: string }) => {
   const { darkMode } = useTheme();
@@ -182,6 +184,24 @@ const TopicPage = () => {
                     </div>
                   )}
 
+                  {content.hldVsLldComparison && (
+                    <div className="mt-4">
+                      <p className={`text-xs font-semibold uppercase tracking-wide mb-2 ${darkMode ? "text-gray-500" : "text-gray-400"}`}>
+                        HLD vs LLD
+                      </p>
+                      <ComparisonList items={content.hldVsLldComparison} />
+                    </div>
+                  )}
+
+                  {content.comparisonTables && content.comparisonTables.map((table) => (
+                    <div className="mt-4" key={table.title}>
+                      <p className={`text-xs font-semibold uppercase tracking-wide mb-2 ${darkMode ? "text-gray-500" : "text-gray-400"}`}>
+                        {table.title}
+                      </p>
+                      <ComparisonList items={table.items} />
+                    </div>
+                  ))}
+
                   {content.quantitativeReference && (
                     <div className="mt-4">
                       <QuantitativeReference
@@ -254,6 +274,15 @@ const TopicPage = () => {
                       <InterviewTraps traps={content.interviewTraps} />
                     </div>
                   )}
+
+                  {content.scalingStrategies && (
+                    <div className="mt-4">
+                      <p className={`text-xs font-semibold uppercase tracking-wide mb-2 ${darkMode ? "text-gray-500" : "text-gray-400"}`}>
+                        Scaling Strategies at a Glance
+                      </p>
+                      <TradeOffs items={content.scalingStrategies} />
+                    </div>
+                  )}
                 </section>
 
                 {/* 5. WHEN */}
@@ -321,6 +350,13 @@ const TopicPage = () => {
               </section>
             )}
 
+            {content.additionalAnswers && (
+              <section>
+                <SectionTitle>More 30-Second Answers</SectionTitle>
+                <QuickAnswerList items={content.additionalAnswers} />
+              </section>
+            )}
+
             {/* Key Takeaways — shown here in normal mode too (Quick Revision already showed it above as Key Points) */}
             {!quickRevision && (
               <section>
@@ -347,6 +383,8 @@ const TopicPage = () => {
             <section>
               <InterviewQuestions groups={content.interviewQuestions} />
             </section>
+
+           
           </div>
         )}
 
