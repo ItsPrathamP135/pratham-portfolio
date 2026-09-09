@@ -1,12 +1,13 @@
-
-
-import type { CategoryProgress, SystemDesignBlock, SystemDesignCategory } from "../Type/systemDesign";
-
+import type {
+  CategoryProgress,
+  SystemDesignBlock,
+  SystemDesignCategory,
+} from "../Type/systemDesign";
 
 const block = (
   blockNumber: number,
   title: string,
-  status: SystemDesignBlock["status"] = "PENDING"
+  status: SystemDesignBlock["status"] = "PENDING",
 ): SystemDesignBlock => ({
   id: slugify(title),
   blockNumber,
@@ -31,18 +32,54 @@ export const systemDesignData: SystemDesignCategory[] = [
     targetDate: "September 14, 2026",
     targetDateISO: "2026-09-14",
     blocks: [
-      { ...block(1, "System Design Introduction"), targetDate: "September 9, 2026", hasContent: true },
-      { ...block(2, "Functional & Non-Functional Requirements"), targetDate: "September 10, 2026", hasContent: true },
-      { ...block(3, "Scalability", "COMPLETED"), targetDate: "September 10, 2026", hasContent: true, completedOn: "2026-09-08" },
-      { ...block(4, "Load Balancer", "COMPLETED"), targetDate: "September 11, 2026", hasContent: true, completedOn: "2026-09-08" },
-      block(5, "CDN"),
-      block(6, "Database Replication"),
-      block(7, "Database Sharding"),
-      block(8, "Consistent Hashing"),
+      {
+        ...block(1, "System Design Introduction", "COMPLETED"),
+        targetDate: "September 9, 2026",
+        hasContent: true,
+        completedOn: "2026-09-07",
+      },
+      {
+        ...block(2, "Functional & Non-Functional Requirements", "COMPLETED"),
+        targetDate: "September 10, 2026",
+        hasContent: true,
+        completedOn: "2026-09-07",
+      },
+      {
+        ...block(3, "Scalability", "COMPLETED"),
+        targetDate: "September 10, 2026",
+        hasContent: true,
+        completedOn: "2026-09-08",
+      },
+      {
+        ...block(4, "Load Balancer", "COMPLETED"),
+        targetDate: "September 11, 2026",
+        hasContent: true,
+        completedOn: "2026-09-08",
+      },
+      {
+        ...block(5, "CDN", "COMPLETED"),
+        targetDate: "September 11, 2026",
+        hasContent: true,
+        completedOn: "2026-09-08",
+      },
+      {
+        ...block(6, "Hashing", "COMPLETED"),
+        targetDate: "September 11, 2026",
+        hasContent: true,
+        completedOn: "2026-09-09",
+      },
+      {
+        ...block(7, "Stateful vs Stateless", "COMPLETED"),
+        targetDate: "September 12, 2026",
+        hasContent: true,
+        completedOn: "2026-09-09",
+      },
+
+      block(8, "Database Replication"),
       block(9, "CAP Theorem"),
       block(10, "Distributed Transactions"),
       block(11, "Eventual Consistency"),
-      block(12, "Horizontal vs Vertical Scaling"),
+      block(12, "Database Sharding"),
     ],
   },
   {
@@ -253,24 +290,30 @@ export const systemDesignData: SystemDesignCategory[] = [
 /** Overall System Design target date, shown on the landing page header. */
 export const systemDesignTargetDate = "October 22, 2026";
 
-export const getCategoryById = (categoryId: string): SystemDesignCategory | undefined =>
+export const getCategoryById = (
+  categoryId: string,
+): SystemDesignCategory | undefined =>
   systemDesignData.find((c) => c.id === categoryId);
 
 /** Adjacent blocks within the same category, for Previous/Next topic navigation. */
 export const getAdjacentBlocks = (categoryId: string, blockId: string) => {
   const category = getCategoryById(categoryId);
-  if (!category) return { category: undefined, prev: undefined, next: undefined };
+  if (!category)
+    return { category: undefined, prev: undefined, next: undefined };
   const index = category.blocks.findIndex((b) => b.id === blockId);
   return {
     category,
     prev: index > 0 ? category.blocks[index - 1] : undefined,
-    next: index >= 0 && index < category.blocks.length - 1 ? category.blocks[index + 1] : undefined,
+    next:
+      index >= 0 && index < category.blocks.length - 1
+        ? category.blocks[index + 1]
+        : undefined,
   };
 };
 
 export const getBlockById = (
   categoryId: string,
-  blockId: string
+  blockId: string,
 ): { category: SystemDesignCategory; block: SystemDesignBlock } | undefined => {
   const category = getCategoryById(categoryId);
   const found = category?.blocks.find((b) => b.id === blockId);
@@ -278,9 +321,13 @@ export const getBlockById = (
 };
 
 /** Progress is always derived — never hard-code a percentage. */
-export const getCategoryProgress = (category: SystemDesignCategory): CategoryProgress => {
+export const getCategoryProgress = (
+  category: SystemDesignCategory,
+): CategoryProgress => {
   const total = category.blocks.length;
-  const completed = category.blocks.filter((b) => b.status === "COMPLETED").length;
+  const completed = category.blocks.filter(
+    (b) => b.status === "COMPLETED",
+  ).length;
   const percentage = total === 0 ? 0 : Math.round((completed / total) * 100);
 
   const sevenDaysAgo = new Date();
