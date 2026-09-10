@@ -80,10 +80,16 @@ export const systemDesignData: SystemDesignCategory[] = [
         hasContent: true,
         completedOn: "2026-09-10",
       },
-      block(9, "CAP Theorem"),
+      {...block(9, "Reliability", "COMPLETED"),
+        targetDate: "September 12, 2026",
+        hasContent: true,
+        completedOn: "2026-09-10",
+      },
+    
       block(10, "Distributed Transactions"),
       block(11, "Database Replication"),
       block(12, "Database Sharding"),
+        block(13, "CAP Theorem"),
     ],
   },
   {

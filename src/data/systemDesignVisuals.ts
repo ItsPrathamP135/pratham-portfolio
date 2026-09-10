@@ -760,6 +760,598 @@ export const systemDesignVisuals: Record<string, TopicVisualization> = {
       },
     ],
   },
+  "reliability": {
+    topicId: "reliability",
+    type: "stage-flow",
+    summary:
+      "Build reliable systems by identifying failures, detecting them quickly, isolating their impact, recovering safely, protecting data and correctness, and continuously learning from failures.",
+
+    stages: [
+      {
+        title: "1. Unreliable vs Reliable Architecture",
+        caption:
+          "A reliable system continues providing correct behavior even when individual components fail.",
+        layers: [
+          {
+            boxes: [
+              "Single Application Server",
+              "Single Database",
+              "No Health Checks",
+              "No Timeout",
+              "No Failure Handling",
+            ],
+          },
+          {
+            boxes: [
+              "Redundant Servers",
+              "Database Replication",
+              "Health Checks",
+              "Timeouts",
+              "Failure Recovery",
+            ],
+          },
+        ],
+      },
+
+      {
+        title: "2. Identify What Can Fail",
+        caption:
+          "Reliability starts by identifying failure points across the complete architecture.",
+        layers: [
+          {
+            boxes: [
+              "Application",
+              "Server",
+              "Network",
+              "Database",
+              "Cache",
+              "Message Broker",
+              "External API",
+              "Storage",
+            ],
+          },
+        ],
+      },
+
+      {
+        title: "3. Remove Single Points of Failure",
+        caption:
+          "Redundancy prevents one component failure from bringing down the entire system.",
+        layers: [
+          {
+            boxes: [
+              "Application Server A",
+              "Application Server B",
+              "Database Primary",
+              "Database Replica",
+            ],
+          },
+          {
+            boxes: [
+              "Load Balancer",
+              "Multi-AZ Deployment",
+              "Failover",
+              "Redundant Dependencies",
+            ],
+          },
+        ],
+      },
+
+      {
+        title: "4. Detect Failure",
+        caption:
+          "The system must detect unhealthy components before routing more traffic to them.",
+        layers: [
+          {
+            boxes: [
+              "Health Checks",
+              "Liveness Check",
+              "Readiness Check",
+            ],
+          },
+          {
+            boxes: [
+              "Load Balancer",
+              "Service Discovery",
+              "Orchestrator",
+            ],
+          },
+        ],
+      },
+
+      {
+        title: "5. Timeout Prevents Cascading Failure",
+        caption:
+          "A timeout prevents a request from waiting indefinitely for a slow or failed dependency.",
+        layers: [
+          {
+            boxes: [
+              "Service A",
+              "Timeout",
+              "Service B",
+            ],
+          },
+          {
+            boxes: [
+              "Without Timeout → Threads Wait → Resources Exhausted",
+              "With Timeout → Fail Fast → Resources Released",
+            ],
+          },
+        ],
+      },
+
+      {
+        title: "6. Retry Transient Failures",
+        caption:
+          "Retries can recover temporary failures, but uncontrolled retries can create retry storms.",
+        layers: [
+          {
+            boxes: [
+              "Request",
+              "Temporary Failure",
+              "Retry",
+              "Success",
+            ],
+          },
+          {
+            boxes: [
+              "Exponential Backoff",
+              "Jitter",
+              "Maximum Retry Limit",
+              "Idempotency",
+            ],
+          },
+        ],
+      },
+
+      {
+        title: "7. Circuit Breaker Stops Cascading Failures",
+        caption:
+          "Circuit breakers stop repeatedly calling an unhealthy dependency.",
+        layers: [
+          {
+            boxes: [
+              "CLOSED",
+              "Requests Flow Normally",
+            ],
+          },
+          {
+            boxes: [
+              "Failures Increase",
+              "OPEN",
+              "Requests Fail Fast",
+            ],
+          },
+          {
+            boxes: [
+              "Recovery Check",
+              "HALF-OPEN",
+              "Healthy → CLOSED",
+              "Failure → OPEN",
+            ],
+          },
+        ],
+      },
+
+      {
+        title: "8. Bulkhead Resource Isolation",
+        caption:
+          "Bulkheads isolate resources so failure or overload in one area does not consume everything.",
+        layers: [
+          {
+            boxes: [
+              "Service A",
+              "Thread Pool A",
+              "Connection Pool A",
+            ],
+          },
+          {
+            boxes: [
+              "Service B",
+              "Thread Pool B",
+              "Connection Pool B",
+            ],
+          },
+          {
+            boxes: [
+              "Service C",
+              "Thread Pool C",
+              "Connection Pool C",
+            ],
+          },
+        ],
+      },
+
+      {
+        title: "9. Rate Limiting + Load Shedding",
+        caption:
+          "Protect system capacity by controlling incoming traffic and rejecting excess work when necessary.",
+        layers: [
+          {
+            boxes: [
+              "Incoming Traffic",
+              "Rate Limiter",
+              "Allowed Requests",
+            ],
+          },
+          {
+            boxes: [
+              "Excess Traffic",
+              "Reject / Load Shed",
+              "Protect Healthy Capacity",
+            ],
+          },
+        ],
+      },
+
+      {
+        title: "10. Graceful Degradation",
+        caption:
+          "When a non-critical dependency fails, continue serving the core user experience.",
+        layers: [
+          {
+            boxes: [
+              "Request",
+              "Primary Service",
+            ],
+          },
+          {
+            boxes: [
+              "Recommendation Service",
+              "Notification Service",
+              "Analytics Service",
+            ],
+          },
+          {
+            boxes: [
+              "Dependency Failure",
+              "Fallback",
+              "Core Function Continues",
+            ],
+          },
+        ],
+      },
+
+      {
+        title: "11. Protect Data with Replication",
+        caption:
+          "Replication provides additional copies of data and supports failover.",
+        layers: [
+          {
+            boxes: [
+              "Primary Database",
+            ],
+          },
+          {
+            boxes: [
+              "Replica 1",
+              "Replica 2",
+            ],
+          },
+          {
+            boxes: [
+              "Failover",
+              "Promote Healthy Replica",
+            ],
+          },
+        ],
+      },
+
+      {
+        title: "12. Replication vs Backup",
+        caption:
+          "Replication improves availability; backups protect against data loss and logical corruption.",
+        layers: [
+          {
+            boxes: [
+              "Replication",
+              "Fast Failover",
+              "High Availability",
+            ],
+          },
+          {
+            boxes: [
+              "Backup",
+              "Point-in-Time Recovery",
+              "Data Recovery",
+            ],
+          },
+        ],
+      },
+
+      {
+        title: "13. RPO vs RTO",
+        caption:
+          "Reliability planning must define how much data loss and downtime the business can tolerate.",
+        layers: [
+          {
+            boxes: [
+              "RPO",
+              "Maximum Acceptable Data Loss",
+            ],
+          },
+          {
+            boxes: [
+              "RTO",
+              "Maximum Acceptable Recovery Time",
+            ],
+          },
+        ],
+      },
+
+      {
+        title: "14. Preserve Correctness with Idempotency",
+        caption:
+          "Retries must not create duplicate side effects, especially for payments and other critical operations.",
+        layers: [
+          {
+            boxes: [
+              "Client Request",
+              "Idempotency Key",
+              "Payment Service",
+            ],
+          },
+          {
+            boxes: [
+              "First Request → Charge",
+              "Retry → Same Key",
+              "Return Existing Result",
+            ],
+          },
+        ],
+      },
+
+      {
+        title: "15. Reliable Payment Architecture",
+        caption:
+          "A payment can succeed even when the response is lost, so correctness requires durable state, idempotency and reconciliation.",
+        layers: [
+          {
+            boxes: [
+              "Client",
+              "Payment API",
+              "Payment Provider",
+            ],
+          },
+          {
+            boxes: [
+              "Idempotency Key",
+              "Durable Payment State",
+              "Retry",
+              "Reconciliation",
+            ],
+          },
+        ],
+      },
+
+      {
+        title: "16. Ambiguous Payment Outcome",
+        caption:
+          "A timeout does not necessarily mean the payment failed.",
+        layers: [
+          {
+            boxes: [
+              "Payment Request",
+              "Provider Processes Payment",
+            ],
+          },
+          {
+            boxes: [
+              "Response Lost",
+              "Client Sees Timeout",
+              "Payment Status = Unknown",
+            ],
+          },
+          {
+            boxes: [
+              "Retry Same Idempotency Key",
+              "Check Existing Result",
+              "Avoid Duplicate Charge",
+            ],
+          },
+        ],
+      },
+
+      {
+        title: "17. Protect the Message Layer",
+        caption:
+          "Reliable messaging requires durable messages, replication, correct acknowledgement and consumer failure handling.",
+        layers: [
+          {
+            boxes: [
+              "Producer",
+              "Message Broker",
+              "Consumer",
+            ],
+          },
+          {
+            boxes: [
+              "Replication",
+              "Acknowledgement",
+              "Consumer Retry",
+              "Offset Management",
+              "DLQ",
+            ],
+          },
+        ],
+      },
+
+      {
+        title: "18. End-to-End Reliable Microservices",
+        caption:
+          "Reliability requires protection at every layer rather than relying on a single mechanism.",
+        layers: [
+          {
+            boxes: [
+              "Client",
+              "API Gateway",
+              "Load Balancer",
+            ],
+          },
+          {
+            boxes: [
+              "Service A",
+              "Service B",
+              "Service C",
+            ],
+          },
+          {
+            boxes: [
+              "Timeout",
+              "Retry",
+              "Circuit Breaker",
+              "Bulkhead",
+            ],
+          },
+          {
+            boxes: [
+              "Database",
+              "Cache",
+              "Message Broker",
+            ],
+          },
+        ],
+      },
+
+      {
+        title: "19. Cascading Failure Prevention",
+        caption:
+          "Combine multiple reliability mechanisms to prevent local failures from becoming system-wide failures.",
+        layers: [
+          {
+            boxes: [
+              "Traffic Control",
+              "Rate Limiting",
+              "Load Shedding",
+            ],
+          },
+          {
+            boxes: [
+              "Timeout",
+              "Retry + Backoff",
+              "Circuit Breaker",
+            ],
+          },
+          {
+            boxes: [
+              "Bulkhead",
+              "Graceful Degradation",
+              "Redundancy",
+            ],
+          },
+        ],
+      },
+
+      {
+        title: "20. Observe Reliability",
+        caption:
+          "A system cannot be reliably operated without visibility into failures and system behavior.",
+        layers: [
+          {
+            boxes: [
+              "Metrics",
+              "Logs",
+              "Traces",
+            ],
+          },
+          {
+            boxes: [
+              "Error Rate",
+              "Latency",
+              "Throughput",
+              "Availability",
+            ],
+          },
+          {
+            boxes: [
+              "Alerts",
+              "Incident Detection",
+              "Root Cause Analysis",
+            ],
+          },
+        ],
+      },
+
+      {
+        title: "21. Recover and Learn",
+        caption:
+          "Recovery is followed by analysis, prevention and continuous improvement.",
+        layers: [
+          {
+            boxes: [
+              "Detect Failure",
+              "Recover",
+              "Restore Service",
+            ],
+          },
+          {
+            boxes: [
+              "Incident Analysis",
+              "Root Cause",
+              "Corrective Action",
+            ],
+          },
+          {
+            boxes: [
+              "Improve Architecture",
+              "Improve Monitoring",
+              "Test Again",
+            ],
+          },
+        ],
+      },
+
+      {
+        title: "22. Complete Reliability Loop",
+        caption:
+          "The complete reliability mindset: identify → detect → isolate → protect → recover → learn → prevent.",
+        layers: [
+          {
+            boxes: [
+              "IDENTIFY",
+              "What Can Fail?",
+            ],
+          },
+          {
+            boxes: [
+              "DETECT",
+              "Is Something Failing?",
+            ],
+          },
+          {
+            boxes: [
+              "ISOLATE",
+              "Contain the Failure",
+            ],
+          },
+          {
+            boxes: [
+              "PROTECT",
+              "Prevent Cascading Failure",
+            ],
+          },
+          {
+            boxes: [
+              "RECOVER",
+              "Restore Service",
+            ],
+          },
+          {
+            boxes: [
+              "LEARN",
+              "Analyze the Failure",
+            ],
+          },
+          {
+            boxes: [
+              "PREVENT",
+              "Improve the System",
+            ],
+          },
+        ],
+      },
+    ],
+  },
 };
 
 export const getTopicVisualization = (

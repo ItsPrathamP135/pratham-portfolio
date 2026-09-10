@@ -6153,6 +6153,989 @@ export const systemDesignTopics: Record<string, TopicContent> = {
       },
     ],
   },
+  reliability: {
+    blockId: "reliability",
+    categoryId: "hld-fundamentals",
+
+    what: [
+      "Reliability is the ability of a system to consistently perform its intended function correctly over time, including when individual components fail, dependencies become unavailable, traffic spikes, or infrastructure experiences problems.",
+      "Reliability is broader than availability. Availability asks whether the system is accessible and operational; reliability also considers whether the system behaves correctly, handles failures safely, recovers properly, and prevents failures from cascading.",
+      "A reliable system does not assume that components will never fail. It assumes failures will happen and designs the architecture to detect, isolate, recover from, and learn from those failures.",
+      "The core reliability mindset is: IDENTIFY → DETECT → ISOLATE → PROTECT/DEGRADE → RECOVER → LEARN → PREVENT.",
+    ],
+
+    deepConcepts: [
+      {
+        term: "Reliability",
+        simpleDefinition:
+          "The ability of a system to keep performing its intended function correctly over time, even when failures occur.",
+        interviewDefinition:
+          "Reliability is the ability of a system to consistently perform its intended function correctly over time, including under component failures, dependency failures, traffic spikes, and infrastructure problems.",
+        whyItMatters:
+          "Production systems cannot assume everything will always work. Reliability engineering designs for failure instead of treating failure as an exceptional event.",
+        example:
+          "If one application server fails, the system continues serving users through other healthy instances instead of causing an outage.",
+        whenItMatters:
+          "Any production system where failures, downtime, incorrect operations, or data loss have meaningful business impact.",
+        commonMistake:
+          "Treating reliability and availability as exactly the same concept.",
+        interviewQuestion: "What is reliability in system design?",
+        interviewAnswer:
+          "Reliability is the ability of a system to consistently perform its intended function correctly over time, including when components or dependencies fail.",
+      },
+
+      {
+        term: "Reliability vs Availability",
+        simpleDefinition:
+          "Availability asks whether the system is up; reliability also asks whether it keeps behaving correctly over time.",
+        interviewDefinition:
+          "Availability measures whether a system is operational and accessible at a given time, while reliability is broader and includes correctness, failure handling, recovery, and consistent behavior.",
+        whyItMatters:
+          "A system can be highly available but still unreliable if it returns incorrect results or loses data.",
+        example:
+          "A payment API that always responds with HTTP 200 but occasionally creates duplicate charges is available but not reliable.",
+        whenItMatters:
+          "When discussing SLAs, failure handling, correctness, or production architecture.",
+        commonMistake: "Using reliability and availability interchangeably.",
+        interviewQuestion: "Can a system be available but unreliable?",
+        interviewAnswer:
+          "Yes. A system can remain accessible while producing incorrect results, duplicating operations, losing data, or failing to recover safely.",
+      },
+
+      {
+        term: "Failure Detection",
+        simpleDefinition: "Knowing quickly that something has gone wrong.",
+        interviewDefinition:
+          "Failure detection uses health checks, monitoring, metrics, timeouts, and alerts to identify unhealthy components or abnormal system behavior.",
+        whyItMatters:
+          "A failure that is not detected cannot be isolated or recovered from automatically.",
+        example:
+          "A load balancer health-checks application instances and stops routing traffic to an instance that becomes unhealthy.",
+        whenItMatters:
+          "Any distributed system with multiple instances or dependencies.",
+        commonMistake: "Assuming detection and recovery are the same thing.",
+        interviewQuestion: "Why is failure detection important?",
+        interviewAnswer:
+          "Because the system must know that a component has failed before it can stop sending traffic to it, fail over, degrade gracefully, or recover.",
+      },
+
+      {
+        term: "Redundancy",
+        simpleDefinition:
+          "Having additional components that can take over when one fails.",
+        interviewDefinition:
+          "Redundancy means deploying multiple independent instances or copies of critical components so failure of one does not necessarily cause system-wide failure.",
+        whyItMatters:
+          "Without redundancy, a single component can become a single point of failure.",
+        example:
+          "Two application instances across different Availability Zones allow one instance or AZ to fail while another continues serving traffic.",
+        whenItMatters: "High-availability production architectures.",
+        commonMistake:
+          "Adding multiple instances without considering whether they share the same failure domain.",
+        interviewQuestion: "Why is redundancy important for reliability?",
+        interviewAnswer:
+          "Redundancy removes single points of failure by providing additional components that can continue serving when another component fails.",
+      },
+
+      {
+        term: "Timeout",
+        simpleDefinition: "Stop waiting indefinitely for a dependency.",
+        interviewDefinition:
+          "A timeout defines the maximum amount of time a request is allowed to wait for a response from a dependency before failing or taking an alternative path.",
+        whyItMatters:
+          "Without timeouts, slow dependencies can consume threads, connections, and other resources until the calling service itself becomes unhealthy.",
+        example:
+          "Service A calls Service B with a 2-second timeout. If B does not respond within 2 seconds, A stops waiting instead of holding the request indefinitely.",
+        whenItMatters:
+          "Every synchronous service-to-service or external API call.",
+        commonMistake:
+          "Thinking a timeout makes the dependency faster. It only limits how long the caller waits.",
+        interviewQuestion: "How do timeouts improve reliability?",
+        interviewAnswer:
+          "They prevent resources from being held indefinitely by slow dependencies and allow the system to fail fast or use a fallback.",
+      },
+
+      {
+        term: "Retry with Exponential Backoff and Jitter",
+        simpleDefinition:
+          "Retry temporary failures carefully instead of immediately hammering the failed service.",
+        interviewDefinition:
+          "Retries can recover transient failures, while exponential backoff progressively increases the delay between attempts and jitter randomizes those delays to reduce synchronized retry spikes.",
+        whyItMatters:
+          "Immediate retries from thousands of clients can create a retry storm and make an already unhealthy dependency even worse.",
+        example:
+          "Retry after 100ms → 200ms → 400ms → 800ms, with random jitter added to each delay.",
+        whenItMatters:
+          "Transient network failures, temporary service unavailability, and rate-limited dependencies.",
+        commonMistake: "Adding unlimited immediate retries.",
+        interviewQuestion: "Why do we use exponential backoff and jitter?",
+        interviewAnswer:
+          "Exponential backoff reduces retry frequency as failures continue, while jitter prevents many clients from retrying at exactly the same time.",
+      },
+
+      {
+        term: "Circuit Breaker",
+        simpleDefinition:
+          "Stop repeatedly calling a dependency that is failing.",
+        interviewDefinition:
+          "A circuit breaker monitors failures and temporarily stops requests to an unhealthy dependency, allowing the dependency time to recover and protecting the caller from cascading failure.",
+        whyItMatters:
+          "Repeated calls to a failing dependency can exhaust threads, connections, and CPU in otherwise healthy services.",
+        example:
+          "CLOSED → failures increase → OPEN → requests fail fast → HALF-OPEN → test requests → CLOSED if healthy.",
+        whenItMatters:
+          "Microservices and external dependency calls where repeated failures can cascade.",
+        commonMistake:
+          "Confusing a circuit breaker with a timeout or retry. They solve different problems.",
+        interviewQuestion: "Explain the three states of a circuit breaker.",
+        interviewAnswer:
+          "CLOSED allows normal traffic, OPEN blocks calls and fails fast, and HALF-OPEN allows limited test calls to determine whether the dependency has recovered.",
+      },
+
+      {
+        term: "Bulkhead",
+        simpleDefinition:
+          "Separate resources so one failure or overload cannot consume everything.",
+        interviewDefinition:
+          "Bulkhead isolation separates resources such as thread pools, connection pools, or queues between workloads so failure or overload in one area does not exhaust shared resources needed by other workloads.",
+        whyItMatters:
+          "Without isolation, one unhealthy dependency can consume all available resources and cause unrelated functionality to fail.",
+        example:
+          "Payment calls use one thread pool while notification calls use another.",
+        whenItMatters:
+          "Systems with multiple dependencies or workloads competing for shared resources.",
+        commonMistake:
+          "Thinking bulkhead prevents the dependency from failing. It only limits the blast radius.",
+        interviewQuestion: "How does a bulkhead prevent cascading failure?",
+        interviewAnswer:
+          "It isolates resources so one failing or overloaded workload cannot consume all resources and bring down unrelated workloads.",
+      },
+
+      {
+        term: "Rate Limiting and Load Shedding",
+        simpleDefinition:
+          "Control how much work enters the system when demand exceeds capacity.",
+        interviewDefinition:
+          "Rate limiting restricts incoming request volume according to defined limits, while load shedding deliberately rejects or drops lower-priority work when the system is overloaded to preserve critical functionality.",
+        whyItMatters:
+          "A system overloaded beyond its capacity can become slower, exhaust resources, and eventually fail completely.",
+        example:
+          "Allow 1000 requests per second per client; reject excess traffic rather than allowing the entire system to collapse.",
+        whenItMatters:
+          "Public APIs, high-traffic systems, and overload protection.",
+        commonMistake:
+          "Treating rate limiting as a replacement for capacity planning.",
+        interviewQuestion:
+          "What is the difference between rate limiting and load shedding?",
+        interviewAnswer:
+          "Rate limiting controls how much traffic is allowed in under normal operation, while load shedding deliberately rejects excess or lower-priority work during overload to protect the system.",
+      },
+
+      {
+        term: "Graceful Degradation",
+        simpleDefinition:
+          "Keep the important functionality working even when non-critical features fail.",
+        interviewDefinition:
+          "Graceful degradation means reducing or disabling non-critical functionality when dependencies fail or capacity is constrained while preserving the core user experience.",
+        whyItMatters:
+          "Not every dependency deserves to take down the entire application.",
+        example:
+          "If recommendations fail, an e-commerce site still allows users to search, view products, and purchase.",
+        whenItMatters:
+          "Systems with optional features and multiple downstream dependencies.",
+        commonMistake:
+          "Returning an error for the entire request when only a non-critical dependency failed.",
+        interviewQuestion: "How does graceful degradation improve reliability?",
+        interviewAnswer:
+          "It allows core functionality to continue even when optional features or dependencies fail.",
+      },
+
+      {
+        term: "Idempotency",
+        simpleDefinition:
+          "Repeating the same operation does not create an unintended duplicate side effect.",
+        interviewDefinition:
+          "An idempotent operation produces the same intended business outcome when the same request is repeated, making safe retries possible for operations such as payments or order creation.",
+        whyItMatters:
+          "A timeout does not always mean the server failed. The operation may have succeeded even though the response was lost.",
+        example:
+          "A payment request with idempotency key ABC123 is retried. The payment service recognizes the key and returns the original result instead of charging again.",
+        whenItMatters:
+          "Payments, orders, reservations, account operations, and any retried operation with side effects.",
+        commonMistake:
+          "Assuming retries are safe simply because the API uses POST.",
+        interviewQuestion: "Why is idempotency important in a payment system?",
+        interviewAnswer:
+          "Because a client may retry after a timeout even though the original payment succeeded. An idempotency key allows the server to return the existing result instead of creating a duplicate charge.",
+      },
+
+      {
+        term: "Database Reliability",
+        simpleDefinition:
+          "Protect the source of truth against failures and data loss.",
+        interviewDefinition:
+          "Database reliability uses replication, backups, failover, appropriate consistency guarantees, monitoring, and recovery mechanisms to maintain availability and protect authoritative business data.",
+        whyItMatters:
+          "The database often contains the system's most critical state and can become a single point of failure.",
+        example:
+          "A primary database replicates to a standby in another Availability Zone and the standby is promoted when the primary fails.",
+        whenItMatters: "Any production system with persistent business data.",
+        commonMistake: "Treating replication as equivalent to backup.",
+        interviewQuestion: "How would you make a database reliable?",
+        interviewAnswer:
+          "Use appropriate replication, failover, backups, monitoring, capacity planning, and recovery procedures based on the required availability, RPO, RTO, and consistency.",
+      },
+
+      {
+        term: "Replication vs Backup",
+        simpleDefinition:
+          "Replication helps keep the system running; backups help recover data.",
+        interviewDefinition:
+          "Replication maintains additional copies of current data for availability and failover, while backups provide historical recovery points for corruption, accidental deletion, ransomware, or other logical failures.",
+        whyItMatters:
+          "A corrupted or accidentally deleted record can be replicated to every replica, so replication alone cannot provide complete data recovery.",
+        example:
+          "A bad DELETE statement replicates to the standby database. A point-in-time backup is required to recover the previous state.",
+        whenItMatters:
+          "Database disaster recovery and data protection planning.",
+        commonMistake: "Believing replicas replace backups.",
+        interviewQuestion:
+          "Why do we need backups if we already have replicas?",
+        interviewAnswer:
+          "Because replication copies current changes, including accidental or corrupted changes. Backups provide historical recovery points that can restore data to an earlier valid state.",
+      },
+
+      {
+        term: "RPO",
+        simpleDefinition: "How much data loss is acceptable.",
+        interviewDefinition:
+          "Recovery Point Objective is the maximum acceptable amount of data loss expressed as a time duration.",
+        whyItMatters: "RPO influences replication and backup strategies.",
+        example:
+          "An RPO of 5 minutes means losing up to 5 minutes of recent writes may be acceptable.",
+        whenItMatters: "Choosing replication and disaster recovery strategies.",
+        commonMistake: "Confusing RPO with recovery time.",
+        interviewQuestion: "What does an RPO of 5 minutes mean?",
+        interviewAnswer:
+          "It means the business can tolerate losing up to approximately five minutes of the most recent data after a failure.",
+      },
+
+      {
+        term: "RTO",
+        simpleDefinition: "How quickly the system must recover.",
+        interviewDefinition:
+          "Recovery Time Objective is the maximum acceptable time required to restore service after a failure.",
+        whyItMatters:
+          "RTO determines how quickly and automatically recovery mechanisms need to operate.",
+        example:
+          "An RTO of 2 minutes means the system should be restored and serving traffic within two minutes.",
+        whenItMatters:
+          "Designing failover, recovery, and disaster recovery mechanisms.",
+        commonMistake: "Confusing RTO with RPO.",
+        interviewQuestion: "What is the difference between RPO and RTO?",
+        interviewAnswer:
+          "RPO defines acceptable data loss; RTO defines acceptable recovery time.",
+      },
+
+      {
+        term: "Graceful Shutdown",
+        simpleDefinition:
+          "Stop accepting new work while finishing work that is already in progress.",
+        interviewDefinition:
+          "Graceful shutdown allows an application instance to stop receiving new requests while giving existing requests and background operations time to complete before termination.",
+        whyItMatters:
+          "Abrupt shutdown can terminate in-flight requests and create failed operations or inconsistent processing.",
+        example:
+          "During deployment, the load balancer stops sending new traffic to an instance while existing requests finish.",
+        whenItMatters:
+          "Deployments, autoscaling, container termination, and rolling updates.",
+        commonMistake:
+          "Immediately killing an instance without allowing in-flight work to complete.",
+        interviewQuestion: "Why is graceful shutdown important?",
+        interviewAnswer:
+          "It prevents unnecessary failures of in-flight requests and allows an instance to leave the system safely.",
+      },
+
+      {
+        term: "Observability",
+        simpleDefinition: "Understand what is happening inside the system.",
+        interviewDefinition:
+          "Observability uses metrics, logs, and distributed traces to understand system behavior, detect failures, diagnose root causes, and measure reliability.",
+        whyItMatters:
+          "A system cannot be reliably operated if failures cannot be detected and diagnosed.",
+        example:
+          "Metrics show latency increased, traces identify a slow downstream service, and logs reveal the underlying database error.",
+        whenItMatters: "Production systems and incident response.",
+        commonMistake:
+          "Treating monitoring as only dashboards without actionable signals.",
+        interviewQuestion: "What are the three pillars of observability?",
+        interviewAnswer: "Metrics, logs, and distributed traces.",
+      },
+
+      {
+        term: "Chaos Engineering",
+        simpleDefinition:
+          "Intentionally test failures to discover weaknesses before real failures happen.",
+        interviewDefinition:
+          "Chaos engineering deliberately introduces controlled failures into systems to validate resilience assumptions and discover weaknesses before production incidents expose them.",
+        whyItMatters:
+          "A reliability mechanism that has never been tested may not work when it is actually needed.",
+        example:
+          "Terminate application instances in one Availability Zone and verify traffic redistribution and capacity handling.",
+        whenItMatters:
+          "Mature production systems with strong reliability requirements.",
+        commonMistake:
+          "Running uncontrolled failure experiments without safeguards.",
+        interviewQuestion: "Why is chaos engineering useful?",
+        interviewAnswer:
+          "It validates that failure-handling mechanisms actually work under realistic failure conditions and exposes hidden weaknesses.",
+      },
+    ],
+
+    comparisonTables: [
+      {
+        title: "Reliability vs Availability vs Fault Tolerance",
+        items: [
+          {
+            statement:
+              "Ability to consistently perform the intended function correctly over time",
+            label: "Reliability",
+          },
+          {
+            statement:
+              "Ability of the system to remain accessible and operational",
+            label: "Availability",
+          },
+          {
+            statement:
+              "Ability to continue operating despite specified component failures",
+            label: "Fault Tolerance",
+          },
+          {
+            statement:
+              "Broader concept covering correctness, failure handling and recovery",
+            label: "Reliability",
+          },
+          {
+            statement: "Focuses primarily on whether service is available",
+            label: "Availability",
+          },
+          {
+            statement:
+              "One mechanism/characteristic used to improve reliability",
+            label: "Fault Tolerance",
+          },
+        ],
+      },
+
+      {
+        title: "RPO vs RTO",
+        items: [
+          {
+            statement: "Maximum acceptable data loss",
+            label: "RPO",
+          },
+          {
+            statement: "Maximum acceptable recovery time",
+            label: "RTO",
+          },
+          {
+            statement: "Measured as a time window of potentially lost data",
+            label: "RPO",
+          },
+          {
+            statement: "Measured as time required to restore service",
+            label: "RTO",
+          },
+        ],
+      },
+
+      {
+        title: "Replication vs Backup",
+        items: [
+          {
+            statement: "Provides current copies for availability and failover",
+            label: "Replication",
+          },
+          {
+            statement: "Provides historical recovery points",
+            label: "Backup",
+          },
+          {
+            statement: "Helps recover from primary failure",
+            label: "Replication",
+          },
+          {
+            statement: "Helps recover from corruption or accidental deletion",
+            label: "Backup",
+          },
+        ],
+      },
+
+      {
+        title: "Retry vs Circuit Breaker vs Timeout",
+        items: [
+          {
+            statement: "Stops waiting indefinitely for a dependency",
+            label: "Timeout",
+          },
+          {
+            statement: "Attempts a transient operation again",
+            label: "Retry",
+          },
+          {
+            statement:
+              "Temporarily stops calls to a repeatedly failing dependency",
+            label: "Circuit Breaker",
+          },
+          {
+            statement: "Uses backoff and jitter to control repeated attempts",
+            label: "Retry",
+          },
+          {
+            statement: "Fails fast while the dependency is unhealthy",
+            label: "Circuit Breaker",
+          },
+        ],
+      },
+    ],
+
+    why: [
+      "Failures are inevitable in distributed systems. Servers crash, networks partition, databases become unavailable, dependencies slow down, deployments introduce bugs, and traffic can exceed capacity.",
+      "The goal of reliability engineering is therefore not to prevent every failure. The goal is to limit the blast radius, preserve correctness, recover quickly, and prevent one failure from becoming a system-wide outage.",
+      "Reliability requires thinking about the complete architecture rather than a single component. Application servers, databases, caches, messaging systems, load balancers, external APIs, and storage all have their own failure modes.",
+      "A reliable architecture also protects business correctness. A system that stays online but double-charges customers, loses orders, or corrupts data is not truly reliable.",
+    ],
+
+    how: [
+      {
+        step: "1. Identify failure modes",
+        description:
+          "List what can fail across application, infrastructure, network, database, cache, messaging, storage, and external dependencies.",
+      },
+      {
+        step: "2. Identify failure impact",
+        description:
+          "Determine which failures cause complete outage, partial degradation, data loss, duplicate operations, or performance degradation.",
+      },
+      {
+        step: "3. Remove single points of failure",
+        description:
+          "Introduce redundancy across servers, Availability Zones, databases, caches, and messaging infrastructure where required.",
+      },
+      {
+        step: "4. Detect failures",
+        description:
+          "Use health checks, metrics, logs, traces, monitoring, timeouts, and alerts to detect unhealthy components and abnormal behavior.",
+      },
+      {
+        step: "5. Stop waiting indefinitely",
+        description:
+          "Configure appropriate timeouts for synchronous dependency calls so slow services do not exhaust caller resources.",
+      },
+      {
+        step: "6. Recover transient failures",
+        description:
+          "Use bounded retries with exponential backoff and jitter for failures that are likely to be temporary.",
+      },
+      {
+        step: "7. Stop cascading failures",
+        description:
+          "Use circuit breakers to stop repeatedly calling unhealthy dependencies.",
+      },
+      {
+        step: "8. Isolate resources",
+        description:
+          "Use bulkheads such as separate thread pools, connection pools, or queues so one workload cannot consume all shared resources.",
+      },
+      {
+        step: "9. Protect system capacity",
+        description:
+          "Use rate limiting, load shedding, admission control, and capacity planning to prevent overload.",
+      },
+      {
+        step: "10. Preserve correctness",
+        description:
+          "Use idempotency for operations that may be retried, especially payments, orders, reservations, and other side-effecting operations.",
+      },
+      {
+        step: "11. Protect authoritative data",
+        description:
+          "Use replication, failover, backups, monitoring, and recovery procedures appropriate to business RPO and RTO requirements.",
+      },
+      {
+        step: "12. Degrade gracefully",
+        description:
+          "Allow non-critical features to fail while preserving the core functionality of the system.",
+      },
+      {
+        step: "13. Recover safely",
+        description:
+          "Use automated failover where required, graceful shutdown, recovery procedures, and disaster recovery mechanisms.",
+      },
+      {
+        step: "14. Observe and learn",
+        description:
+          "Measure reliability using metrics, logs, traces, SLIs/SLOs, incident analysis, and post-incident improvements.",
+      },
+      {
+        step: "15. Test failure scenarios",
+        description:
+          "Validate resilience using controlled failure testing, disaster recovery exercises, and chaos engineering where appropriate.",
+      },
+    ],
+
+    interviewTraps: [
+      {
+        trap: '"Reliability means zero failures"',
+        wrongApproach:
+          "Designing as if every component must remain healthy forever.",
+        whyWrong: "Distributed systems inevitably experience failures.",
+        betterApproach:
+          "Design for failure: detect it, isolate it, recover safely, and limit the blast radius.",
+      },
+      {
+        trap: '"Reliability = availability"',
+        wrongApproach:
+          "Saying a system is reliable simply because it responds to requests.",
+        whyWrong:
+          "The system can be available while producing incorrect results, losing data, or creating duplicate side effects.",
+        betterApproach:
+          "Explain that availability is one aspect of reliability; correctness and failure handling also matter.",
+      },
+      {
+        trap: '"Retry everything"',
+        wrongApproach: "Using unlimited immediate retries.",
+        whyWrong:
+          "Retries can create retry storms and overload an already unhealthy dependency.",
+        betterApproach:
+          "Use bounded retries, exponential backoff, jitter, timeouts, and idempotency.",
+      },
+      {
+        trap: '"Retry after timeout means the first request failed"',
+        wrongApproach:
+          "Assuming a timeout proves the operation did not execute.",
+        whyWrong:
+          "The server or payment provider may have completed the operation while the response was lost.",
+        betterApproach:
+          "Use idempotency keys and query durable state when the outcome is ambiguous.",
+      },
+      {
+        trap: '"Replication = backup"',
+        wrongApproach: "Using replicas as the only recovery mechanism.",
+        whyWrong:
+          "Corruption and accidental deletion can replicate to every replica.",
+        betterApproach:
+          "Use both replication for availability and backups for historical recovery.",
+      },
+      {
+        trap: '"Circuit breaker replaces timeout"',
+        wrongApproach:
+          "Using only a circuit breaker for dependency protection.",
+        whyWrong:
+          "A circuit breaker controls repeated calls after failures; it does not define how long an individual request may wait.",
+        betterApproach:
+          "Use timeouts for individual calls and circuit breakers for repeated dependency failure.",
+      },
+      {
+        trap: '"More retries always increase reliability"',
+        wrongApproach: "Increasing retry counts whenever failures occur.",
+        whyWrong: "More retries can increase load and cause cascading failure.",
+        betterApproach:
+          "Retry only appropriate transient failures and use backoff, jitter, limits, and idempotency.",
+      },
+      {
+        trap: '"Stateless means the system has no state"',
+        wrongApproach:
+          "Claiming a stateless application has no database or external state.",
+        whyWrong:
+          "Stateless normally describes the application instance's dependency on local client state.",
+        betterApproach:
+          "Keep application instances stateless while externalizing state to appropriate systems such as databases or shared stores.",
+      },
+      {
+        trap: '"Multi-AZ makes the whole system reliable"',
+        wrongApproach: "Making only application servers Multi-AZ.",
+        whyWrong:
+          "A single-AZ database, cache, messaging system, or other dependency can remain a system-wide SPOF.",
+        betterApproach: "Review reliability layer by layer.",
+      },
+    ],
+
+    when: [
+      "Reliability engineering is important for production systems where failures can affect users, revenue, data, security, or business operations.",
+      "Simple development or prototype systems may use fewer reliability mechanisms when downtime and data loss are acceptable trade-offs.",
+      "Critical systems such as payment, banking, healthcare, order processing, authentication, and large-scale consumer applications usually require stronger reliability guarantees.",
+      "The exact mechanisms should be selected based on failure impact, availability requirements, RPO, RTO, traffic characteristics, consistency requirements, and business cost.",
+    ],
+
+    tradeOffs: [
+      {
+        label: "Redundancy",
+        points: [
+          "+ Higher availability and fault tolerance",
+          "− Additional infrastructure and operational cost",
+        ],
+      },
+      {
+        label: "Retries",
+        points: [
+          "+ Can recover transient failures",
+          "− Can create retry storms and additional load",
+        ],
+      },
+      {
+        label: "Synchronous Replication",
+        points: [
+          "+ Stronger data-loss guarantees",
+          "− Higher write latency and dependency on replica/network responsiveness",
+        ],
+      },
+      {
+        label: "Asynchronous Replication",
+        points: [
+          "+ Lower write latency",
+          "− Replication lag and potential recent data loss during failover",
+        ],
+      },
+      {
+        label: "Circuit Breaker",
+        points: [
+          "+ Prevents cascading failures and fails fast",
+          "− Can temporarily reject requests even while a dependency is recovering",
+        ],
+      },
+      {
+        label: "Bulkhead",
+        points: [
+          "+ Limits blast radius",
+          "− Reduces resource sharing efficiency and adds configuration complexity",
+        ],
+      },
+      {
+        label: "Graceful Degradation",
+        points: [
+          "+ Preserves core functionality during partial failure",
+          "− Reduced feature availability and potentially degraded user experience",
+        ],
+      },
+      {
+        label: "Multi-AZ / Multi-Region",
+        points: [
+          "+ Stronger infrastructure resilience",
+          "− Higher cost, complexity, networking considerations, and operational burden",
+        ],
+      },
+    ],
+
+    thirtySecondAnswer:
+      "Reliability is the ability of a system to consistently perform its intended function correctly over time, even when failures occur. I design for failure rather than assuming components won't fail. First I identify failure points and remove single points of failure using redundancy. Then I detect failures using health checks and observability, protect service communication with timeouts, bounded retries, backoff and circuit breakers, and isolate resources using bulkheads. I also use rate limiting and load shedding to protect capacity, idempotency to preserve correctness during retries, replication and backups to protect data, and graceful degradation to keep core functionality working. Finally, I define RPO and RTO, automate recovery where required, and test failure scenarios.",
+
+    secondaryAnswer: {
+      question: "How would you make a microservices system reliable?",
+      answer:
+        "I would start by identifying failure modes across the application, infrastructure, database, cache, messaging layer, network, and external dependencies. At the application layer, I would keep services stateless where practical and deploy redundant instances across failure domains. The communication layer would use appropriate timeouts, bounded retries with exponential backoff and jitter, circuit breakers, and bulkhead isolation to prevent cascading failures. Rate limiting and load shedding would protect the system during overload. For critical operations such as payments, I would use idempotency so retries cannot create duplicate side effects. The database would have replication and automated failover for availability, plus backups for recovery from corruption or accidental deletion. Non-critical dependencies would have fallbacks so the core functionality can continue. Finally, I would use metrics, logs, traces, alerts, SLOs, and failure testing to detect problems, recover quickly, and continuously improve the architecture.",
+    },
+
+    keyTakeaways: [
+      "Reliability means consistently performing the intended function correctly over time, including during failures.",
+      "Reliability is broader than availability.",
+      "Design for failure instead of assuming components will always work.",
+      "The reliability flow is: IDENTIFY → DETECT → ISOLATE → PROTECT/DEGRADE → RECOVER → LEARN → PREVENT.",
+      "Remove single points of failure with appropriate redundancy.",
+      "Use timeouts so dependencies cannot hold resources indefinitely.",
+      "Use bounded retries with exponential backoff and jitter for transient failures.",
+      "Use circuit breakers to prevent repeated calls to unhealthy dependencies.",
+      "Use bulkheads to isolate resources and limit blast radius.",
+      "Use rate limiting and load shedding to protect system capacity.",
+      "Use graceful degradation to preserve core functionality.",
+      "Use idempotency to make retrying side-effecting operations safe.",
+      "Replication improves availability; backups provide historical data recovery.",
+      "RPO = acceptable data loss. RTO = acceptable recovery time.",
+      "Observability is required to detect, diagnose, and improve reliability.",
+      "Reliability mechanisms introduce cost, latency, complexity, and operational overhead, so they should follow actual business requirements.",
+      "A system is not truly reliable merely because it stays online; it must also preserve correctness and recover safely.",
+    ],
+
+    interviewQuestions: [
+      {
+        level: "Basic",
+        questions: [
+          {
+            id: "b1",
+            question: "What is reliability in system design?",
+            answer:
+              "The ability of a system to consistently perform its intended function correctly over time, including when failures occur.",
+          },
+          {
+            id: "b2",
+            question:
+              "What is the difference between reliability and availability?",
+            answer:
+              "Availability focuses on whether the system is operational; reliability is broader and includes correctness, failure handling, and recovery.",
+          },
+          {
+            id: "b3",
+            question: "Why should we design for failure?",
+            answer:
+              "Because failures are inevitable in distributed systems and cannot realistically be eliminated completely.",
+          },
+          {
+            id: "b4",
+            question: "What is a single point of failure?",
+            answer:
+              "A component whose failure alone can cause the system or a critical function to fail.",
+          },
+          {
+            id: "b5",
+            question: "Why is redundancy important?",
+            answer:
+              "It provides alternative components that can continue serving when one component fails.",
+          },
+          {
+            id: "b6",
+            question: "What is a timeout?",
+            answer:
+              "A maximum waiting period after which a request to a dependency is considered failed or abandoned.",
+          },
+          {
+            id: "b7",
+            question: "What is retry?",
+            answer:
+              "Attempting an operation again after a failure, usually for transient failures.",
+          },
+          {
+            id: "b8",
+            question: "What is a circuit breaker?",
+            answer:
+              "A mechanism that temporarily stops calls to a repeatedly failing dependency and fails fast.",
+          },
+          {
+            id: "b9",
+            question: "What is RPO?",
+            answer:
+              "Maximum acceptable data loss expressed as a time duration.",
+          },
+          {
+            id: "b10",
+            question: "What is RTO?",
+            answer: "Maximum acceptable recovery time after a failure.",
+          },
+        ],
+      },
+
+      {
+        level: "Intermediate",
+        questions: [
+          {
+            id: "i1",
+            question: "Why are retries dangerous?",
+            answer:
+              "Uncontrolled retries can increase traffic and create retry storms that overload an already failing dependency.",
+          },
+          {
+            id: "i2",
+            question: "Why use exponential backoff?",
+            answer:
+              "To progressively reduce retry frequency when failures continue.",
+          },
+          {
+            id: "i3",
+            question: "Why use jitter with retries?",
+            answer:
+              "To prevent many clients from retrying simultaneously and creating synchronized traffic spikes.",
+          },
+          {
+            id: "i4",
+            question:
+              "What is the difference between timeout and circuit breaker?",
+            answer:
+              "Timeout limits how long an individual request waits; circuit breaker stops repeated calls when a dependency is persistently unhealthy.",
+          },
+          {
+            id: "i5",
+            question: "What is a bulkhead?",
+            answer:
+              "A resource-isolation mechanism that prevents one workload from consuming resources required by other workloads.",
+          },
+          {
+            id: "i6",
+            question: "What is graceful degradation?",
+            answer:
+              "Keeping core functionality available while reducing or disabling non-critical functionality during partial failure.",
+          },
+          {
+            id: "i7",
+            question: "Why is idempotency important for payment APIs?",
+            answer:
+              "Because the client may retry after a timeout even though the original payment succeeded, potentially causing duplicate charges.",
+          },
+          {
+            id: "i8",
+            question: "Why are backups needed when replication exists?",
+            answer:
+              "Replication copies changes, including corruption or accidental deletion, while backups provide historical recovery points.",
+          },
+          {
+            id: "i9",
+            question: "What are the three pillars of observability?",
+            answer: "Metrics, logs, and distributed traces.",
+          },
+          {
+            id: "i10",
+            question: "What is load shedding?",
+            answer:
+              "Deliberately rejecting or dropping excess or lower-priority work during overload to preserve critical system functionality.",
+          },
+        ],
+      },
+
+      {
+        level: "Advanced",
+        questions: [
+          {
+            id: "a1",
+            question:
+              "How would you prevent cascading failure in microservices?",
+            answer:
+              "Use timeouts, bounded retries with backoff and jitter, circuit breakers, bulkheads, rate limiting, load shedding, graceful degradation, and appropriate capacity.",
+          },
+          {
+            id: "a2",
+            question: "How would you make a payment system reliable?",
+            answer:
+              "Use durable payment state, idempotency keys, controlled retries, timeouts, provider reconciliation, database reliability, observability, and safe handling of ambiguous outcomes.",
+          },
+          {
+            id: "a3",
+            question: "Why doesn't a timeout prove that a payment failed?",
+            answer:
+              "Because the provider may have processed the payment successfully while the response was lost or delayed.",
+          },
+          {
+            id: "a4",
+            question: "How do RPO and RTO influence architecture?",
+            answer:
+              "RPO influences how much replication or backup lag is acceptable; RTO influences how quickly and automatically failover and recovery must occur.",
+          },
+          {
+            id: "a5",
+            question: "How would you design database reliability?",
+            answer:
+              "Use replication, failover, backups, monitoring, recovery procedures, capacity planning, and consistency mechanisms appropriate to RPO/RTO requirements.",
+          },
+          {
+            id: "a6",
+            question: "Why can a highly available system still be unreliable?",
+            answer:
+              "It can remain operational while producing incorrect results, duplicating operations, losing data, or failing to recover correctly.",
+          },
+          {
+            id: "a7",
+            question:
+              "How would you protect a service from a slow downstream dependency?",
+            answer:
+              "Use timeouts, bounded retries where appropriate, circuit breakers, bulkhead isolation, and graceful fallback.",
+          },
+          {
+            id: "a8",
+            question:
+              "How does bulkhead isolation help during dependency failure?",
+            answer:
+              "It prevents the failing dependency from consuming all threads, connections, or other shared resources.",
+          },
+          {
+            id: "a9",
+            question: "What happens if a retry is not idempotent?",
+            answer:
+              "A retry can execute the side effect multiple times, potentially creating duplicate orders, charges, reservations, or other business operations.",
+          },
+          {
+            id: "a10",
+            question:
+              "How would you test whether a reliability design actually works?",
+            answer:
+              "Perform controlled failure testing such as instance failures, dependency outages, network failures, database failover, overload tests, disaster recovery exercises, and chaos experiments where appropriate.",
+          },
+        ],
+      },
+
+      {
+        level: "Scenario",
+        questions: [
+          {
+            id: "s1",
+            question:
+              "Service B is down and Service A keeps retrying. CPU and threads in Service A reach 100%. What happened?",
+            answer:
+              "A cascading failure or retry storm occurred. Service A should use timeouts, bounded retries, backoff, circuit breaking, and resource isolation.",
+          },
+          {
+            id: "s2",
+            question:
+              "A payment request times out, but the payment provider says it succeeded. What should happen on retry?",
+            answer:
+              "Retry using the same idempotency key or query the existing payment status so the payment is not duplicated.",
+          },
+          {
+            id: "s3",
+            question:
+              "Your recommendation service is down. Should the entire e-commerce site return an error?",
+            answer:
+              "No. Recommendations are typically non-critical, so the system should degrade gracefully and continue core shopping functionality.",
+          },
+          {
+            id: "s4",
+            question:
+              "One tenant sends massive traffic and consumes all application threads. How would you protect other tenants?",
+            answer:
+              "Use rate limiting, quotas, bulkhead isolation, and potentially load shedding.",
+          },
+          {
+            id: "s5",
+            question:
+              "The database replica exists, but an accidental DELETE is replicated everywhere. Can the replica recover the data?",
+            answer:
+              "Not necessarily. A backup or point-in-time recovery mechanism is required because the bad change may have been replicated.",
+          },
+          {
+            id: "s6",
+            question:
+              "A downstream service takes 60 seconds to respond. Your service has 500 request threads. What is the risk?",
+            answer:
+              "Threads can remain blocked waiting for the dependency, eventually exhausting resources and causing cascading failure. Appropriate timeouts and isolation are required.",
+          },
+          {
+            id: "s7",
+            question:
+              "The circuit breaker is OPEN. What happens to new requests?",
+            answer:
+              "They fail fast or use a fallback instead of calling the unhealthy dependency.",
+          },
+          {
+            id: "s8",
+            question:
+              "The system is overloaded and cannot process every request. What should it do?",
+            answer:
+              "Protect critical functionality using rate limiting, admission control, load shedding, prioritization, and graceful degradation.",
+          },
+          {
+            id: "s9",
+            question:
+              "Your system recovers quickly after failure but loses the last 10 minutes of data. Which requirement was not satisfied?",
+            answer:
+              "The RPO requirement was not satisfied if the business required less than 10 minutes of acceptable data loss.",
+          },
+          {
+            id: "s10",
+            question:
+              "Your system loses service for 20 minutes even though the business requires recovery within 2 minutes. Which requirement was violated?",
+            answer: "The RTO requirement was violated.",
+          },
+        ],
+      },
+    ],
+  },
 };
 
 export const getTopicContent = (blockId: string): TopicContent | undefined =>
