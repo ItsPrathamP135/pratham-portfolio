@@ -760,7 +760,7 @@ export const systemDesignVisuals: Record<string, TopicVisualization> = {
       },
     ],
   },
-  "reliability": {
+  reliability: {
     topicId: "reliability",
     type: "stage-flow",
     summary:
@@ -843,18 +843,10 @@ export const systemDesignVisuals: Record<string, TopicVisualization> = {
           "The system must detect unhealthy components before routing more traffic to them.",
         layers: [
           {
-            boxes: [
-              "Health Checks",
-              "Liveness Check",
-              "Readiness Check",
-            ],
+            boxes: ["Health Checks", "Liveness Check", "Readiness Check"],
           },
           {
-            boxes: [
-              "Load Balancer",
-              "Service Discovery",
-              "Orchestrator",
-            ],
+            boxes: ["Load Balancer", "Service Discovery", "Orchestrator"],
           },
         ],
       },
@@ -865,11 +857,7 @@ export const systemDesignVisuals: Record<string, TopicVisualization> = {
           "A timeout prevents a request from waiting indefinitely for a slow or failed dependency.",
         layers: [
           {
-            boxes: [
-              "Service A",
-              "Timeout",
-              "Service B",
-            ],
+            boxes: ["Service A", "Timeout", "Service B"],
           },
           {
             boxes: [
@@ -886,12 +874,7 @@ export const systemDesignVisuals: Record<string, TopicVisualization> = {
           "Retries can recover temporary failures, but uncontrolled retries can create retry storms.",
         layers: [
           {
-            boxes: [
-              "Request",
-              "Temporary Failure",
-              "Retry",
-              "Success",
-            ],
+            boxes: ["Request", "Temporary Failure", "Retry", "Success"],
           },
           {
             boxes: [
@@ -910,17 +893,10 @@ export const systemDesignVisuals: Record<string, TopicVisualization> = {
           "Circuit breakers stop repeatedly calling an unhealthy dependency.",
         layers: [
           {
-            boxes: [
-              "CLOSED",
-              "Requests Flow Normally",
-            ],
+            boxes: ["CLOSED", "Requests Flow Normally"],
           },
           {
-            boxes: [
-              "Failures Increase",
-              "OPEN",
-              "Requests Fail Fast",
-            ],
+            boxes: ["Failures Increase", "OPEN", "Requests Fail Fast"],
           },
           {
             boxes: [
@@ -939,25 +915,13 @@ export const systemDesignVisuals: Record<string, TopicVisualization> = {
           "Bulkheads isolate resources so failure or overload in one area does not consume everything.",
         layers: [
           {
-            boxes: [
-              "Service A",
-              "Thread Pool A",
-              "Connection Pool A",
-            ],
+            boxes: ["Service A", "Thread Pool A", "Connection Pool A"],
           },
           {
-            boxes: [
-              "Service B",
-              "Thread Pool B",
-              "Connection Pool B",
-            ],
+            boxes: ["Service B", "Thread Pool B", "Connection Pool B"],
           },
           {
-            boxes: [
-              "Service C",
-              "Thread Pool C",
-              "Connection Pool C",
-            ],
+            boxes: ["Service C", "Thread Pool C", "Connection Pool C"],
           },
         ],
       },
@@ -968,11 +932,7 @@ export const systemDesignVisuals: Record<string, TopicVisualization> = {
           "Protect system capacity by controlling incoming traffic and rejecting excess work when necessary.",
         layers: [
           {
-            boxes: [
-              "Incoming Traffic",
-              "Rate Limiter",
-              "Allowed Requests",
-            ],
+            boxes: ["Incoming Traffic", "Rate Limiter", "Allowed Requests"],
           },
           {
             boxes: [
@@ -990,10 +950,7 @@ export const systemDesignVisuals: Record<string, TopicVisualization> = {
           "When a non-critical dependency fails, continue serving the core user experience.",
         layers: [
           {
-            boxes: [
-              "Request",
-              "Primary Service",
-            ],
+            boxes: ["Request", "Primary Service"],
           },
           {
             boxes: [
@@ -1018,21 +975,13 @@ export const systemDesignVisuals: Record<string, TopicVisualization> = {
           "Replication provides additional copies of data and supports failover.",
         layers: [
           {
-            boxes: [
-              "Primary Database",
-            ],
+            boxes: ["Primary Database"],
           },
           {
-            boxes: [
-              "Replica 1",
-              "Replica 2",
-            ],
+            boxes: ["Replica 1", "Replica 2"],
           },
           {
-            boxes: [
-              "Failover",
-              "Promote Healthy Replica",
-            ],
+            boxes: ["Failover", "Promote Healthy Replica"],
           },
         ],
       },
@@ -1043,18 +992,10 @@ export const systemDesignVisuals: Record<string, TopicVisualization> = {
           "Replication improves availability; backups protect against data loss and logical corruption.",
         layers: [
           {
-            boxes: [
-              "Replication",
-              "Fast Failover",
-              "High Availability",
-            ],
+            boxes: ["Replication", "Fast Failover", "High Availability"],
           },
           {
-            boxes: [
-              "Backup",
-              "Point-in-Time Recovery",
-              "Data Recovery",
-            ],
+            boxes: ["Backup", "Point-in-Time Recovery", "Data Recovery"],
           },
         ],
       },
@@ -1065,16 +1006,10 @@ export const systemDesignVisuals: Record<string, TopicVisualization> = {
           "Reliability planning must define how much data loss and downtime the business can tolerate.",
         layers: [
           {
-            boxes: [
-              "RPO",
-              "Maximum Acceptable Data Loss",
-            ],
+            boxes: ["RPO", "Maximum Acceptable Data Loss"],
           },
           {
-            boxes: [
-              "RTO",
-              "Maximum Acceptable Recovery Time",
-            ],
+            boxes: ["RTO", "Maximum Acceptable Recovery Time"],
           },
         ],
       },
@@ -1085,11 +1020,7 @@ export const systemDesignVisuals: Record<string, TopicVisualization> = {
           "Retries must not create duplicate side effects, especially for payments and other critical operations.",
         layers: [
           {
-            boxes: [
-              "Client Request",
-              "Idempotency Key",
-              "Payment Service",
-            ],
+            boxes: ["Client Request", "Idempotency Key", "Payment Service"],
           },
           {
             boxes: [
@@ -1107,11 +1038,7 @@ export const systemDesignVisuals: Record<string, TopicVisualization> = {
           "A payment can succeed even when the response is lost, so correctness requires durable state, idempotency and reconciliation.",
         layers: [
           {
-            boxes: [
-              "Client",
-              "Payment API",
-              "Payment Provider",
-            ],
+            boxes: ["Client", "Payment API", "Payment Provider"],
           },
           {
             boxes: [
@@ -1126,14 +1053,10 @@ export const systemDesignVisuals: Record<string, TopicVisualization> = {
 
       {
         title: "16. Ambiguous Payment Outcome",
-        caption:
-          "A timeout does not necessarily mean the payment failed.",
+        caption: "A timeout does not necessarily mean the payment failed.",
         layers: [
           {
-            boxes: [
-              "Payment Request",
-              "Provider Processes Payment",
-            ],
+            boxes: ["Payment Request", "Provider Processes Payment"],
           },
           {
             boxes: [
@@ -1158,11 +1081,7 @@ export const systemDesignVisuals: Record<string, TopicVisualization> = {
           "Reliable messaging requires durable messages, replication, correct acknowledgement and consumer failure handling.",
         layers: [
           {
-            boxes: [
-              "Producer",
-              "Message Broker",
-              "Consumer",
-            ],
+            boxes: ["Producer", "Message Broker", "Consumer"],
           },
           {
             boxes: [
@@ -1182,33 +1101,16 @@ export const systemDesignVisuals: Record<string, TopicVisualization> = {
           "Reliability requires protection at every layer rather than relying on a single mechanism.",
         layers: [
           {
-            boxes: [
-              "Client",
-              "API Gateway",
-              "Load Balancer",
-            ],
+            boxes: ["Client", "API Gateway", "Load Balancer"],
           },
           {
-            boxes: [
-              "Service A",
-              "Service B",
-              "Service C",
-            ],
+            boxes: ["Service A", "Service B", "Service C"],
           },
           {
-            boxes: [
-              "Timeout",
-              "Retry",
-              "Circuit Breaker",
-              "Bulkhead",
-            ],
+            boxes: ["Timeout", "Retry", "Circuit Breaker", "Bulkhead"],
           },
           {
-            boxes: [
-              "Database",
-              "Cache",
-              "Message Broker",
-            ],
+            boxes: ["Database", "Cache", "Message Broker"],
           },
         ],
       },
@@ -1219,25 +1121,13 @@ export const systemDesignVisuals: Record<string, TopicVisualization> = {
           "Combine multiple reliability mechanisms to prevent local failures from becoming system-wide failures.",
         layers: [
           {
-            boxes: [
-              "Traffic Control",
-              "Rate Limiting",
-              "Load Shedding",
-            ],
+            boxes: ["Traffic Control", "Rate Limiting", "Load Shedding"],
           },
           {
-            boxes: [
-              "Timeout",
-              "Retry + Backoff",
-              "Circuit Breaker",
-            ],
+            boxes: ["Timeout", "Retry + Backoff", "Circuit Breaker"],
           },
           {
-            boxes: [
-              "Bulkhead",
-              "Graceful Degradation",
-              "Redundancy",
-            ],
+            boxes: ["Bulkhead", "Graceful Degradation", "Redundancy"],
           },
         ],
       },
@@ -1248,26 +1138,13 @@ export const systemDesignVisuals: Record<string, TopicVisualization> = {
           "A system cannot be reliably operated without visibility into failures and system behavior.",
         layers: [
           {
-            boxes: [
-              "Metrics",
-              "Logs",
-              "Traces",
-            ],
+            boxes: ["Metrics", "Logs", "Traces"],
           },
           {
-            boxes: [
-              "Error Rate",
-              "Latency",
-              "Throughput",
-              "Availability",
-            ],
+            boxes: ["Error Rate", "Latency", "Throughput", "Availability"],
           },
           {
-            boxes: [
-              "Alerts",
-              "Incident Detection",
-              "Root Cause Analysis",
-            ],
+            boxes: ["Alerts", "Incident Detection", "Root Cause Analysis"],
           },
         ],
       },
@@ -1278,25 +1155,13 @@ export const systemDesignVisuals: Record<string, TopicVisualization> = {
           "Recovery is followed by analysis, prevention and continuous improvement.",
         layers: [
           {
-            boxes: [
-              "Detect Failure",
-              "Recover",
-              "Restore Service",
-            ],
+            boxes: ["Detect Failure", "Recover", "Restore Service"],
           },
           {
-            boxes: [
-              "Incident Analysis",
-              "Root Cause",
-              "Corrective Action",
-            ],
+            boxes: ["Incident Analysis", "Root Cause", "Corrective Action"],
           },
           {
-            boxes: [
-              "Improve Architecture",
-              "Improve Monitoring",
-              "Test Again",
-            ],
+            boxes: ["Improve Architecture", "Improve Monitoring", "Test Again"],
           },
         ],
       },
@@ -1307,47 +1172,313 @@ export const systemDesignVisuals: Record<string, TopicVisualization> = {
           "The complete reliability mindset: identify → detect → isolate → protect → recover → learn → prevent.",
         layers: [
           {
-            boxes: [
-              "IDENTIFY",
-              "What Can Fail?",
-            ],
+            boxes: ["IDENTIFY", "What Can Fail?"],
           },
           {
-            boxes: [
-              "DETECT",
-              "Is Something Failing?",
-            ],
+            boxes: ["DETECT", "Is Something Failing?"],
           },
           {
-            boxes: [
-              "ISOLATE",
-              "Contain the Failure",
-            ],
+            boxes: ["ISOLATE", "Contain the Failure"],
           },
           {
-            boxes: [
-              "PROTECT",
-              "Prevent Cascading Failure",
-            ],
+            boxes: ["PROTECT", "Prevent Cascading Failure"],
           },
           {
-            boxes: [
-              "RECOVER",
-              "Restore Service",
-            ],
+            boxes: ["RECOVER", "Restore Service"],
           },
           {
-            boxes: [
-              "LEARN",
-              "Analyze the Failure",
-            ],
+            boxes: ["LEARN", "Analyze the Failure"],
           },
           {
+            boxes: ["PREVENT", "Improve the System"],
+          },
+        ],
+      },
+    ],
+  },
+  "database-replication": {
+    topicId: "database-replication",
+    type: "stage-flow",
+
+    summary:
+      "Database replication maintains additional copies of database state across separate database instances to improve availability, read scalability, and failover capability.",
+
+    stages: [
+      {
+        title: "Basic Database Replication",
+        caption:
+          "The primary handles writes and continuously replicates changes to one or more replicas.",
+
+        layers: [
+          { boxes: ["Application"] },
+          { boxes: ["Primary Database"] },
+          { boxes: ["Replication"] },
+          { boxes: ["Replica 1", "Replica 2"] },
+        ],
+      },
+
+      {
+        title: "Primary → Replica Flow",
+        caption:
+          "A write is processed by the primary, recorded through the replication mechanism, and applied by replicas.",
+
+        layers: [
+          { boxes: ["Client → Write Request"] },
+          { boxes: ["Primary Database"] },
+          { boxes: ["Replication Log / Stream"] },
+          { boxes: ["Replica 1", "Replica 2"] },
+        ],
+      },
+
+      {
+        title: "Synchronous Replication",
+        caption:
+          "The write acknowledgement depends on the configured replica acknowledgement semantics.",
+
+        layers: [
+          { boxes: ["Client → Write"] },
+          { boxes: ["Primary Database"] },
+          { boxes: ["Replica → Confirm / Acknowledge"] },
+          { boxes: ["Write Acknowledged"] },
+        ],
+      },
+
+      {
+        title: "Asynchronous Replication",
+        caption:
+          "The primary can acknowledge the write before replicas have caught up.",
+
+        layers: [
+          { boxes: ["Client → Write"] },
+          { boxes: ["Primary Database → Acknowledge"] },
+          { boxes: ["Replication continues"] },
+          { boxes: ["Replica → Applies Later"] },
+        ],
+      },
+
+      {
+        title: "Replication Lag",
+        caption:
+          "The replica may temporarily be behind the primary, causing stale reads.",
+
+        layers: [
+          { boxes: ["Primary: Order = CONFIRMED"] },
+          { boxes: ["Replication Lag"] },
+          { boxes: ["Replica: Order = PROCESSING"] },
+          { boxes: ["Read → Stale Result"] },
+        ],
+      },
+
+      {
+        title: "Read-After-Write Consistency",
+        caption:
+          "A write goes to the primary, but a following read from a lagging replica may not immediately see it.",
+
+        layers: [
+          { boxes: ["Client → UPDATE Profile"] },
+          { boxes: ["Primary → Write Successful"] },
+          { boxes: ["Client → GET Profile"] },
+          { boxes: ["Lagging Replica → Old Data"] },
+        ],
+      },
+
+      {
+        title: "Read Routing",
+        caption:
+          "Reads can be distributed across replicas when their consistency and freshness are acceptable.",
+
+        layers: [
+          { boxes: ["Application"] },
+          { boxes: ["Write → Primary"] },
+          { boxes: ["Read → Replica 1", "Read → Replica 2"] },
+          { boxes: ["Replica Read Capacity"] },
+        ],
+      },
+
+      {
+        title: "Primary Failure + Failover",
+        caption:
+          "When the primary fails, a suitable healthy replica can be promoted and write traffic redirected.",
+
+        layers: [
+          { boxes: ["Primary Database ❌"] },
+          { boxes: ["Failure Detection"] },
+          { boxes: ["Select Healthy Replica"] },
+          { boxes: ["Promote Replica → New Primary"] },
+          { boxes: ["Redirect Application Writes"] },
+        ],
+      },
+
+      {
+        title: "Asynchronous Failover Data-Loss Window",
+        caption:
+          "If the primary fails before recent writes reach the replica, those writes may not be available after failover.",
+
+        layers: [
+          {
+            boxes: ["Primary: Write A", "Primary: Write B", "Primary: Write C"],
+          },
+          { boxes: ["Replication Lag"] },
+          { boxes: ["Replica: A ✓", "Replica: B ✓", "Replica: C ❌"] },
+          { boxes: ["Primary Failure"] },
+          { boxes: ["Possible Loss of Recent Write C"] },
+        ],
+      },
+
+      {
+        title: "Replication vs Sharding",
+        caption:
+          "Replication creates copies; sharding partitions the dataset across nodes.",
+
+        layers: [
+          { boxes: ["Replication"] },
+          { boxes: ["DB Copy A", "DB Copy A"] },
+          { boxes: ["Sharding"] },
+          { boxes: ["Shard 1", "Shard 2", "Shard 3"] },
+        ],
+      },
+
+      {
+        title: "Replication + Sharding",
+        caption:
+          "Large systems can combine sharding for scale with replication for redundancy.",
+
+        layers: [
+          { boxes: ["Application"] },
+          { boxes: ["Shard 1", "Shard 2", "Shard 3"] },
+          { boxes: ["Shard 1 Primary + Replicas"] },
+          { boxes: ["Shard 2 Primary + Replicas"] },
+          { boxes: ["Shard 3 Primary + Replicas"] },
+        ],
+      },
+
+      {
+        title: "Replication vs Backup",
+        caption:
+          "Replication provides current copies for availability; backups provide historical recovery.",
+
+        layers: [
+          { boxes: ["Production Database"] },
+          { boxes: ["Replication → Current Replica"] },
+          { boxes: ["Backup → Historical Recovery Point"] },
+          { boxes: ["Point-in-Time Recovery"] },
+        ],
+      },
+
+      {
+        title: "RPO vs RTO",
+        caption:
+          "RPO determines acceptable data loss; RTO determines acceptable recovery time.",
+
+        layers: [
+          { boxes: ["Failure"] },
+          { boxes: ["RPO → How much data can be lost?"] },
+          { boxes: ["RTO → How quickly must service recover?"] },
+          { boxes: ["Replication + Failover + Backup Strategy"] },
+        ],
+      },
+
+      {
+        title: "Multi-AZ Database Replication",
+        caption:
+          "Database redundancy is distributed across independent Availability Zones.",
+
+        layers: [
+          { boxes: ["Region"] },
+          { boxes: ["AZ-1: Primary Database"] },
+          { boxes: ["Replication"] },
+          { boxes: ["AZ-2: Standby / Replica"] },
+          { boxes: ["AZ-3: Additional Replica"] },
+        ],
+      },
+
+      {
+        title: "Multi-Region Replication",
+        caption:
+          "Database copies can be distributed across geographic Regions for regional resilience.",
+
+        layers: [
+          { boxes: ["Region A: Primary"] },
+          { boxes: ["Cross-Region Replication"] },
+          { boxes: ["Region B: Replica"] },
+          { boxes: ["Region C: Replica / DR"] },
+        ],
+      },
+
+      {
+        title: "Single-Primary vs Multi-Primary",
+        caption:
+          "Single-primary has one write authority; multi-primary allows multiple write locations with greater coordination complexity.",
+
+        layers: [
+          { boxes: ["Single-Primary"] },
+          { boxes: ["Primary → Writes"] },
+          { boxes: ["Replicas → Reads / Standby"] },
+
+          { boxes: ["Multi-Primary"] },
+          { boxes: ["Primary A ↔ Primary B ↔ Primary C"] },
+        ],
+      },
+
+      {
+        title: "Database Replication + Cache",
+        caption:
+          "Caching and replication solve different problems and can work together.",
+
+        layers: [
+          { boxes: ["Application"] },
+          { boxes: ["Redis Cache"] },
+          { boxes: ["Cache Miss"] },
+          { boxes: ["Primary + Read Replicas"] },
+        ],
+      },
+
+      {
+        title: "Read-Heavy Architecture",
+        caption:
+          "Read replicas distribute database read traffic while the primary continues handling writes.",
+
+        layers: [
+          { boxes: ["Clients"] },
+          { boxes: ["Load Balancer / Application"] },
+          { boxes: ["Writes → Primary"] },
+          {
             boxes: [
-              "PREVENT",
-              "Improve the System",
+              "Reads → Replica 1",
+              "Reads → Replica 2",
+              "Reads → Replica 3",
             ],
           },
+        ],
+      },
+
+      {
+        title: "Reporting Replica",
+        caption:
+          "Heavy reporting workloads can be isolated from the transactional primary.",
+
+        layers: [
+          { boxes: ["Application"] },
+          { boxes: ["Primary DB → OLTP"] },
+          { boxes: ["Replication"] },
+          { boxes: ["Reporting Replica → Analytics Queries"] },
+        ],
+      },
+
+      {
+        title: "Complete Database Replication Architecture",
+        caption:
+          "A production-oriented architecture combining application scaling, caching, replication, and failover.",
+
+        layers: [
+          { boxes: ["Users"] },
+          { boxes: ["Load Balancer"] },
+          { boxes: ["Stateless Spring Boot Instances"] },
+          { boxes: ["Redis Cache"] },
+          { boxes: ["Primary Database"] },
+          { boxes: ["Replication"] },
+          { boxes: ["Read Replica 1", "Read Replica 2"] },
+          { boxes: ["Backup / Point-in-Time Recovery"] },
         ],
       },
     ],

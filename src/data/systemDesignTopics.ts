@@ -7136,6 +7136,1232 @@ export const systemDesignTopics: Record<string, TopicContent> = {
       },
     ],
   },
+  "database-replication": {
+    blockId: "database-replication",
+    categoryId: "hld-fundamentals",
+
+    what: [
+      "Database replication is the process of maintaining copies of the same database data on multiple database servers or instances.",
+      "In a common primary-replica architecture, the primary database handles writes while one or more replicas receive and apply copies of those changes.",
+      "Replication is mainly used to improve database availability, read scalability, fault tolerance, and geographic distribution.",
+      "Replication does not necessarily mean that every replica is immediately identical to the primary. The freshness of replicas depends on the replication strategy.",
+      "Replication can be synchronous or asynchronous, depending on how and when the primary considers a write sufficiently replicated.",
+      "Replication is different from sharding. Replication creates copies of data, while sharding partitions data across multiple database nodes.",
+      "Replication is also different from backup. Replication maintains live copies for availability and scaling, while backups provide historical recovery points.",
+    ],
+
+    deepConcepts: [
+      {
+        term: "Database Replication",
+        simpleDefinition:
+          "Maintaining copies of database data on multiple database instances.",
+        interviewDefinition:
+          "Database replication is the process of copying database changes from one database instance to one or more other database instances so that multiple copies of the data are maintained.",
+        whyItMatters:
+          "A single database instance can become a bottleneck or single point of failure. Replication provides additional database instances that can support reads, failover, or geographic distribution.",
+        example:
+          "An e-commerce application has one primary database handling writes and three replicas handling eligible read traffic.",
+        whenItMatters:
+          "Read-heavy applications, highly available systems, database failover, reporting workloads, and geographically distributed applications.",
+        commonMistake:
+          "Assuming replication automatically increases write capacity or guarantees that all replicas always contain the latest data.",
+        interviewQuestion: "What is database replication?",
+        interviewAnswer:
+          "Database replication is maintaining copies of database data across multiple database instances. It is commonly used for availability, read scalability, failover, and geographic distribution.",
+      },
+
+      {
+        term: "Primary and Replica",
+        simpleDefinition:
+          "The primary handles writes and replicas maintain copies of its data.",
+        interviewDefinition:
+          "In a single-primary replication architecture, the primary database normally accepts writes while replicas receive and apply changes from the primary and can serve eligible read traffic.",
+        whyItMatters:
+          "Separating write and read responsibilities allows read traffic to scale independently while retaining a single authoritative write path.",
+        example:
+          "Application → Primary DB for INSERT/UPDATE/DELETE and Replica DBs for SELECT queries that can tolerate replica lag.",
+        whenItMatters:
+          "Common production database architectures with read-heavy workloads.",
+        commonMistake:
+          "Thinking replicas are automatically suitable for every read.",
+        interviewQuestion:
+          "What is the difference between a primary and a replica?",
+        interviewAnswer:
+          "The primary normally handles writes, while replicas maintain copies of the primary's data and can serve eligible reads.",
+      },
+
+      {
+        term: "Synchronous Replication",
+        simpleDefinition:
+          "The primary waits for the required replica acknowledgement according to the configured replication semantics.",
+        interviewDefinition:
+          "Synchronous replication means the primary coordinates with one or more replicas before acknowledging a write according to the configured synchronous replication and durability rules.",
+        whyItMatters:
+          "It can provide stronger protection against losing recently committed data when a primary fails.",
+        example:
+          "Application → Primary → Required replica acknowledgement → Write acknowledgement according to configured semantics.",
+        whenItMatters:
+          "Systems where stronger data-loss protection is more important than the additional write latency and dependency on replica/network responsiveness.",
+        commonMistake:
+          "Saying synchronous replication always guarantees zero data loss or zero downtime.",
+        interviewQuestion: "What is synchronous replication?",
+        interviewAnswer:
+          "Synchronous replication requires the primary to wait for the required replica acknowledgement according to the configured replication semantics before acknowledging the write.",
+      },
+
+      {
+        term: "Asynchronous Replication",
+        simpleDefinition:
+          "The primary can acknowledge a write without waiting for replicas to fully apply that change.",
+        interviewDefinition:
+          "Asynchronous replication allows the primary to acknowledge a write without waiting for the replicas to receive or apply the change.",
+        whyItMatters:
+          "It generally provides lower write latency because the primary does not have to wait for replica acknowledgement.",
+        example:
+          "Application → Primary → Write acknowledged → Change replicated asynchronously to replicas.",
+        whenItMatters:
+          "Systems where lower write latency is important and the application can tolerate replica lag or a defined potential data-loss window during failover.",
+        commonMistake:
+          "Ignoring the possibility of replica lag and recent-data loss during failover.",
+        interviewQuestion: "What is asynchronous replication?",
+        interviewAnswer:
+          "Asynchronous replication allows the primary to acknowledge writes without waiting for replicas to fully apply the changes. It usually provides lower write latency but can introduce replication lag.",
+      },
+
+      {
+        term: "Replication Lag",
+        simpleDefinition:
+          "The delay between a change on the primary and that change being applied or visible on a replica.",
+        interviewDefinition:
+          "Replication lag is the delay between a database change becoming available on the primary and that change being received, applied, or made visible on a replica.",
+        whyItMatters:
+          "Lagging replicas can return stale data and cause consistency problems, especially for read-after-write operations.",
+        example:
+          "User changes their profile → write reaches primary → immediate read goes to lagging replica → old profile is returned.",
+        whenItMatters:
+          "Read scaling, asynchronous replication, read/write splitting, and distributed database architectures.",
+        commonMistake:
+          "Assuming a replica is always equally up-to-date with the primary.",
+        interviewQuestion: "What is replication lag?",
+        interviewAnswer:
+          "Replication lag is the delay between a change being available on the primary and that change being applied or visible on a replica.",
+      },
+
+      {
+        term: "Read-After-Write Consistency",
+        simpleDefinition:
+          "After a successful write, a subsequent read should see that write.",
+        interviewDefinition:
+          "Read-after-write consistency means that once a write has successfully completed, a subsequent read for the same data observes that updated value.",
+        whyItMatters:
+          "Asynchronous replicas can temporarily contain stale data, so blindly routing reads to replicas can violate this expectation.",
+        example:
+          "User changes their name to 'John' and immediately requests their profile. If the read goes to a lagging replica, the old name may be returned.",
+        whenItMatters:
+          "User profiles, order status, payments, account balances, inventory, and other workflows where users expect immediate visibility of their own writes.",
+        commonMistake:
+          "Sending every read to replicas without considering consistency requirements.",
+        interviewQuestion:
+          "How can replication lag affect read-after-write consistency?",
+        interviewAnswer:
+          "If a read is routed to a lagging replica immediately after a write, the replica may return stale data instead of the value just written.",
+      },
+
+      {
+        term: "Read Routing",
+        simpleDefinition:
+          "Deciding whether a read should go to the primary or a replica.",
+        interviewDefinition:
+          "Read routing determines which database instance should serve a read based on factors such as consistency requirements, replica health, replication lag, workload, and geographic location.",
+        whyItMatters:
+          "Not every read can safely go to an asynchronous replica.",
+        example:
+          "Normal product browsing → replica. Immediately after updating account information → primary.",
+        whenItMatters:
+          "Read/write splitting and systems with multiple database replicas.",
+        commonMistake:
+          "Using replicas for consistency-sensitive reads without checking their freshness.",
+        interviewQuestion:
+          "How would you decide whether a read should go to the primary or replica?",
+        interviewAnswer:
+          "I would consider consistency requirements first, then replica health, replication lag, workload, and routing strategy. Reads requiring strong or read-after-write consistency may need to go to the primary.",
+      },
+
+      {
+        term: "Read/Write Splitting",
+        simpleDefinition:
+          "Writes go to the primary while eligible reads go to replicas.",
+        interviewDefinition:
+          "Read/write splitting separates database traffic so writes are routed to the primary and eligible read operations are distributed across replicas.",
+        whyItMatters:
+          "It reduces read pressure on the primary and allows additional database capacity to be used for read workloads.",
+        example: "INSERT/UPDATE/DELETE → Primary; SELECT → Replica pool.",
+        whenItMatters:
+          "Applications with significantly more reads than writes.",
+        commonMistake:
+          "Assuming read/write splitting solves write bottlenecks.",
+        interviewQuestion: "What is read/write splitting?",
+        interviewAnswer:
+          "Read/write splitting routes writes to the primary and distributes eligible reads across replicas.",
+      },
+
+      {
+        term: "Database Failover",
+        simpleDefinition:
+          "Moving database service from a failed primary to an eligible replica.",
+        interviewDefinition:
+          "Database failover is the process of promoting an eligible replica to become the new primary when the existing primary becomes unavailable.",
+        whyItMatters:
+          "Without failover, having replicas may provide redundancy but the application may still be unable to write after primary failure.",
+        example:
+          "Primary fails → failure detected → replica selected → replica promoted → application redirects writes.",
+        whenItMatters: "Highly available production databases.",
+        commonMistake: "Confusing replication with failover.",
+        interviewQuestion: "What is database failover?",
+        interviewAnswer:
+          "Failover is the process of switching database service from a failed primary to an eligible replica that is promoted to become the new primary.",
+      },
+
+      {
+        term: "Automatic Failover",
+        simpleDefinition:
+          "The system detects primary failure and automatically promotes an eligible replica.",
+        interviewDefinition:
+          "Automatic database failover uses monitoring, health detection, and a failover mechanism to identify primary failure and promote an appropriate replica without requiring manual intervention.",
+        whyItMatters:
+          "It can reduce recovery time and help satisfy strict RTO requirements.",
+        example:
+          "Primary becomes unreachable → monitoring detects failure → failover mechanism promotes replica → routing is updated.",
+        whenItMatters:
+          "Production systems with strict availability and recovery requirements.",
+        commonMistake:
+          "Assuming automatic failover means instantaneous recovery.",
+        interviewQuestion: "How does automatic database failover work?",
+        interviewAnswer:
+          "The system detects the primary failure, selects an eligible replica, promotes it, redirects database traffic, and allows applications to reconnect to the new primary.",
+      },
+
+      {
+        term: "Split Brain",
+        simpleDefinition:
+          "Multiple database nodes incorrectly believe they are the primary.",
+        interviewDefinition:
+          "Split brain occurs when two or more database nodes independently become or believe they are the primary and accept writes simultaneously, potentially causing conflicting data.",
+        whyItMatters:
+          "Conflicting writes can cause data divergence and serious consistency problems.",
+        example:
+          "Network partition isolates the old primary from the failover controller while a replica is promoted. Both sides accept writes.",
+        whenItMatters:
+          "Automatic failover, distributed databases, multi-primary architectures, and network partition scenarios.",
+        commonMistake:
+          "Assuming simply having replicas automatically prevents split brain.",
+        interviewQuestion: "What is split brain in database systems?",
+        interviewAnswer:
+          "Split brain occurs when multiple database nodes believe they are primary and accept writes simultaneously. It can cause conflicting writes and data divergence.",
+      },
+
+      {
+        term: "Replication vs Sharding",
+        simpleDefinition: "Replication copies data; sharding partitions data.",
+        interviewDefinition:
+          "Replication maintains multiple copies of the same data, while sharding distributes different portions of the dataset across multiple database nodes.",
+        whyItMatters:
+          "The two mechanisms solve different scaling and availability problems.",
+        example:
+          "Replication: DB1 and DB2 contain the same data. Sharding: DB1 contains users A–M and DB2 contains users N–Z.",
+        whenItMatters: "Choosing a database scaling architecture.",
+        commonMistake: "Using read replicas to solve a write-capacity problem.",
+        interviewQuestion:
+          "What is the difference between replication and sharding?",
+        interviewAnswer:
+          "Replication creates copies of data for availability and read scaling, while sharding partitions data to distribute storage and workload across multiple database nodes.",
+      },
+
+      {
+        term: "Replication + Sharding",
+        simpleDefinition: "Each shard can have its own replicas.",
+        interviewDefinition:
+          "Large-scale database architectures can combine sharding and replication so that data is partitioned across shards while each shard maintains replicas for availability and read scaling.",
+        whyItMatters:
+          "Large systems may need both horizontal data distribution and redundancy.",
+        example:
+          "Shard 1 → Primary + Replicas; Shard 2 → Primary + Replicas; Shard 3 → Primary + Replicas.",
+        whenItMatters:
+          "Large datasets and high-scale systems where replication alone cannot provide sufficient write or storage scalability.",
+        commonMistake:
+          "Thinking replication and sharding are mutually exclusive.",
+        interviewQuestion: "Can replication and sharding be used together?",
+        interviewAnswer:
+          "Yes. Data can be partitioned into shards, and each shard can have replicas to provide availability and read scaling.",
+      },
+
+      {
+        term: "Replication vs Backup",
+        simpleDefinition:
+          "Replication provides live copies; backups provide historical recovery.",
+        interviewDefinition:
+          "Replication maintains current copies of data for availability and failover, while backups provide historical recovery points that can be used to recover from logical corruption, accidental deletion, or other data-loss scenarios.",
+        whyItMatters:
+          "A bad update or accidental deletion can be replicated to every replica.",
+        example:
+          "An accidental DELETE runs on the primary → DELETE replicates to replicas → backups are required to restore the previous state.",
+        whenItMatters: "Database recovery and disaster recovery planning.",
+        commonMistake: "Using replication as a replacement for backups.",
+        interviewQuestion:
+          "Why do we need backups if we already have replicas?",
+        interviewAnswer:
+          "Because replication also copies bad changes. Backups provide historical recovery points that can restore data to a previous valid state.",
+      },
+
+      {
+        term: "RPO",
+        simpleDefinition:
+          "The maximum amount of data loss the business can tolerate.",
+        interviewDefinition:
+          "Recovery Point Objective defines the maximum acceptable amount of data loss, normally expressed as a time duration.",
+        whyItMatters: "RPO influences replication and backup architecture.",
+        example:
+          "RPO = 5 minutes means the business may tolerate losing up to approximately five minutes of recent data after a failure.",
+        whenItMatters:
+          "Choosing synchronous/asynchronous replication, backup frequency, and disaster recovery strategy.",
+        commonMistake: "Confusing RPO with recovery time.",
+        interviewQuestion: "What does an RPO of 5 minutes mean?",
+        interviewAnswer:
+          "It means the business can tolerate losing up to approximately five minutes of the most recent data after a failure.",
+      },
+
+      {
+        term: "RTO",
+        simpleDefinition: "The maximum time the system can take to recover.",
+        interviewDefinition:
+          "Recovery Time Objective defines the maximum acceptable time required to restore service after a failure.",
+        whyItMatters:
+          "RTO influences failover automation, recovery procedures, infrastructure redundancy, and operational design.",
+        example:
+          "RTO = 2 minutes means the service should recover and resume operation within two minutes.",
+        whenItMatters: "High-availability and disaster recovery architecture.",
+        commonMistake: "Confusing RTO with RPO.",
+        interviewQuestion: "What is the difference between RPO and RTO?",
+        interviewAnswer:
+          "RPO defines acceptable data loss, while RTO defines acceptable recovery time.",
+      },
+
+      {
+        term: "Multi-AZ Database Replication",
+        simpleDefinition:
+          "Database instances are distributed across multiple Availability Zones.",
+        interviewDefinition:
+          "Multi-AZ database replication places database instances or replicas across independent Availability Zones so an AZ-level failure does not necessarily remove all database capacity.",
+        whyItMatters:
+          "Multiple database instances inside one AZ can still fail together if that AZ experiences a facility or infrastructure failure.",
+        example: "AZ-1 → Primary DB; AZ-2 → Replica; AZ-3 → Replica.",
+        whenItMatters:
+          "Production systems requiring high availability against Availability Zone failures.",
+        commonMistake:
+          "Thinking Multi-AZ automatically guarantees zero downtime.",
+        interviewQuestion:
+          "Why distribute database replicas across Availability Zones?",
+        interviewAnswer:
+          "To reduce the risk that an Availability Zone failure takes down both the primary and all replicas.",
+      },
+
+      {
+        term: "Multi-Region Replication",
+        simpleDefinition:
+          "Database copies are maintained across geographic regions.",
+        interviewDefinition:
+          "Multi-region replication maintains database copies across geographically separated regions to provide broader failure protection and potentially reduce read latency for users in different locations.",
+        whyItMatters:
+          "A regional outage can affect all resources inside that region, so AZ-level redundancy may not be sufficient for region-wide disaster scenarios.",
+        example: "Region A → Primary; Region B → Replica; Region C → Replica.",
+        whenItMatters:
+          "Global applications, strict disaster recovery requirements, and region-level resilience.",
+        commonMistake:
+          "Ignoring cross-region latency, replication lag, consistency, and conflict complexity.",
+        interviewQuestion:
+          "What are the trade-offs of multi-region database replication?",
+        interviewAnswer:
+          "It improves regional resilience and geographic read locality but adds latency, cost, replication lag, operational complexity, and consistency challenges.",
+      },
+
+      {
+        term: "Single-Primary Architecture",
+        simpleDefinition: "One database instance accepts writes.",
+        interviewDefinition:
+          "In a single-primary architecture, one database node is responsible for accepting writes while other nodes replicate its changes.",
+        whyItMatters:
+          "A single write authority simplifies ordering and conflict management.",
+        example: "Primary → Replica 1, Replica 2, Replica 3.",
+        whenItMatters:
+          "Most traditional primary-replica production architectures.",
+        commonMistake:
+          "Assuming the primary can never become a write bottleneck.",
+        interviewQuestion:
+          "What are the advantages of single-primary replication?",
+        interviewAnswer:
+          "It simplifies write ordering and conflict management because there is one authoritative write node.",
+      },
+
+      {
+        term: "Multi-Primary Architecture",
+        simpleDefinition: "Multiple database nodes can accept writes.",
+        interviewDefinition:
+          "A multi-primary architecture allows multiple database instances to accept writes, requiring mechanisms for conflict detection, conflict resolution, and consistency management.",
+        whyItMatters:
+          "It can support geographically distributed writes but introduces significant consistency and conflict-management complexity.",
+        example: "Region A Primary ↔ Region B Primary.",
+        whenItMatters:
+          "Specific globally distributed workloads where local writes are important and the database technology supports the required semantics.",
+        commonMistake:
+          "Assuming multi-primary is simply a faster version of primary-replica replication.",
+        interviewQuestion:
+          "What are the challenges of multi-primary replication?",
+        interviewAnswer:
+          "The main challenges are write conflicts, consistency, ordering, conflict resolution, and increased operational complexity.",
+      },
+
+      {
+        term: "Cascading Replication",
+        simpleDefinition: "A replica can replicate changes to another replica.",
+        interviewDefinition:
+          "Cascading replication allows a replica to act as an upstream source for another replica instead of every replica receiving changes directly from the primary.",
+        whyItMatters:
+          "It can reduce direct replication workload on the primary in some architectures.",
+        example: "Primary → Replica A → Replica B.",
+        whenItMatters:
+          "Large replica topologies or geographic deployments where direct replication from the primary would be undesirable.",
+        commonMistake:
+          "Ignoring the additional dependency and potential lag introduced by the chain.",
+        interviewQuestion: "What is cascading replication?",
+        interviewAnswer:
+          "Cascading replication is a topology where one replica forwards replicated changes to another replica, reducing the number of direct replication relationships with the primary.",
+      },
+
+      {
+        term: "Reporting Replica",
+        simpleDefinition:
+          "A replica dedicated to reporting or analytical workloads.",
+        interviewDefinition:
+          "A reporting replica is a database replica used specifically for reporting, analytics, or expensive read queries so those workloads do not compete directly with transactional traffic on the primary.",
+        whyItMatters:
+          "Heavy analytical queries can consume CPU, memory, I/O, and connections needed by production transactions.",
+        example:
+          "Application transactions → Primary; BI/reporting queries → Reporting Replica.",
+        whenItMatters:
+          "ERP, e-commerce, financial, analytics, and reporting-heavy systems.",
+        commonMistake:
+          "Running heavy reporting queries directly against the transactional primary.",
+        interviewQuestion: "Why would you use a reporting replica?",
+        interviewAnswer:
+          "To isolate expensive reporting queries from the transactional workload and protect primary database performance.",
+      },
+
+      {
+        term: "Database Replication + Cache",
+        simpleDefinition:
+          "Cache handles repeated reads while replicas provide additional database read capacity.",
+        interviewDefinition:
+          "A system can combine caching with database replication so frequently accessed data is served from cache while eligible database reads are distributed across replicas.",
+        whyItMatters:
+          "Caching reduces database requests while replication provides additional database capacity and availability.",
+        example: "User → Cache → Cache miss → Read Replica → Database.",
+        whenItMatters:
+          "Read-heavy applications with frequently accessed or cacheable data.",
+        commonMistake:
+          "Ignoring consistency between cache data and replicated database data.",
+        interviewQuestion:
+          "How can caching and database replication work together?",
+        interviewAnswer:
+          "The cache can handle frequently repeated reads while replicas serve database reads that miss the cache or are not suitable for caching.",
+      },
+
+      {
+        term: "Replica Health",
+        simpleDefinition:
+          "Whether a replica is healthy enough to serve traffic or participate in failover.",
+        interviewDefinition:
+          "Replica health includes replication status, replication lag, CPU, memory, storage, I/O, connection capacity, query performance, and ability to correctly apply changes.",
+        whyItMatters:
+          "A replica that is technically online but heavily lagging or unhealthy may not be safe for normal read traffic or failover.",
+        example:
+          "Replica is reachable but 20 minutes behind primary → remove it from consistency-sensitive read routing.",
+        whenItMatters: "Read routing, failover, and production monitoring.",
+        commonMistake:
+          "Using simple network availability as the only definition of database health.",
+        interviewQuestion: "What would you monitor on database replicas?",
+        interviewAnswer:
+          "I would monitor replication lag, replication errors, CPU, memory, disk I/O, storage, connections, query latency, and overall replica health.",
+      },
+
+      {
+        term: "Replica Promotion",
+        simpleDefinition: "Changing a replica into the new primary.",
+        interviewDefinition:
+          "Replica promotion is the process of making an eligible replica the authoritative primary after the existing primary fails or during a planned switchover.",
+        whyItMatters:
+          "Replication provides the copy, but promotion is required to make that copy the active write destination.",
+        example:
+          "Primary fails → Replica 1 selected → Replica 1 promoted → Writes redirected.",
+        whenItMatters: "Database failover and disaster recovery.",
+        commonMistake:
+          "Treating replication and promotion as the same operation.",
+        interviewQuestion: "What happens when a replica is promoted?",
+        interviewAnswer:
+          "The replica becomes the new write authority, and application/database routing must redirect writes to it.",
+      },
+    ],
+
+    comparisonTables: [
+      {
+        title: "Synchronous vs Asynchronous Replication",
+        items: [
+          {
+            statement: "Primary waits for required replica acknowledgement",
+            label: "Synchronous",
+          },
+          {
+            statement:
+              "Primary can acknowledge without waiting for full replica application",
+            label: "Asynchronous",
+          },
+          {
+            statement: "Generally stronger protection against recent-data loss",
+            label: "Synchronous",
+          },
+          {
+            statement: "Can have a recent-data-loss window during failover",
+            label: "Asynchronous",
+          },
+          {
+            statement: "Usually higher write latency",
+            label: "Synchronous",
+          },
+          {
+            statement: "Usually lower write latency",
+            label: "Asynchronous",
+          },
+          {
+            statement: "Greater dependency on replica/network responsiveness",
+            label: "Synchronous",
+          },
+          {
+            statement:
+              "More tolerant of temporary replica/network delays for write acknowledgement",
+            label: "Asynchronous",
+          },
+        ],
+      },
+
+      {
+        title: "Replication vs Sharding",
+        items: [
+          {
+            statement: "Creates copies of data",
+            label: "Replication",
+          },
+          {
+            statement: "Partitions data across nodes",
+            label: "Sharding",
+          },
+          {
+            statement: "Primarily helps availability and read scaling",
+            label: "Replication",
+          },
+          {
+            statement: "Primarily helps distribute storage and workload",
+            label: "Sharding",
+          },
+          {
+            statement: "Does not automatically increase write capacity",
+            label: "Replication",
+          },
+          {
+            statement: "Can distribute write workload across shards",
+            label: "Sharding",
+          },
+        ],
+      },
+
+      {
+        title: "Replication vs Backup",
+        items: [
+          {
+            statement: "Maintains current live copies",
+            label: "Replication",
+          },
+          {
+            statement: "Maintains historical recovery points",
+            label: "Backup",
+          },
+          {
+            statement: "Useful for availability and failover",
+            label: "Replication",
+          },
+          {
+            statement:
+              "Useful for accidental deletion and logical corruption recovery",
+            label: "Backup",
+          },
+          {
+            statement: "Bad changes may also be copied",
+            label: "Replication",
+          },
+          {
+            statement: "Can restore an earlier valid state",
+            label: "Backup",
+          },
+        ],
+      },
+
+      {
+        title: "Single-Primary vs Multi-Primary",
+        items: [
+          {
+            statement: "One authoritative write node",
+            label: "Single-Primary",
+          },
+          {
+            statement: "Multiple write nodes",
+            label: "Multi-Primary",
+          },
+          {
+            statement: "Simpler write ordering",
+            label: "Single-Primary",
+          },
+          {
+            statement: "More complex conflict resolution",
+            label: "Multi-Primary",
+          },
+          {
+            statement: "Simpler consistency model",
+            label: "Single-Primary",
+          },
+          {
+            statement: "Can provide geographically distributed writes",
+            label: "Multi-Primary",
+          },
+        ],
+      },
+
+      {
+        title: "RPO vs RTO",
+        items: [
+          {
+            statement: "Maximum acceptable data loss",
+            label: "RPO",
+          },
+          {
+            statement: "Maximum acceptable recovery time",
+            label: "RTO",
+          },
+          {
+            statement: "Influences replication and backup strategy",
+            label: "RPO",
+          },
+          {
+            statement: "Influences failover and recovery strategy",
+            label: "RTO",
+          },
+        ],
+      },
+
+      {
+        title: "Primary vs Replica",
+        items: [
+          {
+            statement: "Normally accepts writes",
+            label: "Primary",
+          },
+          {
+            statement: "Normally receives replicated changes",
+            label: "Replica",
+          },
+          {
+            statement: "Authoritative write destination",
+            label: "Primary",
+          },
+          {
+            statement: "Can serve eligible reads",
+            label: "Replica",
+          },
+          {
+            statement: "Can be promoted during failover",
+            label: "Replica",
+          },
+        ],
+      },
+    ],
+
+    why: [
+      "A single database instance can become a single point of failure. If it fails, the application may lose both read and write capability.",
+      "A single database can also become a read bottleneck when application traffic grows significantly.",
+      "Replication allows additional database instances to share eligible read traffic and provide redundancy.",
+      "Replication also provides a candidate for failover when the primary becomes unavailable.",
+      "For reporting-heavy systems, replicas can isolate expensive analytical workloads from transactional workloads.",
+      "For geographically distributed systems, replicas can be placed closer to users to reduce read latency.",
+      "For disaster recovery, replicas can be distributed across Availability Zones or regions depending on the required failure protection.",
+      "However, replication introduces consistency, lag, failover, storage, networking, and operational complexity, so it should be driven by actual requirements.",
+    ],
+
+    how: [
+      {
+        step: "1. Application sends a write",
+        description:
+          "The application sends an INSERT, UPDATE, or DELETE operation to the primary database in a typical single-primary architecture.",
+      },
+      {
+        step: "2. Primary processes the transaction",
+        description:
+          "The primary validates and processes the transaction according to the database's transaction and durability rules.",
+      },
+      {
+        step: "3. Change is recorded",
+        description:
+          "The database records the change in its replication mechanism, such as a transaction log, WAL, or equivalent technology-specific mechanism.",
+      },
+      {
+        step: "4. Change is transmitted",
+        description:
+          "The replication mechanism sends the required change information from the primary toward one or more replicas.",
+      },
+      {
+        step: "5. Replica receives the change",
+        description:
+          "The replica receives the replicated information and prepares it for application.",
+      },
+      {
+        step: "6. Replica applies the change",
+        description:
+          "The replica applies the change to its local database state.",
+      },
+      {
+        step: "7. Read traffic is routed",
+        description:
+          "Eligible read requests can be distributed across healthy replicas while consistency-sensitive reads may be routed to the primary.",
+      },
+      {
+        step: "8. Replica health is monitored",
+        description:
+          "Monitor replication lag, errors, CPU, memory, storage, I/O, connections, and query performance.",
+      },
+      {
+        step: "9. Failure is detected",
+        description:
+          "If the primary becomes unhealthy, monitoring and failover mechanisms detect the failure.",
+      },
+      {
+        step: "10. Replica is selected",
+        description:
+          "An eligible and sufficiently up-to-date replica is selected for promotion.",
+      },
+      {
+        step: "11. Replica is promoted",
+        description:
+          "The selected replica becomes the new primary according to the database and failover mechanism.",
+      },
+      {
+        step: "12. Traffic is redirected",
+        description:
+          "Database routing, service discovery, DNS, proxy, or connection configuration redirects new writes to the new primary.",
+      },
+      {
+        step: "13. Applications reconnect",
+        description:
+          "Application instances reconnect using the new database endpoint or routing mechanism.",
+      },
+      {
+        step: "14. Recovery is validated",
+        description:
+          "Verify database health, replication state, application connectivity, and data correctness before returning to normal operation.",
+      },
+    ],
+
+    interviewTraps: [
+      {
+        trap: '"Replication automatically scales writes"',
+        wrongApproach: "Adding read replicas whenever the database is slow.",
+        whyWrong:
+          "Traditional primary-replica replication still sends writes to the primary.",
+        betterApproach:
+          "Use replicas for eligible read scaling. If writes are the bottleneck, consider sharding, partitioning, batching, optimization, or workload redesign.",
+      },
+
+      {
+        trap: '"Replication and backup are the same"',
+        wrongApproach: "Using replicas as the only recovery mechanism.",
+        whyWrong:
+          "Corruption or accidental deletion can be replicated to all replicas.",
+        betterApproach:
+          "Use replication for availability/failover and backups for historical recovery.",
+      },
+
+      {
+        trap: '"All replicas always have the latest data"',
+        wrongApproach: "Routing every read to any replica.",
+        whyWrong: "Asynchronous replication can introduce replication lag.",
+        betterApproach:
+          "Monitor replica lag and route consistency-sensitive reads appropriately.",
+      },
+
+      {
+        trap: '"Synchronous replication means zero data loss in every scenario"',
+        wrongApproach:
+          "Assuming synchronous replication solves every data-loss problem.",
+        whyWrong:
+          "Actual guarantees depend on database configuration, acknowledgement semantics, quorum, durability, and the specific failure scenario.",
+        betterApproach:
+          "Explain the configured guarantees and relate them to the required RPO.",
+      },
+
+      {
+        trap: '"Replication means failover"',
+        wrongApproach:
+          "Assuming a replica automatically becomes writable when the primary fails.",
+        whyWrong:
+          "Replication copies data; failover/promotion changes the active write authority.",
+        betterApproach:
+          "Design replication and failover as separate but connected mechanisms.",
+      },
+
+      {
+        trap: '"More replicas always improve performance"',
+        wrongApproach:
+          "Continuously adding replicas without considering workload.",
+        whyWrong:
+          "Replication adds network, storage, synchronization, routing, and operational overhead.",
+        betterApproach:
+          "Add replicas based on measured read workload and monitor their capacity and lag.",
+      },
+
+      {
+        trap: '"Every read should go to a replica"',
+        wrongApproach: "Routing all reads to replicas to protect the primary.",
+        whyWrong: "Some reads require strong or read-after-write consistency.",
+        betterApproach:
+          "Classify reads by consistency requirement and route accordingly.",
+      },
+
+      {
+        trap: '"Multi-AZ means zero downtime"',
+        wrongApproach: "Assuming the database will never become unavailable.",
+        whyWrong:
+          "Failover, connection recovery, capacity, application behavior, and other dependencies can still cause downtime.",
+        betterApproach:
+          "Say Multi-AZ reduces the impact of AZ-level failures and can provide high availability, but does not guarantee zero downtime.",
+      },
+
+      {
+        trap: '"A replica can recover from every database failure"',
+        wrongApproach: "Relying only on replicas for recovery.",
+        whyWrong:
+          "Logical corruption and accidental changes can propagate to replicas.",
+        betterApproach:
+          "Maintain independent backups and point-in-time recovery.",
+      },
+
+      {
+        trap: '"Read replicas solve any database bottleneck"',
+        wrongApproach:
+          "Adding replicas when writes, storage, locks, or connection limits are the real bottleneck.",
+        whyWrong: "Replicas primarily address eligible read workload.",
+        betterApproach:
+          "Identify the actual database bottleneck before selecting the scaling mechanism.",
+      },
+
+      {
+        trap: '"Failover is instantaneous"',
+        wrongApproach:
+          "Assuming applications will never notice a primary failure.",
+        whyWrong:
+          "Failure detection, promotion, connection draining, DNS/proxy changes, and application reconnection take time.",
+        betterApproach:
+          "Design around the required RTO and test the complete failover path.",
+      },
+
+      {
+        trap: '"Multi-primary is always better"',
+        wrongApproach:
+          "Using multiple writable databases simply to increase availability.",
+        whyWrong:
+          "Multiple writers introduce conflict and consistency complexity.",
+        betterApproach:
+          "Use multi-primary only when its specific benefits justify the additional complexity.",
+      },
+    ],
+
+    when: [
+      "Use database replication when database availability is important and a single database instance represents an unacceptable failure risk.",
+      "Use read replicas when the application is read-heavy and database reads are becoming a bottleneck.",
+      "Use reporting replicas when analytical or reporting queries are competing with transactional workloads.",
+      "Use Multi-AZ replication when the system needs protection against Availability Zone-level failures.",
+      "Use multi-region replication when regional resilience or geographic read locality is an important requirement.",
+      "Use synchronous replication when stronger protection against recent data loss is required and additional write latency is acceptable.",
+      "Use asynchronous replication when lower write latency is more important and the system can tolerate replica lag and a defined data-loss window.",
+      "Use replication together with sharding when the system requires both data/workload partitioning and redundancy.",
+      "Do not introduce replication simply because it is a common production pattern. First identify whether the actual bottleneck or reliability requirement justifies it.",
+    ],
+
+    tradeOffs: [
+      {
+        label: "Availability",
+        points: [
+          "+ Provides additional database instances for redundancy and failover",
+          "− Availability still depends on correct failover, routing, capacity, and dependency design",
+        ],
+      },
+      {
+        label: "Read Scalability",
+        points: [
+          "+ Eligible read traffic can be distributed across replicas",
+          "− Does not automatically increase write capacity",
+        ],
+      },
+      {
+        label: "Synchronous Replication",
+        points: [
+          "+ Stronger protection against recent-data loss according to configured semantics",
+          "− Can increase write latency and dependency on replica/network responsiveness",
+        ],
+      },
+      {
+        label: "Asynchronous Replication",
+        points: [
+          "+ Generally lower write latency",
+          "− Can introduce replication lag and a potential recent-data-loss window during failover",
+        ],
+      },
+      {
+        label: "Multi-AZ Replication",
+        points: [
+          "+ Protects against AZ-level failures",
+          "− Requires additional infrastructure and surviving capacity planning",
+        ],
+      },
+      {
+        label: "Multi-Region Replication",
+        points: [
+          "+ Provides broader geographic resilience and regional read locality",
+          "− Higher cost, latency, complexity, and consistency challenges",
+        ],
+      },
+      {
+        label: "Operational Complexity",
+        points: [
+          "+ Enables sophisticated availability and scaling architectures",
+          "− Requires monitoring, failover testing, lag management, routing, and recovery procedures",
+        ],
+      },
+    ],
+
+    thirtySecondAnswer:
+      "Database replication means maintaining copies of database data across multiple database instances. In a typical primary-replica architecture, writes go to the primary and replicas receive the changes and can serve eligible reads. Replication improves availability, read scalability, and failover, but it introduces trade-offs such as replication lag, consistency issues, cost, and operational complexity. Synchronous replication provides stronger data-loss protection according to its configured semantics but can increase write latency, while asynchronous replication generally provides lower write latency but can introduce lag and a recent-data-loss window during failover. Replication is different from sharding and backup: sharding partitions data, while backups provide historical recovery.",
+
+    secondaryAnswer: {
+      question:
+        "How would you design a highly available read-heavy database architecture?",
+      answer:
+        "I would use a single primary for writes and multiple read replicas for eligible reads. I would distribute the database instances across Availability Zones so an AZ-level failure does not remove all database capacity. Read/write splitting would route writes to the primary and eligible reads to healthy replicas. I would monitor replication lag and remove lagging replicas from consistency-sensitive traffic. For primary failure, I would have an automated failover mechanism that detects the failure, promotes an eligible replica, and redirects write traffic. I would also maintain independent backups because replication does not protect against logical corruption or accidental deletion. If the workload eventually becomes write-heavy, I would evaluate sharding or other write-scaling strategies rather than simply adding read replicas.",
+    },
+
+    keyTakeaways: [
+      "Database replication means maintaining copies of database data across multiple database instances.",
+      "In a common single-primary architecture, the primary handles writes and replicas maintain copies.",
+      "Replicas can serve eligible read traffic.",
+      "Synchronous replication generally provides stronger recent-data-loss protection according to configured semantics but can increase write latency.",
+      "Asynchronous replication generally provides lower write latency but can introduce replication lag.",
+      "Replication lag can cause stale reads and read-after-write consistency problems.",
+      "Read/write splitting routes writes to the primary and eligible reads to replicas.",
+      "Read replicas improve read scalability but do not automatically increase write capacity.",
+      "Replication and sharding solve different problems and can be combined.",
+      "Replication is not a replacement for backups.",
+      "Failover and replication are separate concepts: replication copies data; failover changes the active primary.",
+      "Split-brain prevention is critical in automated failover architectures.",
+      "Multi-AZ replication protects against AZ-level failures.",
+      "Multi-region replication provides broader geographic resilience but introduces additional complexity.",
+      "RPO defines acceptable data loss; RTO defines acceptable recovery time.",
+      "Replica health includes replication lag, errors, resource usage, storage, connections, and query performance.",
+      "A replica should not automatically receive every read; routing must consider consistency requirements.",
+      "Always identify the actual database bottleneck before deciding whether replication is the correct scaling strategy.",
+    ],
+
+    interviewQuestions: [
+      {
+        level: "Basic",
+        questions: [
+          {
+            id: "b1",
+            question: "What is database replication?",
+            answer:
+              "Database replication is maintaining copies of database data across multiple database instances for availability, read scaling, failover, or geographic distribution.",
+          },
+          {
+            id: "b2",
+            question: "Why do we use database replication?",
+            answer:
+              "To improve availability, distribute eligible read traffic, provide failover candidates, isolate workloads, and support geographic resilience.",
+          },
+          {
+            id: "b3",
+            question: "What is a primary database?",
+            answer:
+              "In a single-primary architecture, it is the database instance that normally accepts writes.",
+          },
+          {
+            id: "b4",
+            question: "What is a replica?",
+            answer:
+              "A replica is a database instance that receives and applies replicated changes from an upstream database and can serve eligible reads.",
+          },
+          {
+            id: "b5",
+            question: "What is synchronous replication?",
+            answer:
+              "Replication where the primary coordinates with the required replica acknowledgement before acknowledging the write according to configured semantics.",
+          },
+          {
+            id: "b6",
+            question: "What is asynchronous replication?",
+            answer:
+              "Replication where the primary can acknowledge a write without waiting for replicas to fully apply the change.",
+          },
+          {
+            id: "b7",
+            question: "What is replication lag?",
+            answer:
+              "The delay between a change being available on the primary and being applied or visible on a replica.",
+          },
+          {
+            id: "b8",
+            question: "What is failover?",
+            answer:
+              "The process of switching database service from a failed primary to an eligible replica.",
+          },
+          {
+            id: "b9",
+            question: "What is RPO?",
+            answer:
+              "Recovery Point Objective defines the maximum acceptable amount of data loss.",
+          },
+          {
+            id: "b10",
+            question: "What is RTO?",
+            answer:
+              "Recovery Time Objective defines the maximum acceptable recovery time.",
+          },
+        ],
+      },
+
+      {
+        level: "Intermediate",
+        questions: [
+          {
+            id: "i1",
+            question:
+              "What is the difference between synchronous and asynchronous replication?",
+            answer:
+              "Synchronous replication waits for the required replica acknowledgement according to configured semantics, while asynchronous replication allows the primary to acknowledge without waiting for full replica application.",
+          },
+          {
+            id: "i2",
+            question: "Why does asynchronous replication introduce lag?",
+            answer:
+              "Because replication and replica application happen after or independently of the primary's write acknowledgement, so replicas can temporarily fall behind.",
+          },
+          {
+            id: "i3",
+            question: "How does replication lag affect users?",
+            answer:
+              "Reads routed to lagging replicas can return stale data and violate read-after-write expectations.",
+          },
+          {
+            id: "i4",
+            question: "Does replication increase write capacity?",
+            answer:
+              "Not in a traditional primary-replica architecture because writes still go to the primary.",
+          },
+          {
+            id: "i5",
+            question: "How do read replicas improve scalability?",
+            answer:
+              "They allow eligible read traffic to be distributed across multiple database instances.",
+          },
+          {
+            id: "i6",
+            question: "Replication vs sharding?",
+            answer:
+              "Replication creates copies; sharding partitions data. Replication mainly helps availability/read scaling, while sharding helps distribute data and workload.",
+          },
+          {
+            id: "i7",
+            question: "Replication vs backup?",
+            answer:
+              "Replication maintains live copies, while backups provide historical recovery points.",
+          },
+          {
+            id: "i8",
+            question: "What is read/write splitting?",
+            answer:
+              "Routing writes to the primary and eligible reads to replicas.",
+          },
+          {
+            id: "i9",
+            question: "What is read-after-write consistency?",
+            answer:
+              "It means a read performed after a successful write observes that write.",
+          },
+          {
+            id: "i10",
+            question:
+              "How can you handle read-after-write consistency with replicas?",
+            answer:
+              "Route the read to the primary, use session-aware routing, wait for an appropriate replica position, or use a database-specific consistency mechanism.",
+          },
+        ],
+      },
+
+      {
+        level: "Advanced",
+        questions: [
+          {
+            id: "a1",
+            question: "What happens when the primary database fails?",
+            answer:
+              "Failure is detected, an eligible replica is selected and promoted, database routing is updated, and applications reconnect to the new primary.",
+          },
+          {
+            id: "a2",
+            question: "What is split brain?",
+            answer:
+              "A condition where multiple database nodes believe they are primary and accept writes simultaneously, potentially causing conflicting data.",
+          },
+          {
+            id: "a3",
+            question: "How do you prevent split brain?",
+            answer:
+              "Use database-specific leader election, quorum, fencing, consensus, or other mechanisms that ensure only one valid primary can accept writes.",
+          },
+          {
+            id: "a4",
+            question: "Why can asynchronous failover cause data loss?",
+            answer:
+              "The primary may acknowledge a write before the change reaches the replica that is later promoted.",
+          },
+          {
+            id: "a5",
+            question: "What are the trade-offs of synchronous replication?",
+            answer:
+              "It can provide stronger data-loss protection but may increase write latency and dependency on replica/network responsiveness.",
+          },
+          {
+            id: "a6",
+            question: "What are the trade-offs of multi-region replication?",
+            answer:
+              "It improves regional resilience and geographic read locality but adds latency, cost, replication lag, consistency challenges, and operational complexity.",
+          },
+          {
+            id: "a7",
+            question: "Can replication and sharding be used together?",
+            answer:
+              "Yes. Each shard can have replicas, combining data/workload partitioning with redundancy and read scaling.",
+          },
+          {
+            id: "a8",
+            question: "Why do reporting replicas help?",
+            answer:
+              "They isolate expensive reporting and analytical queries from transactional workloads on the primary.",
+          },
+          {
+            id: "a9",
+            question: "What should you monitor on replicas?",
+            answer:
+              "Replication lag, replication errors, CPU, memory, disk I/O, storage, connections, query latency, and overall health.",
+          },
+          {
+            id: "a10",
+            question: "Why isn't replication enough for database recovery?",
+            answer:
+              "Because logical corruption or accidental deletion can be replicated. Independent backups and point-in-time recovery are required.",
+          },
+        ],
+      },
+
+      {
+        level: "Scenario",
+        questions: [
+          {
+            id: "s1",
+            question:
+              "Your application has 90% reads and 10% writes. The primary database CPU is high. What would you consider first?",
+            answer:
+              "I would investigate whether reads are the bottleneck. If so, I would consider read replicas and read/write splitting, while checking consistency requirements.",
+          },
+          {
+            id: "s2",
+            question:
+              "A user updates their profile and immediately sees the old profile. What could be happening?",
+            answer:
+              "The write reached the primary but the subsequent read was routed to a lagging asynchronous replica.",
+          },
+          {
+            id: "s3",
+            question:
+              "The primary fails and the newest replica is 30 seconds behind. What is the concern?",
+            answer:
+              "With asynchronous replication, recently acknowledged writes may not exist on the replica selected for promotion, creating a potential data-loss window.",
+          },
+          {
+            id: "s4",
+            question:
+              "An accidental DELETE was executed on the primary and replicated to every replica. How do you recover?",
+            answer:
+              "Use an independent backup or point-in-time recovery mechanism rather than relying on replicas.",
+          },
+          {
+            id: "s5",
+            question:
+              "Reporting queries are slowing down production transactions. What would you do?",
+            answer:
+              "Move reporting workloads to a dedicated reporting replica or analytical system.",
+          },
+          {
+            id: "s6",
+            question:
+              "You added five read replicas but write latency is still high. Why?",
+            answer:
+              "Read replicas do not automatically increase write capacity because writes still go through the primary.",
+          },
+          {
+            id: "s7",
+            question:
+              "One replica is 10 minutes behind the primary. Should it receive normal reads?",
+            answer:
+              "It should not receive reads that require fresh data. Depending on the workload, it may be removed from routing until its lag returns to an acceptable threshold.",
+          },
+          {
+            id: "s8",
+            question:
+              "The primary database fails during a payment request. What should the payment system do?",
+            answer:
+              "Failover handles database availability, but payment correctness requires durable payment state, idempotency, and reconciliation because the external provider may have completed the payment even if the database response was lost.",
+          },
+          {
+            id: "s9",
+            question:
+              "Your application is Multi-AZ but the only database is in one AZ. Is the architecture fully highly available?",
+            answer:
+              "No. The database remains a single failure domain and can become a system-wide availability bottleneck.",
+          },
+          {
+            id: "s10",
+            question:
+              "The business says it can tolerate at most 1 minute of data loss but your asynchronous replica can lag by 5 minutes. What does this tell you?",
+            answer:
+              "The current replication strategy may not satisfy the RPO requirement. A stronger replication/recovery strategy or architecture is required.",
+          },
+        ],
+      },
+    ],
+  },
 };
 
 export const getTopicContent = (blockId: string): TopicContent | undefined =>
