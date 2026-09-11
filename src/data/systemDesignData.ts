@@ -92,10 +92,15 @@ export const systemDesignData: SystemDesignCategory[] = [
         hasContent: true,
         completedOn: "2026-09-11",
       },
+       {
+        ...block(11, "Database Sharding", "COMPLETED"),
+        targetDate: "September 13, 2026",
+        hasContent: true,
+        completedOn: "2026-09-11",
+      },
+      block(12, "Distributed Transactions"),
 
-      block(11, "Distributed Transactions"),
-
-      block(12, "Database Sharding"),
+      
       block(13, "CAP Theorem"),
     ],
   },

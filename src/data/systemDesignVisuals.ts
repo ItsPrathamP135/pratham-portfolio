@@ -1483,6 +1483,662 @@ export const systemDesignVisuals: Record<string, TopicVisualization> = {
       },
     ],
   },
+  "database-sharding": {
+  topicId: "database-sharding",
+  type: "stage-flow",
+  summary:
+    "Database sharding distributes a large logical dataset across multiple database shards using a shard key, while routing, query locality, hotspot handling, replication, failure recovery, and rebalancing determine whether the architecture remains scalable and reliable.",
+
+  stages: [
+    {
+      title: "1. Identify the Database Bottleneck",
+      caption: "Sharding should solve a real database scaling problem.",
+      layers: [
+        {
+          boxes: [
+            "Single Database",
+            "CPU / Memory Limit",
+            "Storage Limit",
+            "Write Throughput Limit",
+            "Connection Limit",
+            "Latency / Load Bottleneck"
+          ]
+        },
+        {
+          boxes: [
+            "Measure Workload",
+            "Identify Bottleneck",
+            "Optimize First"
+          ]
+        }
+      ]
+    },
+
+    {
+      title: "2. Try Simpler Scaling First",
+      caption: "Sharding is powerful but adds significant complexity.",
+      layers: [
+        {
+          boxes: [
+            "Query Optimization",
+            "Indexes",
+            "Vertical Scaling"
+          ]
+        },
+        {
+          boxes: [
+            "Caching",
+            "Read Replicas",
+            "Connection Pool Tuning"
+          ]
+        },
+        {
+          boxes: [
+            "Still Limited?",
+            "Consider Sharding"
+          ]
+        }
+      ]
+    },
+
+    {
+      title: "3. Choose the Shard Key",
+      caption: "The shard key determines where each record lives.",
+      layers: [
+        {
+          boxes: [
+            "User ID",
+            "Tenant ID",
+            "Order ID",
+            "Region ID"
+          ]
+        },
+        {
+          boxes: [
+            "High Cardinality",
+            "Even Distribution",
+            "Stable Value",
+            "Query Locality",
+            "Low Hotspot Risk"
+          ]
+        },
+        {
+          boxes: [
+            "Shard Key",
+            "→",
+            "Shard Ownership"
+          ]
+        }
+      ]
+    },
+
+    {
+      title: "4. Choose the Sharding Strategy",
+      caption: "Different strategies optimize different workloads.",
+      layers: [
+        {
+          boxes: [
+            "Range Sharding",
+            "Hash Sharding",
+            "Consistent Hashing",
+            "Directory Sharding"
+          ]
+        },
+        {
+          boxes: [
+            "Range → Query Locality",
+            "Hash → Distribution",
+            "Consistent Hash → Limited Remapping",
+            "Directory → Flexible Mapping"
+          ]
+        }
+      ]
+    },
+
+    {
+      title: "5. Shard Router",
+      caption: "The router determines which database owns the requested key.",
+      layers: [
+        {
+          boxes: [
+            "Client Request",
+            "Application",
+            "Shard Router"
+          ]
+        },
+        {
+          boxes: [
+            "Extract Shard Key",
+            "Calculate / Lookup Shard",
+            "Route Request"
+          ]
+        },
+        {
+          boxes: [
+            "Shard 1",
+            "Shard 2",
+            "Shard 3",
+            "Shard N"
+          ]
+        }
+      ]
+    },
+
+    {
+      title: "6. Targeted Query",
+      caption: "A good shard key allows the request to reach one shard.",
+      layers: [
+        {
+          boxes: [
+            "Query + Shard Key"
+          ]
+        },
+        {
+          boxes: [
+            "Shard Router"
+          ]
+        },
+        {
+          boxes: [
+            "Target Shard"
+          ]
+        },
+        {
+          boxes: [
+            "Fast",
+            "Low Fan-Out",
+            "Efficient"
+          ]
+        }
+      ]
+    },
+
+    {
+      title: "7. Scatter-Gather Query",
+      caption: "Queries without a usable shard key may need to contact many shards.",
+      layers: [
+        {
+          boxes: [
+            "Query Without Shard Key"
+          ]
+        },
+        {
+          boxes: [
+            "Shard Router"
+          ]
+        },
+        {
+          boxes: [
+            "Shard 1",
+            "Shard 2",
+            "Shard 3",
+            "Shard N"
+          ]
+        },
+        {
+          boxes: [
+            "Gather Results",
+            "Merge / Aggregate"
+          ]
+        },
+        {
+          boxes: [
+            "More Network Traffic",
+            "Higher Fan-Out",
+            "Higher Tail Latency"
+          ]
+        }
+      ]
+    },
+
+    {
+      title: "8. Cross-Shard Joins & Transactions",
+      caption: "Distributed data makes relational operations harder.",
+      layers: [
+        {
+          boxes: [
+            "Cross-Shard Join",
+            "Cross-Shard Transaction"
+          ]
+        },
+        {
+          boxes: [
+            "Network Coordination",
+            "Distributed Commit",
+            "Failure Handling"
+          ]
+        },
+        {
+          boxes: [
+            "Prefer Data Co-Location",
+            "Denormalization",
+            "Application-Level Coordination"
+          ]
+        }
+      ]
+    },
+
+    {
+      title: "9. Data Co-Location",
+      caption: "Related data should ideally live on the same shard.",
+      layers: [
+        {
+          boxes: [
+            "Customer",
+            "Orders",
+            "Payments"
+          ]
+        },
+        {
+          boxes: [
+            "Same Tenant / Customer Key"
+          ]
+        },
+        {
+          boxes: [
+            "Same Shard",
+            "→",
+            "Simpler Queries",
+            "Fewer Cross-Shard Operations"
+          ]
+        }
+      ]
+    },
+
+    {
+      title: "10. Hot Shard & Hot Key",
+      caption: "Evenly distributed shards can still suffer from concentrated traffic.",
+      layers: [
+        {
+          boxes: [
+            "Uneven Data Distribution",
+            "Uneven Traffic Distribution"
+          ]
+        },
+        {
+          boxes: [
+            "Hot Shard"
+          ]
+        },
+        {
+          boxes: [
+            "Hot Key",
+            "Single Popular User",
+            "Popular Product",
+            "Popular Resource"
+          ]
+        },
+        {
+          boxes: [
+            "Cache",
+            "Replication",
+            "Key Splitting",
+            "Better Shard Key",
+            "Rebalancing"
+          ]
+        }
+      ]
+    },
+
+    {
+      title: "11. Consistent Hashing + Virtual Nodes",
+      caption: "Consistent hashing reduces large-scale remapping when shard membership changes.",
+      layers: [
+        {
+          boxes: [
+            "Hash Ring"
+          ]
+        },
+        {
+          boxes: [
+            "Shard 1",
+            "Shard 2",
+            "Shard 3",
+            "Shard 4"
+          ]
+        },
+        {
+          boxes: [
+            "Key → Hash Position"
+          ]
+        },
+        {
+          boxes: [
+            "Next Shard Clockwise"
+          ]
+        },
+        {
+          boxes: [
+            "Virtual Nodes",
+            "Better Distribution",
+            "Smoother Rebalancing"
+          ]
+        }
+      ]
+    },
+
+    {
+      title: "12. Sharding + Replication",
+      caption: "Sharding provides partitioning; replication provides redundancy.",
+      layers: [
+        {
+          boxes: [
+            "Logical Database"
+          ]
+        },
+        {
+          boxes: [
+            "Shard 1",
+            "Shard 2",
+            "Shard 3"
+          ]
+        },
+        {
+          boxes: [
+            "Primary + Replica",
+            "Primary + Replica",
+            "Primary + Replica"
+          ]
+        },
+        {
+          boxes: [
+            "Scale Storage / Writes",
+            "Improve Availability",
+            "Read Scaling"
+          ]
+        }
+      ]
+    },
+
+    {
+      title: "13. Shard Failure",
+      caption: "A failed shard should not unnecessarily bring down the entire system.",
+      layers: [
+        {
+          boxes: [
+            "Shard Failure"
+          ]
+        },
+        {
+          boxes: [
+            "Detect Failure",
+            "Health Check",
+            "Failover"
+          ]
+        },
+        {
+          boxes: [
+            "Promote Replica",
+            "Restore Service",
+            "Recover Failed Shard"
+          ]
+        },
+        {
+          boxes: [
+            "Replication",
+            "Backups",
+            "Monitoring"
+          ]
+        }
+      ]
+    },
+
+    {
+      title: "14. Rebalancing",
+      caption: "As data grows, shard distribution may become uneven.",
+      layers: [
+        {
+          boxes: [
+            "Shard 1",
+            "Shard 2",
+            "Shard 3"
+          ]
+        },
+        {
+          boxes: [
+            "Uneven Data",
+            "Uneven Traffic",
+            "Storage Growth"
+          ]
+        },
+        {
+          boxes: [
+            "Move Data",
+            "Redistribute Keys",
+            "Balance Shards"
+          ]
+        },
+        {
+          boxes: [
+            "Minimize Downtime",
+            "Control Migration Load",
+            "Verify Data"
+          ]
+        }
+      ]
+    },
+
+    {
+      title: "15. Adding a New Shard",
+      caption: "New capacity requires controlled data redistribution.",
+      layers: [
+        {
+          boxes: [
+            "Existing Shards"
+          ]
+        },
+        {
+          boxes: [
+            "Add New Shard"
+          ]
+        },
+        {
+          boxes: [
+            "Update Routing",
+            "Move Selected Data"
+          ]
+        },
+        {
+          boxes: [
+            "Verify Distribution",
+            "Monitor Load"
+          ]
+        },
+        {
+          boxes: [
+            "Balanced Shard Cluster"
+          ]
+        }
+      ]
+    },
+
+    {
+      title: "16. Tenant-Based Sharding",
+      caption: "Tenant ID can provide strong locality for multi-tenant systems.",
+      layers: [
+        {
+          boxes: [
+            "Tenant A",
+            "Tenant B",
+            "Tenant C"
+          ]
+        },
+        {
+          boxes: [
+            "Tenant ID → Shard"
+          ]
+        },
+        {
+          boxes: [
+            "Tenant A → Shard 1",
+            "Tenant B → Shard 2",
+            "Tenant C → Shard 3"
+          ]
+        },
+        {
+          boxes: [
+            "Data Locality",
+            "Tenant Isolation",
+            "Simpler Queries"
+          ]
+        },
+        {
+          boxes: [
+            "Large Tenant → Potential Hotspot"
+          ]
+        }
+      ]
+    },
+
+    {
+      title: "17. Monitor Every Shard",
+      caption: "Sharding requires per-shard visibility.",
+      layers: [
+        {
+          boxes: [
+            "CPU",
+            "Memory",
+            "Storage",
+            "Connections"
+          ]
+        },
+        {
+          boxes: [
+            "Latency",
+            "Throughput",
+            "Errors",
+            "Query Load"
+          ]
+        },
+        {
+          boxes: [
+            "Data Distribution",
+            "Hot Shards",
+            "Replication Lag",
+            "Cross-Shard Queries"
+          ]
+        },
+        {
+          boxes: [
+            "Alert",
+            "Investigate",
+            "Rebalance"
+          ]
+        }
+      ]
+    },
+
+    {
+      title: "18. Complete Database Sharding Architecture",
+      caption: "A production-ready design combines routing, partitioning, replication, caching, monitoring, and failure handling.",
+      layers: [
+        {
+          boxes: [
+            "Client"
+          ]
+        },
+        {
+          boxes: [
+            "Load Balancer",
+            "Application Servers"
+          ]
+        },
+        {
+          boxes: [
+            "Shard Router"
+          ]
+        },
+        {
+          boxes: [
+            "Shard 1",
+            "Shard 2",
+            "Shard 3",
+            "Shard N"
+          ]
+        },
+        {
+          boxes: [
+            "Primary + Replica",
+            "Primary + Replica",
+            "Primary + Replica",
+            "Primary + Replica"
+          ]
+        },
+        {
+          boxes: [
+            "Cache",
+            "Monitoring",
+            "Backup",
+            "Failover"
+          ]
+        },
+        {
+          boxes: [
+            "Scalable",
+            "Available",
+            "Observable",
+            "Rebalanceable"
+          ]
+        }
+      ]
+    },
+
+    {
+      title: "19. Final Sharding Decision",
+      caption: "Use sharding when simpler scaling approaches are insufficient and database capacity remains the bottleneck.",
+      layers: [
+        {
+          boxes: [
+            "Is Database the Bottleneck?"
+          ]
+        },
+        {
+          boxes: [
+            "Optimize?",
+            "Vertical Scale?",
+            "Cache?",
+            "Read Replicas?"
+          ]
+        },
+        {
+          boxes: [
+            "Still Limited?"
+          ]
+        },
+        {
+          boxes: [
+            "Choose Shard Key"
+          ]
+        },
+        {
+          boxes: [
+            "Choose Strategy"
+          ]
+        },
+        {
+          boxes: [
+            "Design Routing",
+            "Query Locality",
+            "Hotspot Handling"
+          ]
+        },
+        {
+          boxes: [
+            "Replication",
+            "Failure Handling",
+            "Rebalancing",
+            "Monitoring"
+          ]
+        },
+        {
+          boxes: [
+            "Production-Ready Sharded Database"
+          ]
+        }
+      ]
+    }
+  ]
+}
 };
 
 export const getTopicVisualization = (
