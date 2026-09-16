@@ -8362,6 +8362,1284 @@ export const systemDesignTopics: Record<string, TopicContent> = {
       },
     ],
   },
+  "database-sharding": {
+    blockId: "database-sharding",
+    categoryId: "hld-fundamentals",
+
+    what: [
+      "Database sharding is a horizontal data-partitioning technique in which a large logical dataset is divided across multiple independent database instances called shards.",
+      "Instead of storing the complete dataset on one database server, data is distributed across multiple databases so that each shard owns only a subset of the total data.",
+      "A shard is one logical portion of the overall dataset and is typically backed by an independent database instance or database cluster.",
+      "The shard key determines which shard owns a particular record and strongly influences data distribution, query routing, write distribution, hotspots, transactions, joins, and rebalancing.",
+      "Sharding can distribute database storage and workload horizontally, allowing the system to scale beyond the practical limits of a single database instance.",
+      "Sharding is different from replication. Sharding partitions data, while replication maintains copies of data.",
+      "Sharding can be combined with replication so that each shard has its own replicas for availability, failover, and read scaling.",
+      "Sharding should not be the first database scaling technique considered. Query optimization, indexing, vertical scaling, caching, and read replicas should be evaluated first.",
+    ],
+
+    deepConcepts: [
+      {
+        term: "Database Sharding",
+        simpleDefinition:
+          "Splitting one large logical dataset across multiple database instances.",
+        interviewDefinition:
+          "Database sharding is a horizontal data-partitioning technique in which a large logical dataset is divided across multiple independent database instances called shards.",
+        whyItMatters:
+          "A single database can reach limits in storage, CPU, connections, or write throughput. Sharding distributes data and workload across multiple database nodes.",
+        example:
+          "30 million users can be distributed across three shards, with each shard storing approximately one portion of the total users.",
+        whenItMatters:
+          "Very large datasets, high write throughput, storage limitations, and workloads that require horizontal database scaling.",
+        commonMistake:
+          "Introducing sharding without first identifying whether the database actually requires horizontal scaling.",
+        interviewQuestion: "What is database sharding?",
+        interviewAnswer:
+          "Database sharding horizontally partitions a logical dataset across multiple database instances. Each shard owns a subset of the data, allowing storage and workload to scale horizontally.",
+      },
+
+      {
+        term: "Shard",
+        simpleDefinition: "One logical portion of the overall dataset.",
+        interviewDefinition:
+          "A shard is an independent database instance or cluster that stores a subset of the total logical dataset.",
+        whyItMatters:
+          "Dividing data into shards allows the database workload and storage requirements to be distributed across multiple machines.",
+        example:
+          "Shard 1 → users 1–10 million, Shard 2 → users 10–20 million, Shard 3 → users 20–30 million.",
+        whenItMatters:
+          "Whenever a system uses horizontal database partitioning.",
+        commonMistake:
+          "Thinking every shard contains a complete copy of the database. That describes replication rather than sharding.",
+        interviewQuestion: "What is a shard?",
+        interviewAnswer:
+          "A shard is one logical portion of a larger dataset stored on an independent database instance or cluster.",
+      },
+
+      {
+        term: "Shard Key",
+        simpleDefinition:
+          "The field used to determine which shard owns a record.",
+        interviewDefinition:
+          "A shard key is a field or combination of fields used to determine the shard on which a particular record is stored.",
+        whyItMatters:
+          "The shard key directly affects data distribution, query routing, hotspots, scalability, transactions, joins, and future rebalancing.",
+        example:
+          "If userId is the shard key, userId = 125 is passed through the shard-selection mechanism to determine its target shard.",
+        whenItMatters:
+          "During the initial sharding design and whenever workload or data distribution changes.",
+        commonMistake:
+          "Choosing a shard key only because it has high cardinality without considering query patterns and write distribution.",
+        interviewQuestion: "What is a shard key and why is it important?",
+        interviewAnswer:
+          "The shard key determines where each record is stored. It is important because it affects distribution, routing, hotspots, query locality, transactions, and rebalancing.",
+      },
+
+      {
+        term: "Good Shard Key",
+        simpleDefinition:
+          "A shard key that distributes workload effectively while supporting important queries.",
+        interviewDefinition:
+          "A good shard key generally provides sufficient cardinality, balanced distribution, good query locality, balanced writes, stability, predictable growth, and low hotspot risk.",
+        whyItMatters:
+          "A poor shard key can create hot shards, expensive cross-shard queries, and difficult rebalancing.",
+        example:
+          "userId can be a good shard-key candidate when users are reasonably distributed and important queries are primarily user-specific.",
+        whenItMatters:
+          "When designing a new sharded database or evaluating an existing partitioning strategy.",
+        commonMistake:
+          "Assuming the field with the highest number of unique values is automatically the best shard key.",
+        interviewQuestion: "What characteristics make a good shard key?",
+        interviewAnswer:
+          "A good shard key should provide good distribution, sufficient cardinality, balanced writes, good query locality, stability, and low hotspot risk while matching the application's query patterns.",
+      },
+
+      {
+        term: "Bad Shard Key",
+        simpleDefinition:
+          "A shard key that causes uneven distribution or poor query routing.",
+        interviewDefinition:
+          "A bad shard key causes concentrated data or traffic, excessive cross-shard queries, poor locality, or difficult future rebalancing.",
+        whyItMatters:
+          "A poorly selected shard key can leave some shards overloaded while others have significant unused capacity.",
+        example:
+          "status = ACTIVE/INACTIVE may concentrate a large amount of data into only a small number of shard-key values.",
+        whenItMatters: "During shard-key selection and workload analysis.",
+        commonMistake:
+          "Ignoring low cardinality, monotonically increasing values, or uneven tenant sizes.",
+        interviewQuestion: "Give examples of poor shard keys.",
+        interviewAnswer:
+          "Low-cardinality fields such as status or fields that create concentrated writes can be poor shard keys. A timestamp or sequential key can also create hot ranges with range-based sharding.",
+      },
+
+      {
+        term: "Range-Based Sharding",
+        simpleDefinition: "Dividing data according to ranges of the shard key.",
+        interviewDefinition:
+          "Range-based sharding partitions records according to predefined ranges of the shard key.",
+        whyItMatters:
+          "It provides strong data locality and makes range queries efficient.",
+        example:
+          "Shard 1 → userId 1–1,000,000; Shard 2 → userId 1,000,001–2,000,000; Shard 3 → userId 2,000,001–3,000,000.",
+        whenItMatters:
+          "Workloads that frequently perform range queries and benefit from range locality.",
+        commonMistake:
+          "Ignoring the possibility of hot ranges or uneven distribution.",
+        interviewQuestion:
+          "What are the advantages and disadvantages of range sharding?",
+        interviewAnswer:
+          "Range sharding provides strong locality and efficient range queries, but uneven ranges and monotonically increasing keys can create hotspots and require rebalancing.",
+      },
+
+      {
+        term: "Hash-Based Sharding",
+        simpleDefinition:
+          "Using a hash of the shard key to determine the target shard.",
+        interviewDefinition:
+          "Hash-based sharding applies a hash function to the shard key and uses the resulting value to determine the target shard.",
+        whyItMatters:
+          "Hashing generally distributes keys more evenly and reduces range-based concentration.",
+        example:
+          "hash(userId) % N can conceptually determine the target shard.",
+        whenItMatters:
+          "Workloads where even distribution is more important than range locality.",
+        commonMistake:
+          "Assuming hash sharding is automatically better than range sharding for every workload.",
+        interviewQuestion: "What is hash-based sharding?",
+        interviewAnswer:
+          "Hash-based sharding applies a hash function to the shard key to determine the target shard, generally providing better distribution but making range queries more difficult.",
+      },
+
+      {
+        term: "Consistent Hashing",
+        simpleDefinition:
+          "Mapping keys and shards onto a logical hash ring to reduce key movement when topology changes.",
+        interviewDefinition:
+          "Consistent hashing places keys and nodes on a logical ring and assigns each key according to the ring's routing rule, so adding or removing a node generally affects only a portion of the keyspace.",
+        whyItMatters:
+          "Simple modulo hashing can remap a large portion of keys when the number of shards changes. Consistent hashing can reduce unnecessary movement.",
+        example:
+          "If S1 = 15, S2 = 40, S3 = 65, S4 = 90 and key = 50, the key is assigned to the next shard clockwise, S3.",
+        whenItMatters:
+          "Systems where nodes may be added or removed and minimizing key remapping is important.",
+        commonMistake:
+          "Treating consistent hashing as synonymous with replication or assuming it automatically solves hot keys.",
+        interviewQuestion: "How does consistent hashing help sharding?",
+        interviewAnswer:
+          "It maps keys and shards onto a logical ring so that adding or removing a shard generally requires moving only a portion of the keyspace instead of remapping everything.",
+      },
+
+      {
+        term: "Directory-Based Sharding",
+        simpleDefinition:
+          "Using a mapping table to determine where each key is stored.",
+        interviewDefinition:
+          "Directory-based sharding maintains a mapping between logical keys and the shards that own those keys.",
+        whyItMatters:
+          "It provides flexible placement because data can be moved without changing the logical key.",
+        example:
+          "userId 101 → Shard 1, userId 205 → Shard 3, userId 789 → Shard 2.",
+        whenItMatters:
+          "Workloads where flexible placement is more important than simple deterministic routing.",
+        commonMistake:
+          "Ignoring the directory as a critical dependency that must itself be highly available and scalable.",
+        interviewQuestion: "What is directory-based sharding?",
+        interviewAnswer:
+          "Directory-based sharding maintains metadata mapping keys to their owning shards, allowing flexible data placement but introducing an additional routing dependency.",
+      },
+
+      {
+        term: "Shard Router",
+        simpleDefinition:
+          "The component that determines which shard should handle a database request.",
+        interviewDefinition:
+          "A shard router extracts or determines the shard key, applies the configured partitioning strategy, and routes the request to the appropriate database shard.",
+        whyItMatters:
+          "Without correct routing, the application cannot reliably locate the data belonging to a specific shard.",
+        example:
+          "Application → Shard Router → Shard 2 for a request associated with a key owned by Shard 2.",
+        whenItMatters:
+          "Any architecture where the application needs to route requests across multiple database shards.",
+        commonMistake: "Confusing the shard router with a load balancer.",
+        interviewQuestion: "What is the role of a shard router?",
+        interviewAnswer:
+          "A shard router determines database ownership based on the shard key and routes the request to the correct shard. A load balancer instead distributes application traffic across server instances.",
+      },
+
+      {
+        term: "Targeted Query",
+        simpleDefinition:
+          "A query that can be routed directly to the required shard.",
+        interviewDefinition:
+          "A targeted query contains enough shard-key information for the routing layer to identify the shard or small subset of shards containing the required data.",
+        whyItMatters:
+          "It avoids contacting unnecessary shards and therefore reduces network traffic, resource usage, and latency.",
+        example:
+          "SELECT * FROM orders WHERE user_id = 123 can be routed directly when user_id is the shard key.",
+        whenItMatters:
+          "Read and write operations where the shard key is available.",
+        commonMistake:
+          "Assuming every query in a sharded system must contact every shard.",
+        interviewQuestion: "What is a targeted query?",
+        interviewAnswer:
+          "A targeted query contains enough shard-key information to route the request to one specific shard or a small subset of shards.",
+      },
+
+      {
+        term: "Scatter-Gather",
+        simpleDefinition:
+          "Sending a query to multiple shards and combining their results.",
+        interviewDefinition:
+          "Scatter-gather is a distributed query pattern where a request is sent to multiple shards, the partial results are collected, and a final result is aggregated.",
+        whyItMatters:
+          "Queries without a usable shard key may require multiple shards, increasing network and processing overhead.",
+        example:
+          "Query → Shard 1 + Shard 2 + Shard 3 → Gather results → Aggregate → Response.",
+        whenItMatters:
+          "Global searches, aggregations, sorting, and queries that cannot be targeted to a single shard.",
+        commonMistake:
+          "Treating scatter-gather as equivalent in cost to a targeted query.",
+        interviewQuestion:
+          "What is scatter-gather and why can it be expensive?",
+        interviewAnswer:
+          "Scatter-gather sends the query to multiple shards and merges their results. It can increase network traffic, processing, failure surface, and tail latency.",
+      },
+
+      {
+        term: "Data Co-Location",
+        simpleDefinition: "Keeping related records on the same shard.",
+        interviewDefinition:
+          "Data co-location means selecting a shard key or partitioning strategy that places related records on the same shard.",
+        whyItMatters:
+          "Co-location can reduce cross-shard joins, distributed transactions, network calls, and query complexity.",
+        example:
+          "Using tenantId as the shard key can keep a tenant's users, orders, and invoices together when the workload supports that model.",
+        whenItMatters:
+          "Systems with strong relationships between records or tenant-local transactions.",
+        commonMistake:
+          "Choosing a shard key only for even distribution while ignoring important data relationships.",
+        interviewQuestion: "Why is data co-location important in sharding?",
+        interviewAnswer:
+          "Keeping related data on the same shard can reduce cross-shard joins and transactions, improving query locality and simplifying consistency.",
+      },
+
+      {
+        term: "Cross-Shard Query",
+        simpleDefinition: "A query that requires data from multiple shards.",
+        interviewDefinition:
+          "A cross-shard query accesses multiple database shards because the required data is distributed across them.",
+        whyItMatters:
+          "Cross-shard operations introduce network calls, result aggregation, and additional failure and latency considerations.",
+        example:
+          "A global search without the shard key may need to query Shard 1, Shard 2, and Shard 3 before combining results.",
+        whenItMatters:
+          "Global search, reporting, aggregation, sorting, and relationships that span shards.",
+        commonMistake:
+          "Ignoring cross-shard query frequency during shard-key selection.",
+        interviewQuestion: "Why should cross-shard queries be minimized?",
+        interviewAnswer:
+          "They increase network traffic, processing work, latency, and failure surface. A good shard key should keep important queries targeted where practical.",
+      },
+
+      {
+        term: "Cross-Shard Transaction",
+        simpleDefinition:
+          "A transaction that affects data stored on multiple shards.",
+        interviewDefinition:
+          "A cross-shard transaction coordinates operations across multiple independent database shards.",
+        whyItMatters:
+          "Distributed transaction coordination is more complex than a transaction confined to a single database shard.",
+        example:
+          "An order is stored on Shard 1 while related payment data is stored on Shard 2, requiring coordination between both systems.",
+        whenItMatters:
+          "Systems where business operations span multiple data partitions.",
+        commonMistake:
+          "Assuming normal single-database ACID transaction behavior automatically extends across independent shards.",
+        interviewQuestion: "Why are cross-shard transactions difficult?",
+        interviewAnswer:
+          "Multiple independent database systems must coordinate success, failure, and consistency, making distributed transaction handling significantly more complex.",
+      },
+
+      {
+        term: "Cross-Shard Join",
+        simpleDefinition:
+          "A join where related records are stored on different shards.",
+        interviewDefinition:
+          "A cross-shard join requires retrieving related records from multiple shards and combining them through a distributed query or application-level process.",
+        whyItMatters:
+          "Cross-shard joins introduce network overhead and complicate query execution.",
+        example:
+          "Users are stored on Shard 1 while orders are stored on Shard 2, requiring data from both shards to construct a combined result.",
+        whenItMatters:
+          "Queries involving relationships that were not co-located by the shard key.",
+        commonMistake:
+          "Ignoring relational query patterns when selecting a shard key.",
+        interviewQuestion: "How does sharding affect joins?",
+        interviewAnswer:
+          "Local joins remain relatively straightforward, while cross-shard joins require data retrieval from multiple databases and result merging, increasing complexity and latency.",
+      },
+
+      {
+        term: "Hot Key",
+        simpleDefinition:
+          "A single key that receives disproportionately high traffic.",
+        interviewDefinition:
+          "A hot key is an individual shard-key value that receives significantly more requests or workload than other keys.",
+        whyItMatters:
+          "Even a well-balanced shard distribution can experience a hotspot if one key receives extreme traffic.",
+        example:
+          "A celebrity user's profile receives 100,000 requests per second while normal users receive only a few requests per second.",
+        whenItMatters:
+          "High-traffic systems with highly popular users, products, posts, or other resources.",
+        commonMistake:
+          "Assuming consistent hashing or virtual nodes automatically distribute the traffic of a single hot key.",
+        interviewQuestion: "How would you handle a hot key?",
+        interviewAnswer:
+          "I would consider caching, replication, request coalescing, key splitting where applicable, or specialized routing. Consistent hashing alone does not solve a single hot-key workload.",
+      },
+
+      {
+        term: "Hot Shard",
+        simpleDefinition: "A shard receiving disproportionately high workload.",
+        interviewDefinition:
+          "A hot shard is a shard whose CPU, storage, traffic, writes, or query workload is significantly higher than that of other shards.",
+        whyItMatters:
+          "A hot shard can become the effective bottleneck even when the overall database cluster has spare capacity.",
+        example:
+          "Shard 2 receives most traffic because a large tenant or uneven shard-key distribution maps to it.",
+        whenItMatters: "Shard monitoring, capacity planning, and rebalancing.",
+        commonMistake:
+          "Looking only at cluster-wide database metrics and missing shard-level imbalance.",
+        interviewQuestion: "How would you handle a hot shard?",
+        interviewAnswer:
+          "I would identify the cause, then consider rebalancing, resharding, a better shard key, caching, replication, or capacity changes depending on the workload.",
+      },
+
+      {
+        term: "Sharding + Replication",
+        simpleDefinition:
+          "Partitioning data into shards while maintaining replicas for each shard.",
+        interviewDefinition:
+          "A sharded architecture can maintain one or more replicas for each shard, combining horizontal data distribution with redundancy and read scaling.",
+        whyItMatters:
+          "Large systems may need both horizontal partitioning and high availability.",
+        example:
+          "Shard 1 → Primary + Replicas; Shard 2 → Primary + Replicas; Shard 3 → Primary + Replicas.",
+        whenItMatters:
+          "Large datasets requiring both scalability and database redundancy.",
+        commonMistake:
+          "Thinking sharding itself automatically provides high availability.",
+        interviewQuestion: "Can sharding and replication be combined?",
+        interviewAnswer:
+          "Yes. Data can be partitioned into shards, and each shard can have replicas for availability, failover, and eligible read scaling.",
+      },
+
+      {
+        term: "Rebalancing",
+        simpleDefinition: "Redistributing data or workload across shards.",
+        interviewDefinition:
+          "Rebalancing redistributes data or workload across shards when existing distribution becomes uneven or capacity requirements change.",
+        whyItMatters:
+          "Without rebalancing, some shards can become overloaded while others remain underutilized.",
+        example:
+          "Shard 1 = 10 TB, Shard 2 = 3 TB, Shard 3 = 2 TB → data is redistributed to produce a more balanced topology.",
+        whenItMatters:
+          "Dataset growth, shard expansion, workload changes, and hotspot mitigation.",
+        commonMistake:
+          "Planning the initial sharding design without considering future data movement.",
+        interviewQuestion: "What is database rebalancing?",
+        interviewAnswer:
+          "Rebalancing redistributes data or workload among shards to correct uneven distribution and make better use of available capacity.",
+      },
+
+      {
+        term: "Resharding",
+        simpleDefinition: "Changing the existing partitioning layout.",
+        interviewDefinition:
+          "Resharding changes the shard topology or partitioning strategy, such as adding shards, splitting ranges, or moving data to a new distribution.",
+        whyItMatters:
+          "A sharding design that works at one scale may become unsuitable as data volume and workload grow.",
+        example:
+          "A system initially using three shards expands to six shards and migrates data into the new topology.",
+        whenItMatters:
+          "Significant dataset growth, persistent hotspots, changing workload patterns, or insufficient shard capacity.",
+        commonMistake: "Assuming resharding is a trivial configuration change.",
+        interviewQuestion: "Why is resharding difficult?",
+        interviewAnswer:
+          "It can require large amounts of data movement, routing changes, consistency management, validation, and operational coordination while the system remains available.",
+      },
+
+      {
+        term: "Shard Router Failure",
+        simpleDefinition:
+          "Failure of the component responsible for determining shard ownership.",
+        interviewDefinition:
+          "Shard-router failure can prevent applications from determining which database shard owns requested data even when the underlying database shards remain healthy.",
+        whyItMatters:
+          "The routing layer can become a critical dependency in a sharded architecture.",
+        example:
+          "All three database shards are healthy, but the router is unavailable, preventing application requests from being directed to them.",
+        whenItMatters:
+          "Production sharded architectures requiring high availability.",
+        commonMistake:
+          "Treating the routing layer as an unimportant component.",
+        interviewQuestion:
+          "How would you make a shard router highly available?",
+        interviewAnswer:
+          "I would remove it as a single point of failure through redundancy, health monitoring, safe configuration management, and failover mechanisms.",
+      },
+
+      {
+        term: "Shard Monitoring",
+        simpleDefinition:
+          "Monitoring the health and workload of each shard independently.",
+        interviewDefinition:
+          "Shard monitoring tracks resource usage, query performance, data distribution, replication state, and workload imbalance at individual shard level.",
+        whyItMatters:
+          "Cluster-wide averages can hide a single overloaded shard.",
+        example:
+          "Shard 1 CPU = 30%, Shard 2 CPU = 95%, Shard 3 CPU = 25% → investigate Shard 2 for hotspot or distribution issues.",
+        whenItMatters:
+          "Production operations, capacity planning, hotspot detection, and rebalancing.",
+        commonMistake:
+          "Monitoring only total database CPU or average query latency.",
+        interviewQuestion:
+          "What metrics would you monitor in a sharded database?",
+        interviewAnswer:
+          "I would monitor CPU, memory, storage, connections, query latency, throughput, errors, data distribution, replication lag, hot shards, cross-shard query rates, and rebalancing activity.",
+      },
+    ],
+
+    comparisonTables: [
+      {
+        title: "Sharding vs Replication",
+        items: [
+          {
+            statement: "Partitions data across database nodes",
+            label: "Sharding",
+          },
+          {
+            statement: "Maintains copies of the same data",
+            label: "Replication",
+          },
+          {
+            statement: "Primarily helps distribute storage and workload",
+            label: "Sharding",
+          },
+          {
+            statement: "Primarily helps availability and read scaling",
+            label: "Replication",
+          },
+          {
+            statement: "Can distribute write workload across shards",
+            label: "Sharding",
+          },
+          {
+            statement: "Does not automatically increase write capacity",
+            label: "Replication",
+          },
+          {
+            statement: "Does not automatically provide redundancy",
+            label: "Sharding",
+          },
+          {
+            statement: "Provides multiple copies of data",
+            label: "Replication",
+          },
+        ],
+      },
+
+      {
+        title: "Range vs Hash Sharding",
+        items: [
+          {
+            statement: "Provides strong range locality",
+            label: "Range",
+          },
+          {
+            statement: "Generally provides better key distribution",
+            label: "Hash",
+          },
+          {
+            statement: "Efficient for range queries",
+            label: "Range",
+          },
+          {
+            statement: "Range queries are generally harder",
+            label: "Hash",
+          },
+          {
+            statement: "Can suffer from hot ranges",
+            label: "Range",
+          },
+          {
+            statement: "Generally reduces range-based hotspots",
+            label: "Hash",
+          },
+          {
+            statement: "Provides predictable range placement",
+            label: "Range",
+          },
+          {
+            statement: "Provides less natural range locality",
+            label: "Hash",
+          },
+        ],
+      },
+
+      {
+        title: "Targeted Query vs Scatter-Gather",
+        items: [
+          {
+            statement: "Usually contacts one shard or small subset",
+            label: "Targeted Query",
+          },
+          {
+            statement: "May contact many or all shards",
+            label: "Scatter-Gather",
+          },
+          {
+            statement: "Lower network overhead",
+            label: "Targeted Query",
+          },
+          {
+            statement: "Higher network overhead",
+            label: "Scatter-Gather",
+          },
+          {
+            statement: "Usually lower latency",
+            label: "Targeted Query",
+          },
+          {
+            statement: "Can increase tail latency",
+            label: "Scatter-Gather",
+          },
+          {
+            statement: "Simpler failure surface",
+            label: "Targeted Query",
+          },
+          {
+            statement: "Requires result gathering and aggregation",
+            label: "Scatter-Gather",
+          },
+        ],
+      },
+
+      {
+        title: "Hot Key vs Hot Shard",
+        items: [
+          {
+            statement: "One key receives disproportionately high traffic",
+            label: "Hot Key",
+          },
+          {
+            statement: "One shard receives disproportionately high workload",
+            label: "Hot Shard",
+          },
+          {
+            statement: "Scope is an individual key",
+            label: "Hot Key",
+          },
+          {
+            statement: "Scope is the entire shard",
+            label: "Hot Shard",
+          },
+          {
+            statement: "Caching and replication can help",
+            label: "Hot Key",
+          },
+          {
+            statement: "Rebalancing or resharding can help",
+            label: "Hot Shard",
+          },
+        ],
+      },
+
+      {
+        title: "Vertical Scaling vs Sharding",
+        items: [
+          {
+            statement: "Increase resources on one database machine",
+            label: "Vertical Scaling",
+          },
+          {
+            statement: "Distribute data across multiple database machines",
+            label: "Sharding",
+          },
+          {
+            statement: "Lower architectural complexity",
+            label: "Vertical Scaling",
+          },
+          {
+            statement: "Higher architectural complexity",
+            label: "Sharding",
+          },
+          {
+            statement: "Limited by single-machine capacity",
+            label: "Vertical Scaling",
+          },
+          {
+            statement: "Can expand across multiple database nodes",
+            label: "Sharding",
+          },
+        ],
+      },
+
+      {
+        title: "Sharding vs Consistent Hashing",
+        items: [
+          {
+            statement: "A database partitioning architecture",
+            label: "Sharding",
+          },
+          {
+            statement: "A key/node distribution technique",
+            label: "Consistent Hashing",
+          },
+          {
+            statement: "Defines data ownership across partitions",
+            label: "Sharding",
+          },
+          {
+            statement: "Helps reduce key remapping during topology changes",
+            label: "Consistent Hashing",
+          },
+          {
+            statement: "Can use multiple partitioning strategies",
+            label: "Sharding",
+          },
+          {
+            statement: "Can be used as part of a sharding/routing strategy",
+            label: "Consistent Hashing",
+          },
+        ],
+      },
+    ],
+
+    why: [
+      "A single database can eventually reach practical limits in storage, CPU, connections, I/O, or write throughput.",
+      "Sharding distributes the dataset across multiple database nodes so that capacity can be increased horizontally.",
+      "Sharding can distribute write workload when writes can be partitioned effectively across shards.",
+      "Sharding can reduce the size and workload handled by each individual database instance.",
+      "A properly selected shard key can allow important queries to be routed directly to the correct shard.",
+      "Sharding can support very large datasets that would be difficult or impractical to maintain on one database instance.",
+      "However, sharding introduces distributed-system complexity, so simpler approaches such as indexing, query optimization, vertical scaling, caching, and read replicas should be evaluated first.",
+    ],
+
+    how: [
+      {
+        step: "1. Identify the database bottleneck",
+        description:
+          "Measure storage, CPU, memory, connections, I/O, query latency, read/write throughput, and growth before deciding that sharding is required.",
+      },
+      {
+        step: "2. Evaluate simpler scaling techniques",
+        description:
+          "Check whether query optimization, indexing, vertical scaling, caching, partitioning, or read replicas can satisfy the requirements without introducing sharding complexity.",
+      },
+      {
+        step: "3. Select the shard key",
+        description:
+          "Choose a stable key that provides good distribution, balanced writes, acceptable query locality, and low hotspot risk while matching important application query patterns.",
+      },
+      {
+        step: "4. Select the sharding strategy",
+        description:
+          "Choose range-based, hash-based, consistent-hashing-based, directory-based, or another suitable partitioning approach according to workload requirements.",
+      },
+      {
+        step: "5. Route requests",
+        description:
+          "The application or shard-routing layer determines the target shard from the shard key and routes the request accordingly.",
+      },
+      {
+        step: "6. Prefer targeted queries",
+        description:
+          "Queries containing the shard key can often be routed to one shard, reducing network traffic and latency.",
+      },
+      {
+        step: "7. Handle scatter-gather queries",
+        description:
+          "Queries without sufficient shard-key information may need to contact multiple shards and aggregate their results.",
+      },
+      {
+        step: "8. Design for data locality",
+        description:
+          "Keep related data on the same shard where practical to reduce cross-shard joins and transactions.",
+      },
+      {
+        step: "9. Add replication where required",
+        description:
+          "Each shard can have replicas to provide redundancy, failover, and eligible read scaling.",
+      },
+      {
+        step: "10. Monitor each shard",
+        description:
+          "Monitor CPU, memory, storage, connections, throughput, query latency, errors, data distribution, replication lag, and cross-shard operations independently.",
+      },
+      {
+        step: "11. Detect hotspots",
+        description:
+          "Identify hot keys and hot shards before they become capacity bottlenecks or cause cascading performance problems.",
+      },
+      {
+        step: "12. Rebalance when required",
+        description:
+          "Move or redistribute data when shard sizes or workloads become uneven.",
+      },
+      {
+        step: "13. Plan for resharding",
+        description:
+          "Design migration and routing procedures for future growth so that adding capacity does not require an uncontrolled migration.",
+      },
+      {
+        step: "14. Test failure and recovery",
+        description:
+          "Test shard failure, replica failure, router failure, network problems, migration failures, and recovery procedures.",
+      },
+    ],
+
+    interviewTraps: [
+      {
+        trap: '"Sharding and replication are the same"',
+        wrongApproach:
+          "Saying that each database node contains a different partition and calling that replication.",
+        whyWrong:
+          "Replication creates copies of data, while sharding partitions the dataset.",
+        betterApproach:
+          "Explain that sharding distributes different portions of data and replication maintains additional copies of those portions.",
+      },
+
+      {
+        trap: '"The highest-cardinality field is always the best shard key"',
+        wrongApproach:
+          "Choosing a field solely because it contains many unique values.",
+        whyWrong:
+          "Query patterns, write distribution, locality, hotspots, and future growth also matter.",
+        betterApproach:
+          "Evaluate distribution together with query patterns and workload characteristics.",
+      },
+
+      {
+        trap: '"Consistent hashing solves all sharding problems"',
+        wrongApproach:
+          "Assuming consistent hashing eliminates hotspots, cross-shard queries, and rebalancing.",
+        whyWrong:
+          "Consistent hashing mainly helps distribute keys and reduce key movement when topology changes.",
+        betterApproach:
+          "Treat consistent hashing as one distribution/routing technique and separately design for hotspots, queries, replication, and migrations.",
+      },
+
+      {
+        trap: '"Sharding automatically provides high availability"',
+        wrongApproach:
+          "Assuming a database is highly available simply because data is split across multiple shards.",
+        whyWrong:
+          "Each shard can still fail. Sharding does not inherently create redundant copies.",
+        betterApproach:
+          "Combine sharding with replication and failover when availability requirements demand it.",
+      },
+
+      {
+        trap: '"Every query hits every shard"',
+        wrongApproach:
+          "Describing all database requests as scatter-gather operations.",
+        whyWrong:
+          "Queries containing the shard key can often be routed directly.",
+        betterApproach:
+          "Distinguish targeted queries from scatter-gather queries.",
+      },
+
+      {
+        trap: '"Read replicas solve a write bottleneck"',
+        wrongApproach:
+          "Adding read replicas when the primary database is saturated by writes.",
+        whyWrong:
+          "Traditional primary-replica architectures still send writes to the primary.",
+        betterApproach:
+          "Identify the bottleneck first and consider sharding or other write-scaling techniques when appropriate.",
+      },
+
+      {
+        trap: '"A hot shard means the entire cluster is overloaded"',
+        wrongApproach: "Looking only at overall database utilization.",
+        whyWrong:
+          "One shard can be overloaded while other shards have substantial spare capacity.",
+        betterApproach:
+          "Monitor shard-level workload and identify uneven distribution.",
+      },
+
+      {
+        trap: '"A hot key is solved by adding virtual nodes"',
+        wrongApproach:
+          "Assuming virtual nodes distribute requests for one extremely popular key across multiple physical shards.",
+        whyWrong:
+          "A single key still has one ownership position in the routing model.",
+        betterApproach:
+          "Consider caching, replication, request coalescing, key splitting, or specialized routing.",
+      },
+
+      {
+        trap: '"Cross-shard joins behave like normal database joins"',
+        wrongApproach:
+          "Assuming the database can perform a normal local join across independent shards.",
+        whyWrong:
+          "Data must be retrieved from multiple database instances and combined.",
+        betterApproach:
+          "Design for data co-location or explicitly handle distributed query execution.",
+      },
+
+      {
+        trap: '"Cross-shard transactions are automatically ACID across all shards"',
+        wrongApproach:
+          "Assuming a normal local database transaction automatically covers multiple independent shards.",
+        whyWrong:
+          "Distributed transactions require coordination between independent database systems.",
+        betterApproach:
+          "Prefer single-shard transactions where possible and use appropriate distributed consistency/workflow patterns when required.",
+      },
+
+      {
+        trap: '"Rebalancing is just moving some rows"',
+        wrongApproach:
+          "Ignoring routing, consistency, performance, and availability during data movement.",
+        whyWrong:
+          "Large migrations can affect production traffic and require coordinated routing and validation.",
+        betterApproach:
+          "Treat rebalancing as an operational migration problem and plan it before production growth requires it.",
+      },
+
+      {
+        trap: '"Sharding eliminates the need for backups"',
+        wrongApproach:
+          "Relying on multiple shards as the only recovery mechanism.",
+        whyWrong:
+          "Sharding distributes data but does not provide historical recovery from corruption or accidental deletion.",
+        betterApproach:
+          "Maintain appropriate backups and recovery procedures for every shard.",
+      },
+
+      {
+        trap: '"Shard router failure does not matter if databases are healthy"',
+        wrongApproach: "Ignoring the routing layer as a failure domain.",
+        whyWrong:
+          "Applications may be unable to locate the correct shard even when databases are healthy.",
+        betterApproach:
+          "Make routing highly available and monitor it as a critical dependency.",
+      },
+
+      {
+        trap: '"Sharding should always be the first scaling choice"',
+        wrongApproach:
+          "Introducing distributed database partitioning before measuring the bottleneck.",
+        whyWrong:
+          "Sharding introduces significant operational and application complexity.",
+        betterApproach:
+          "Start with measurement and simpler optimizations, then introduce sharding when the requirements justify it.",
+      },
+    ],
+
+    when: [
+      "Consider sharding when a single database is approaching practical storage limits.",
+      "Consider sharding when write throughput cannot be increased sufficiently through optimization or vertical scaling.",
+      "Consider sharding when database CPU, I/O, connections, or overall workload exceeds what one instance can efficiently handle.",
+      "Consider sharding when the dataset can be partitioned using a stable and effective shard key.",
+      "Consider sharding when important queries can remain reasonably targeted.",
+      "Consider sharding when the team can support the operational complexity of distributed databases.",
+      "Use range sharding when range queries and data locality are important.",
+      "Use hash-based sharding when relatively even distribution is more important than range locality.",
+      "Use consistent hashing when reducing key movement during topology changes is important.",
+      "Use directory-based sharding when flexible data placement is required.",
+      "Combine sharding with replication when both horizontal data scaling and database redundancy are required.",
+      "Do not introduce sharding when indexing, query optimization, vertical scaling, caching, or read replicas can already satisfy the requirements.",
+      "Do not shard when the workload has no suitable shard key or when cross-shard operations would dominate the workload.",
+    ],
+
+    tradeOffs: [
+      {
+        label: "Scalability",
+        points: [
+          "+ Distributes data and workload across multiple database nodes",
+          "- Introduces routing and partition-management complexity",
+        ],
+      },
+      {
+        label: "Write Capacity",
+        points: [
+          "+ Writes can be distributed across shards when the workload is partitionable",
+          "- Poor shard-key selection can create write hotspots",
+        ],
+      },
+      {
+        label: "Storage",
+        points: [
+          "+ Total dataset can be distributed across multiple machines",
+          "- Data placement and capacity management become more complex",
+        ],
+      },
+      {
+        label: "Query Performance",
+        points: [
+          "+ Targeted queries can access only the required shard",
+          "- Scatter-gather queries can increase latency and network overhead",
+        ],
+      },
+      {
+        label: "Range Queries",
+        points: [
+          "+ Range sharding provides strong range locality",
+          "- Hash-based approaches can make range queries more difficult",
+        ],
+      },
+      {
+        label: "Transactions",
+        points: [
+          "+ Single-shard transactions remain relatively simple",
+          "- Cross-shard transactions require distributed coordination",
+        ],
+      },
+      {
+        label: "Joins",
+        points: [
+          "+ Data co-location can keep related joins local",
+          "- Cross-shard joins require additional network and result-merging work",
+        ],
+      },
+      {
+        label: "Hotspots",
+        points: [
+          "+ Proper shard-key selection can distribute workload effectively",
+          "- Hot keys and hot shards can still occur",
+        ],
+      },
+      {
+        label: "Operations",
+        points: [
+          "+ Capacity can be expanded horizontally",
+          "- Monitoring, rebalancing, migration, backup, and recovery become more complex",
+        ],
+      },
+      {
+        label: "Cost",
+        points: [
+          "+ Allows scaling across multiple database machines",
+          "- More database instances and operational infrastructure increase cost",
+        ],
+      },
+    ],
+
+    thirtySecondAnswer:
+      "Database sharding is a horizontal data-partitioning technique where a large logical dataset is divided across multiple database instances called shards. A shard key determines where each record is stored. The most important design decision is choosing a shard key that provides good distribution, balanced writes, low hotspot risk, and good query locality. Range sharding is useful for range queries, while hash-based approaches generally provide better distribution. Sharding can distribute storage and write workload, but it introduces trade-offs such as cross-shard queries, distributed transactions, joins, hotspots, and rebalancing. Sharding is different from replication: sharding partitions data, while replication maintains copies.",
+
+    secondaryAnswer: {
+      question:
+        "How would you design a scalable database for a system with billions of records?",
+      answer:
+        "I would first identify the actual database bottleneck and determine whether indexing, query optimization, vertical scaling, caching, or read replicas can satisfy the requirements. If horizontal database scaling is required, I would choose a shard key based on data distribution, write distribution, and query patterns. Then I would select an appropriate strategy such as range or hash sharding and introduce a reliable shard-routing layer. I would keep important queries targeted where possible and design data co-location to minimize cross-shard joins and transactions. For availability, I would replicate each shard and distribute replicas appropriately. I would monitor each shard for hotspots, lag, storage, CPU, connections, and query latency, and I would have a tested rebalancing and resharding strategy for future growth. The main trade-off is gaining horizontal scalability at the cost of distributed-system and operational complexity.",
+    },
+
+    keyTakeaways: [
+      "Database sharding horizontally partitions one logical dataset across multiple database instances.",
+      "A shard stores only a subset of the overall dataset.",
+      "The shard key is one of the most important decisions in a sharded architecture.",
+      "A good shard key must consider distribution, query patterns, write workload, locality, hotspots, and future growth.",
+      "High cardinality alone does not guarantee a good shard key.",
+      "Range sharding provides strong range locality but can create hot ranges.",
+      "Hash sharding generally provides better distribution but makes range queries harder.",
+      "Consistent hashing can reduce key movement when shards are added or removed.",
+      "Consistent hashing does not automatically solve hot keys.",
+      "Directory-based sharding provides flexible placement but introduces routing metadata as a dependency.",
+      "Targeted queries are generally preferable to scatter-gather queries.",
+      "Scatter-gather can increase network traffic, processing cost, and tail latency.",
+      "Data co-location can reduce cross-shard joins and transactions.",
+      "Cross-shard transactions require distributed coordination.",
+      "Hot key and hot shard are different problems.",
+      "Sharding and replication solve different problems and can be combined.",
+      "Sharding does not automatically provide high availability.",
+      "Rebalancing and resharding should be considered before production growth requires them.",
+      "Shard routers are critical dependencies and should not become single points of failure.",
+      "Shard-level monitoring is required because cluster-wide averages can hide hotspots.",
+      "Sharding should be introduced only when simpler scaling approaches are insufficient.",
+    ],
+
+    interviewQuestions: [
+      {
+        level: "Basic",
+        questions: [
+          {
+            id: "b1",
+            question: "What is database sharding?",
+            answer:
+              "Database sharding horizontally partitions a logical dataset across multiple independent database instances called shards.",
+          },
+          {
+            id: "b2",
+            question: "Why do we need database sharding?",
+            answer:
+              "It is used when a single database cannot efficiently handle the required data volume, storage, write throughput, CPU, I/O, or connections.",
+          },
+          {
+            id: "b3",
+            question: "What is a shard?",
+            answer:
+              "A shard is one logical portion of the total dataset stored on an independent database instance or cluster.",
+          },
+          {
+            id: "b4",
+            question: "What is a shard key?",
+            answer:
+              "A shard key is the field or combination of fields used to determine which shard owns a record.",
+          },
+          {
+            id: "b5",
+            question: "Why is shard-key selection important?",
+            answer:
+              "Because it affects data distribution, query routing, write distribution, hotspots, transactions, joins, and rebalancing.",
+          },
+          {
+            id: "b6",
+            question: "What is range-based sharding?",
+            answer: "It divides records according to ranges of the shard key.",
+          },
+          {
+            id: "b7",
+            question: "What is hash-based sharding?",
+            answer:
+              "It applies a hash function to the shard key to determine the target shard.",
+          },
+          {
+            id: "b8",
+            question: "What is consistent hashing?",
+            answer:
+              "It maps keys and shards onto a logical ring so that adding or removing a shard generally affects only a portion of the keyspace.",
+          },
+          {
+            id: "b9",
+            question: "What is a shard router?",
+            answer:
+              "It determines the target database shard using the shard key and routing strategy.",
+          },
+          {
+            id: "b10",
+            question: "What is rebalancing?",
+            answer:
+              "Rebalancing redistributes data or workload across shards when the distribution becomes uneven.",
+          },
+        ],
+      },
+
+      {
+        level: "Intermediate",
+        questions: [
+          {
+            id: "i1",
+            question: "What makes a good shard key?",
+            answer:
+              "It should provide good distribution, sufficient cardinality, balanced writes, query locality, stability, predictable growth, and low hotspot risk.",
+          },
+          {
+            id: "i2",
+            question:
+              "Is the highest-cardinality field always the best shard key?",
+            answer:
+              "No. Query patterns, write distribution, locality, hotspot risk, and future growth must also be considered.",
+          },
+          {
+            id: "i3",
+            question: "What is the difference between range and hash sharding?",
+            answer:
+              "Range sharding provides strong locality and efficient range queries, while hash sharding generally provides better distribution but makes range queries harder.",
+          },
+          {
+            id: "i4",
+            question:
+              "Why can a sequential key be problematic for range sharding?",
+            answer:
+              "New writes can continuously target the newest range, creating a hot range and uneven workload.",
+          },
+          {
+            id: "i5",
+            question: "What is a targeted query?",
+            answer:
+              "A query containing enough shard-key information to route the request directly to one shard or a small subset.",
+          },
+          {
+            id: "i6",
+            question: "What is scatter-gather?",
+            answer:
+              "It sends a query to multiple shards and gathers and aggregates their results.",
+          },
+          {
+            id: "i7",
+            question: "Why are targeted queries preferred?",
+            answer:
+              "They reduce the number of shards contacted, network traffic, processing, and usually latency.",
+          },
+          {
+            id: "i8",
+            question: "What is data co-location?",
+            answer:
+              "Keeping related records on the same shard so that joins and transactions can remain local where possible.",
+          },
+          {
+            id: "i9",
+            question: "What is a hot shard?",
+            answer:
+              "A shard receiving disproportionately high traffic, data, writes, or resource consumption.",
+          },
+          {
+            id: "i10",
+            question:
+              "What is the difference between sharding and replication?",
+            answer:
+              "Sharding partitions data across nodes, while replication creates copies of data across nodes.",
+          },
+        ],
+      },
+
+      {
+        level: "Advanced",
+        questions: [
+          {
+            id: "a1",
+            question: "Does consistent hashing solve hot keys?",
+            answer:
+              "No. A single hot key still has one ownership location unless the architecture explicitly distributes that workload through caching, replication, key splitting, or other techniques.",
+          },
+          {
+            id: "a2",
+            question: "Why are cross-shard transactions difficult?",
+            answer:
+              "Multiple independent database systems must coordinate the transaction and its failure/consistency behavior.",
+          },
+          {
+            id: "a3",
+            question: "Why are cross-shard joins expensive?",
+            answer:
+              "They require retrieving data from multiple databases and merging the results, adding network and processing overhead.",
+          },
+          {
+            id: "a4",
+            question: "Can sharding and replication be used together?",
+            answer:
+              "Yes. Each shard can have replicas for redundancy, failover, and eligible read scaling.",
+          },
+          {
+            id: "a5",
+            question: "Does sharding automatically provide high availability?",
+            answer:
+              "No. Sharding partitions data but does not automatically create redundant copies. Replication and failover are needed for HA.",
+          },
+          {
+            id: "a6",
+            question:
+              "What is the difference between rebalancing and resharding?",
+            answer:
+              "Rebalancing redistributes data or workload across existing or adjusted shard capacity, while resharding changes the partitioning topology or layout.",
+          },
+          {
+            id: "a7",
+            question: "How would you handle a hot shard?",
+            answer:
+              "I would identify the cause and consider rebalancing, resharding, a better shard key, caching, replication, or additional capacity.",
+          },
+          {
+            id: "a8",
+            question: "Why is the shard router a critical component?",
+            answer:
+              "Because applications depend on it to determine which shard owns requested data. Its failure can prevent access to healthy database shards.",
+          },
+          {
+            id: "a9",
+            question: "How does sharding affect global aggregation?",
+            answer:
+              "The system may need scatter-gather processing, partial aggregation on each shard, and a final merge step.",
+          },
+          {
+            id: "a10",
+            question: "Why should sharding not be the first scaling technique?",
+            answer:
+              "Because it introduces significant distributed-system complexity. Simpler approaches should be evaluated first.",
+          },
+        ],
+      },
+
+      {
+        level: "Scenario",
+        questions: [
+          {
+            id: "s1",
+            question:
+              "Your single database is running at 95% CPU and write throughput is continuously increasing. What would you investigate before sharding?",
+            answer:
+              "I would identify the exact bottleneck and first evaluate query optimization, indexing, vertical scaling, batching, caching where applicable, and other simpler techniques.",
+          },
+          {
+            id: "s2",
+            question:
+              "You have billions of users and most queries are by userId. How might you shard the database?",
+            answer:
+              "I would evaluate userId as a shard key and select an appropriate partitioning strategy based on distribution, query patterns, write workload, and hotspot risk.",
+          },
+          {
+            id: "s3",
+            question:
+              "A global search needs to search users across all shards. What happens?",
+            answer:
+              "It may require scatter-gather processing, where the query is sent to multiple shards and the results are gathered and aggregated.",
+          },
+          {
+            id: "s4",
+            question:
+              "One celebrity user generates 100,000 requests per second. All other users generate normal traffic. What is the problem?",
+            answer:
+              "This is a hot-key problem. I would consider caching, replication, request coalescing, key splitting where applicable, or specialized routing.",
+          },
+          {
+            id: "s5",
+            question:
+              "Shard 2 is at 95% CPU while Shard 1 and Shard 3 are at 30%. What would you investigate?",
+            answer:
+              "I would investigate shard-key distribution, hot keys, large tenants, hot ranges, query patterns, and whether rebalancing or resharding is required.",
+          },
+          {
+            id: "s6",
+            question:
+              "Your application requires frequent joins between users and orders. What should you consider when choosing the shard key?",
+            answer:
+              "I would consider data co-location so that related users and orders can remain on the same shard when the workload and consistency requirements support that design.",
+          },
+          {
+            id: "s7",
+            question:
+              "An operation updates data on two different shards and both must succeed together. What is the challenge?",
+            answer:
+              "This is a cross-shard transaction problem requiring distributed coordination and careful failure/consistency handling.",
+          },
+          {
+            id: "s8",
+            question:
+              "You add three new shards to an existing hash-sharded database. What problem can occur?",
+            answer:
+              "Depending on the hashing strategy, a significant amount of data can map to different shards, requiring data movement and routing changes.",
+          },
+          {
+            id: "s9",
+            question:
+              "Your shard router fails while all database shards are healthy. What happens?",
+            answer:
+              "Applications may be unable to determine where data belongs, so the routing layer becomes an availability bottleneck unless it has redundancy and failover.",
+          },
+          {
+            id: "s10",
+            question:
+              "Your sharded database has grown to the point where several shards are too large. What would you do?",
+            answer:
+              "I would evaluate rebalancing or resharding, plan controlled data migration, update routing safely, monitor the migration, and validate data correctness.",
+          },
+        ],
+      },
+    ],
+  },
 };
 
 export const getTopicContent = (blockId: string): TopicContent | undefined =>
