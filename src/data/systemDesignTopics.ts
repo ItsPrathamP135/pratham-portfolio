@@ -9640,6 +9640,1103 @@ export const systemDesignTopics: Record<string, TopicContent> = {
       },
     ],
   },
+  "cap-theorem": {
+  blockId: "cap-theorem",
+  categoryId: "hld-fundamentals",
+
+  what: [
+    "CAP Theorem describes a fundamental trade-off in distributed systems involving Consistency, Availability, and Partition Tolerance.",
+    "The theorem states that when a network partition occurs, a distributed system cannot simultaneously guarantee both strong Consistency and Availability.",
+    "The three CAP properties are Consistency, Availability, and Partition Tolerance.",
+    "Consistency in CAP means that every successful read receives the most recent successful write or an error.",
+    "Availability in CAP means that every request to a non-failing node receives a non-error response, without guaranteeing that the response contains the latest data.",
+    "Partition Tolerance means that the system continues operating despite communication failures or network partitions between nodes.",
+    "The practical CAP decision is therefore mainly about what the system should sacrifice when a partition occurs: stronger consistency or availability.",
+    "CAP applies specifically to distributed systems where network communication between nodes can fail.",
+    "CAP is not a statement that a system can simply choose any two properties under all conditions.",
+    "Partition tolerance is generally treated as necessary for distributed systems operating over unreliable networks, making the practical choice during a partition primarily between consistency and availability.",
+  ],
+
+  deepConcepts: [
+    {
+      term: "CAP Theorem",
+      simpleDefinition:
+        "During a network partition, a distributed system cannot guarantee both strong consistency and availability at the same time.",
+      interviewDefinition:
+        "CAP Theorem states that a distributed data system cannot simultaneously guarantee strong consistency, availability, and partition tolerance when a network partition occurs.",
+      whyItMatters:
+        "Distributed systems communicate over networks, and network communication can fail. CAP helps architects reason about what behavior the system should provide when nodes cannot communicate reliably.",
+      example:
+        "Two database nodes cannot communicate because of a network partition. The system must decide whether to reject some requests to preserve consistency or continue serving requests while potentially returning different/stale values.",
+      whenItMatters:
+        "Distributed databases, distributed caches, replicated services, multi-node systems, geographically distributed systems, and any architecture where network partitions can occur.",
+      commonMistake:
+        "Saying CAP simply means a system can choose any two of C, A, and P under normal operation.",
+      interviewQuestion: "What is CAP Theorem?",
+      interviewAnswer:
+        "CAP Theorem states that when a network partition occurs, a distributed system cannot simultaneously guarantee strong consistency and availability. Since network partitions are possible in distributed systems, the practical decision is generally whether to favor consistency or availability during the partition.",
+    },
+
+    {
+      term: "Consistency",
+      simpleDefinition:
+        "Every successful read sees the latest successful write or the system returns an error.",
+      interviewDefinition:
+        "In the CAP model, consistency means that all clients observe a single, up-to-date view of the data after a successful write, subject to the formal consistency guarantee being discussed.",
+      whyItMatters:
+        "Some applications cannot safely operate with conflicting or stale values.",
+      example:
+        "A payment balance changes from ₹1,000 to ₹500. A subsequent successful read should not return the old ₹1,000 value if the system promises the relevant strong consistency guarantee.",
+      whenItMatters:
+        "Payments, account balances, inventory, financial transactions, and other workflows where stale or conflicting values can cause incorrect business behavior.",
+      commonMistake:
+        "Defining CAP consistency as simply 'data is correct' or confusing it with ACID transaction consistency.",
+      interviewQuestion:
+        "What does consistency mean in CAP Theorem?",
+      interviewAnswer:
+        "In CAP, consistency means that a successful read sees the most recent successful write or the system returns an error, rather than allowing different nodes to return conflicting versions.",
+    },
+
+    {
+      term: "Availability",
+      simpleDefinition:
+        "Every request to a non-failing node receives a response instead of being rejected because another node is unavailable.",
+      interviewDefinition:
+        "In the CAP model, availability means that every request to a non-failing node receives a non-error response, even if that response may not contain the latest value.",
+      whyItMatters:
+        "Some systems prioritize continuing to serve users even when parts of the distributed system cannot communicate.",
+      example:
+        "Two replicas lose communication. A client sends a read to one healthy replica, and the system continues responding instead of rejecting the request solely because consistency with the other replica cannot be established.",
+      whenItMatters:
+        "Social feeds, product browsing, recommendations, content delivery, and systems where serving slightly stale data is preferable to rejecting requests.",
+      commonMistake:
+        "Saying availability means zero downtime or that every request must always succeed.",
+      interviewQuestion: "What does availability mean in CAP?",
+      interviewAnswer:
+        "CAP availability means that requests to non-failing nodes receive a non-error response, even when the system may not be able to provide the latest data during a partition.",
+    },
+
+    {
+      term: "Partition Tolerance",
+      simpleDefinition:
+        "The system continues operating despite communication failures between distributed nodes.",
+      interviewDefinition:
+        "Partition tolerance means the distributed system continues to provide its defined behavior despite a network partition that prevents some nodes from communicating with one another.",
+      whyItMatters:
+        "Networks can lose packets, links can fail, switches can fail, or regions can become disconnected. Distributed systems must account for these failures.",
+      example:
+        "Database Node A and Database Node B are both running, but a network failure prevents them from communicating.",
+      whenItMatters:
+        "Any distributed architecture where nodes communicate over a network.",
+      commonMistake:
+        "Treating partition tolerance as simply 'the servers do not crash.' A partition is specifically a communication failure between distributed components.",
+      interviewQuestion: "What is partition tolerance?",
+      interviewAnswer:
+        "Partition tolerance is the ability of a distributed system to continue operating according to its design when communication between nodes is disrupted by a network partition.",
+    },
+
+    {
+      term: "Network Partition",
+      simpleDefinition:
+        "A communication failure that separates parts of a distributed system.",
+      interviewDefinition:
+        "A network partition occurs when distributed nodes remain operational but cannot reliably communicate with one another.",
+      whyItMatters:
+        "A partition creates the exact condition under which the CAP trade-off becomes relevant.",
+      example:
+        "Replica A and Replica B are both healthy, but a network failure prevents messages from reaching Replica B.",
+      whenItMatters:
+        "CAP analysis, distributed database failures, multi-region systems, service-to-service communication, and consensus systems.",
+      commonMistake:
+        "Assuming a partition means one server has crashed.",
+      interviewQuestion: "What is a network partition?",
+      interviewAnswer:
+        "A network partition is a communication failure where distributed nodes may remain healthy but cannot reliably communicate with each other.",
+    },
+
+    {
+      term: "CAP During Normal Operation",
+      simpleDefinition:
+        "CAP's important trade-off appears when a partition occurs.",
+      interviewDefinition:
+        "CAP does not mean that a distributed system is constantly choosing between consistency and availability during normal operation. The fundamental constraint becomes relevant when a network partition occurs.",
+      whyItMatters:
+        "This prevents the common misconception that CAP is simply a permanent two-out-of-three selection.",
+      example:
+        "A replicated database may provide strong consistency and availability while communication is healthy, but during a partition it must decide whether to reject some operations or continue serving potentially divergent data.",
+      whenItMatters:
+        "System design interviews and distributed architecture discussions.",
+      commonMistake:
+        "Saying a system is permanently 'CA' just because it provides consistency and availability when the network is healthy.",
+      interviewQuestion:
+        "When does the CAP trade-off become important?",
+      interviewAnswer:
+        "The fundamental CAP trade-off becomes important when a network partition occurs and the system must choose between maintaining strong consistency and continuing to provide availability.",
+    },
+
+    {
+      term: "Consistency During Partition",
+      simpleDefinition:
+        "The system prioritizes a consistent view of data even if some requests must fail or wait.",
+      interviewDefinition:
+        "A consistency-oriented system may reject or delay operations during a partition rather than allow different nodes to independently accept conflicting state.",
+      whyItMatters:
+        "It prevents clients from observing conflicting successful writes or inconsistent state when coordination cannot be achieved.",
+      example:
+        "During a partition, a distributed database refuses writes that cannot be safely coordinated with the required replicas.",
+      whenItMatters:
+        "Payments, account balances, inventory allocation, and operations where correctness is more important than serving every request.",
+      commonMistake:
+        "Calling a CP system unavailable in every situation.",
+      interviewQuestion:
+        "What does a CP system do during a network partition?",
+      interviewAnswer:
+        "A CP-oriented system preserves the required consistency guarantee by rejecting or delaying some operations when the nodes cannot coordinate, sacrificing availability for those operations.",
+    },
+
+    {
+      term: "Availability During Partition",
+      simpleDefinition:
+        "The system continues serving requests even when nodes cannot communicate.",
+      interviewDefinition:
+        "An availability-oriented system continues responding to requests during a partition, accepting that different nodes may temporarily have divergent or stale data.",
+      whyItMatters:
+        "Some applications are more valuable when they continue serving users despite temporarily inconsistent data.",
+      example:
+        "A social feed continues showing cached or replica-local content even while two regions cannot communicate.",
+      whenItMatters:
+        "Content feeds, recommendations, browsing, and workloads where eventual convergence is acceptable.",
+      commonMistake:
+        "Saying an AP system intentionally returns incorrect data.",
+      interviewQuestion:
+        "What does an AP system do during a network partition?",
+      interviewAnswer:
+        "An AP-oriented system continues serving requests during the partition, potentially returning stale or temporarily divergent data and reconciling the state later.",
+    },
+
+    {
+      term: "CP System",
+      simpleDefinition:
+        "A system that prioritizes consistency over availability during a partition.",
+      interviewDefinition:
+        "A CP-oriented system preserves its required consistency guarantee during a network partition by refusing or delaying operations that cannot be safely coordinated.",
+      whyItMatters:
+        "It is appropriate when returning conflicting or stale values would be more harmful than rejecting requests temporarily.",
+      example:
+        "A distributed inventory system refuses an update when it cannot establish the required coordination between replicas.",
+      whenItMatters:
+        "Strongly consistent coordination, financial state, inventory correctness, leader election, and systems where conflicting writes are unacceptable.",
+      commonMistake:
+        "Saying CP means the system is always unavailable.",
+      interviewQuestion: "What is a CP system?",
+      interviewAnswer:
+        "A CP-oriented system favors consistency during a partition, potentially rejecting or delaying operations when it cannot guarantee the required consistent state.",
+    },
+
+    {
+      term: "AP System",
+      simpleDefinition:
+        "A system that prioritizes availability over strong consistency during a partition.",
+      interviewDefinition:
+        "An AP-oriented system continues responding during a partition even if replicas temporarily return stale or divergent values, with the expectation that state can converge later according to the system's consistency model.",
+      whyItMatters:
+        "It allows user-facing services to continue operating when communication between replicas is temporarily unavailable.",
+      example:
+        "A social-media feed continues serving content from the local region even if cross-region replication is temporarily unavailable.",
+      whenItMatters:
+        "Feeds, recommendations, content browsing, and workloads that can tolerate eventual consistency.",
+      commonMistake:
+        "Saying AP means the system ignores consistency permanently.",
+      interviewQuestion: "What is an AP system?",
+      interviewAnswer:
+        "An AP-oriented system favors availability during a partition and may temporarily serve stale or divergent data, with the expectation that the system will reconcile or converge later.",
+    },
+
+    {
+      term: "CA System",
+      simpleDefinition:
+        "A system that provides consistency and availability when no partition occurs.",
+      interviewDefinition:
+        "A CA characterization describes a system that provides consistency and availability when communication between components remains reliable, but a truly distributed system cannot guarantee partition tolerance and simultaneously retain both C and A during a partition.",
+      whyItMatters:
+        "It explains why the common 'choose any two' CAP interpretation is misleading.",
+      example:
+        "A single-node database can provide strong consistency and availability during normal operation, but it does not have a distributed partition to tolerate between database replicas.",
+      whenItMatters:
+        "Explaining CAP misconceptions and distinguishing distributed systems from single-node systems.",
+      commonMistake:
+        "Calling a replicated distributed database permanently CA because it behaves consistently while the network is healthy.",
+      interviewQuestion: "Can a distributed system be CA?",
+      interviewAnswer:
+        "A system can provide consistency and availability while communication is healthy, but in the presence of a network partition a distributed system cannot guarantee both strong consistency and availability simultaneously.",
+    },
+
+    {
+      term: "CAP vs ACID Consistency",
+      simpleDefinition:
+        "CAP consistency and ACID consistency are different concepts.",
+      interviewDefinition:
+        "CAP consistency concerns whether distributed reads observe a consistent view of replicated data, while ACID consistency concerns whether database transactions preserve defined application and data integrity constraints.",
+      whyItMatters:
+        "Confusing these two concepts leads to incorrect explanations of distributed database behavior.",
+      example:
+        "A database transaction can preserve a foreign-key constraint while the distributed replicas temporarily disagree about the latest committed value.",
+      whenItMatters:
+        "Database interviews and distributed-system architecture discussions.",
+      commonMistake:
+        "Defining CAP consistency as 'the C in ACID.'",
+      interviewQuestion: "Is CAP consistency the same as ACID consistency?",
+      interviewAnswer:
+        "No. CAP consistency is about the visibility of data across distributed nodes, while ACID consistency is about preserving database integrity constraints across transactions.",
+    },
+
+    {
+      term: "CAP vs Eventual Consistency",
+      simpleDefinition:
+        "Eventual consistency allows replicas to converge rather than requiring immediate consistency.",
+      interviewDefinition:
+        "Eventual consistency is a consistency model in which replicas may temporarily contain different values but converge to the same state if no new updates continue.",
+      whyItMatters:
+        "It is commonly used in availability-oriented distributed systems where temporary stale reads are acceptable.",
+      example:
+        "A user's profile update reaches Region A immediately and Region B shortly afterward, so users may temporarily see different values.",
+      whenItMatters:
+        "AP systems, geographically distributed applications, feeds, catalogs, and replicated data where temporary staleness is acceptable.",
+      commonMistake:
+        "Saying eventual consistency means data is never consistent.",
+      interviewQuestion: "How is eventual consistency related to CAP?",
+      interviewAnswer:
+        "Eventual consistency allows replicas to temporarily diverge while continuing to serve requests, then converge later. It is commonly used when a system prioritizes availability during partitions.",
+    },
+
+    {
+      term: "Quorum",
+      simpleDefinition:
+        "A minimum number of nodes that must participate in an operation according to the system's configured rules.",
+      interviewDefinition:
+        "A quorum-based system requires a specified number of replicas or nodes to acknowledge an operation before considering it successful, depending on the database or consensus protocol.",
+      whyItMatters:
+        "Quorums can help coordinate distributed reads and writes and influence consistency and availability behavior.",
+      example:
+        "In a three-node replicated system, a write may require acknowledgements from two nodes according to the configured quorum rule.",
+      whenItMatters:
+        "Distributed databases, consensus systems, replicated storage, and consistency-sensitive architectures.",
+      commonMistake:
+        "Assuming quorum automatically makes every distributed system strongly consistent.",
+      interviewQuestion: "What is quorum in distributed systems?",
+      interviewAnswer:
+        "A quorum is a configured minimum number of nodes whose participation or acknowledgement is required for an operation. Its exact consistency guarantees depend on the underlying protocol and configuration.",
+    },
+
+    {
+      term: "CAP and Consensus",
+      simpleDefinition:
+        "Consensus helps distributed nodes agree on important decisions.",
+      interviewDefinition:
+        "Consensus protocols coordinate distributed nodes so that they agree on values or leadership despite failures, but they cannot make network partitions disappear; availability can still be affected when the required quorum cannot be reached.",
+      whyItMatters:
+        "Consensus systems illustrate the practical cost of prioritizing consistency and coordinated state.",
+      example:
+        "A consensus cluster loses quorum because nodes become partitioned. The side without sufficient quorum cannot safely commit new decisions.",
+      whenItMatters:
+        "Leader election, distributed configuration, metadata systems, coordination services, and strongly consistent distributed databases.",
+      commonMistake:
+        "Saying consensus eliminates CAP trade-offs.",
+      interviewQuestion: "Does consensus solve CAP?",
+      interviewAnswer:
+        "No. Consensus helps nodes agree on distributed state, but during a partition a system may lose quorum and therefore sacrifice availability to preserve consistency.",
+    },
+
+    {
+      term: "CAP and Network Partition",
+      simpleDefinition:
+        "Network partition is the condition that forces the CAP trade-off.",
+      interviewDefinition:
+        "When nodes cannot communicate reliably, the system must decide whether to continue accepting operations that may diverge or restrict operations until consistency can be maintained.",
+      whyItMatters:
+        "This is the core reasoning behind CAP rather than treating CAP as a static classification exercise.",
+      example:
+        "Two database regions lose communication. If both continue accepting conflicting writes, consistency can be violated; if one side stops writes, availability is reduced.",
+      whenItMatters:
+        "Multi-region databases, distributed caches, replicated services, and partition scenarios.",
+      commonMistake:
+        "Discussing CAP without explaining what happens during the partition.",
+      interviewQuestion:
+        "Why does a network partition force a consistency/availability trade-off?",
+      interviewAnswer:
+        "Because disconnected nodes cannot reliably coordinate the latest state. Continuing to accept operations preserves availability but can allow divergent state, while requiring coordination preserves consistency but can force some requests to fail or wait.",
+    },
+
+    {
+      term: "CAP in Multi-Region Systems",
+      simpleDefinition:
+        "Geographically distributed systems must account for communication failures between regions.",
+      interviewDefinition:
+        "Multi-region systems can experience network partitions or severe communication delays between regions, making CAP-related consistency and availability decisions especially important.",
+      whyItMatters:
+        "The greater physical distance between regions increases latency and introduces additional failure scenarios.",
+      example:
+        "Mumbai and Singapore regions temporarily lose connectivity. Each region must follow the application's defined behavior for reads and writes during the partition.",
+      whenItMatters:
+        "Global applications, multi-region databases, active-active architectures, and disaster-resilient systems.",
+      commonMistake:
+        "Assuming multi-region automatically means both strong consistency and uninterrupted availability.",
+      interviewQuestion:
+        "How does CAP affect multi-region architecture?",
+      interviewAnswer:
+        "Multi-region systems must define what happens when regions cannot communicate. They may prioritize consistency by restricting writes or prioritize availability by continuing local operations with temporary divergence.",
+    },
+
+    {
+      term: "CAP and Failure Behavior",
+      simpleDefinition:
+        "CAP describes behavior under partition, not every type of failure.",
+      interviewDefinition:
+        "CAP specifically concerns distributed communication partitions and the resulting consistency/availability trade-off. It does not by itself describe every failure mode such as application crashes, disk failures, or overload.",
+      whyItMatters:
+        "System design answers become more precise when CAP is not used as a general explanation for every distributed-system failure.",
+      example:
+        "A server crashing is not automatically a network partition. CAP becomes relevant when distributed components cannot communicate reliably and the system must decide how to proceed.",
+      whenItMatters:
+        "Interview discussions involving reliability, failover, distributed databases, and fault tolerance.",
+      commonMistake:
+        "Using CAP as a synonym for general high availability or fault tolerance.",
+      interviewQuestion: "Does CAP explain all distributed-system failures?",
+      interviewAnswer:
+        "No. CAP specifically addresses the consistency/availability trade-off during network partitions. Other failure mechanisms require additional reliability and fault-tolerance techniques.",
+    },
+  ],
+
+  comparisonTables: [
+    {
+      title: "Consistency vs Availability During Partition",
+      items: [
+        {
+          statement:
+            "Prioritizes a single consistent view of distributed data",
+          label: "Consistency",
+        },
+        {
+          statement:
+            "Prioritizes responding to requests from healthy nodes",
+          label: "Availability",
+        },
+        {
+          statement:
+            "May reject or delay operations when coordination is unavailable",
+          label: "Consistency",
+        },
+        {
+          statement:
+            "May return stale or temporarily divergent data",
+          label: "Availability",
+        },
+        {
+          statement:
+            "Suitable when conflicting state is unacceptable",
+          label: "Consistency",
+        },
+        {
+          statement:
+            "Suitable when continued service is more important than immediate consistency",
+          label: "Availability",
+        },
+      ],
+    },
+
+    {
+      title: "CAP Properties",
+      items: [
+        {
+          statement:
+            "Every successful read observes the required latest value or an error",
+          label: "Consistency",
+        },
+        {
+          statement:
+            "Requests to non-failing nodes receive a non-error response",
+          label: "Availability",
+        },
+        {
+          statement:
+            "System continues operating despite communication partitions",
+          label: "Partition Tolerance",
+        },
+      ],
+    },
+
+    {
+      title: "CP vs AP",
+      items: [
+        {
+          statement:
+            "Preserves the required consistency guarantee during partition",
+          label: "CP",
+        },
+        {
+          statement:
+            "Continues serving requests during partition",
+          label: "AP",
+        },
+        {
+          statement:
+            "May reject or delay operations during partition",
+          label: "CP",
+        },
+        {
+          statement:
+            "May temporarily serve stale or divergent data",
+          label: "AP",
+        },
+        {
+          statement:
+            "Useful when correctness is more important than uninterrupted service",
+          label: "CP",
+        },
+        {
+          statement:
+            "Useful when uninterrupted service is more important than immediate consistency",
+          label: "AP",
+        },
+      ],
+    },
+
+    {
+      title: "CAP vs ACID Consistency",
+      items: [
+        {
+          statement:
+            "Concerns consistency of distributed replicas and reads",
+          label: "CAP Consistency",
+        },
+        {
+          statement:
+            "Concerns preservation of application/database integrity constraints",
+          label: "ACID Consistency",
+        },
+        {
+          statement:
+            "Primarily discussed in distributed systems",
+          label: "CAP Consistency",
+        },
+        {
+          statement:
+            "Primarily discussed as part of database transaction guarantees",
+          label: "ACID Consistency",
+        },
+      ],
+    },
+
+    {
+      title: "CAP vs Eventual Consistency",
+      items: [
+        {
+          statement:
+            "Strong consistency requires reads to observe the latest committed state according to the guarantee",
+          label: "Strong Consistency",
+        },
+        {
+          statement:
+            "Replicas may temporarily differ and converge later",
+          label: "Eventual Consistency",
+        },
+        {
+          statement:
+            "May require rejecting or delaying operations during partition",
+          label: "Strong Consistency",
+        },
+        {
+          statement:
+            "Can continue serving reads/writes with temporary divergence depending on the system",
+          label: "Eventual Consistency",
+        },
+      ],
+    },
+
+    {
+      title: "Network Failure vs Network Partition",
+      items: [
+        {
+          statement:
+            "One component may become unreachable or fail",
+          label: "Network/Node Failure",
+        },
+        {
+          statement:
+            "Multiple distributed components remain alive but cannot communicate reliably",
+          label: "Network Partition",
+        },
+        {
+          statement:
+            "Does not automatically imply a CAP trade-off",
+          label: "Network/Node Failure",
+        },
+        {
+          statement:
+            "Creates the condition where the CAP consistency/availability trade-off matters",
+          label: "Network Partition",
+        },
+      ],
+    },
+  ],
+
+  why: [
+    "Distributed systems communicate over networks, and network communication can fail.",
+    "When a partition occurs, nodes may not be able to determine the latest state maintained by other nodes.",
+    "If every partitioned node continues accepting operations, different nodes may accept conflicting state and violate strong consistency.",
+    "If the system refuses operations until coordination is restored, some requests cannot be served and availability is reduced.",
+    "CAP provides a framework for deciding which behavior is acceptable for the application's business requirements.",
+    "Financial and correctness-sensitive workflows may prefer consistency during a partition.",
+    "Content and user-experience-oriented systems may prefer availability and tolerate temporary stale data.",
+    "The correct CAP choice depends on the application's consistency requirements, business impact of stale data, failure tolerance, and user expectations.",
+  ],
+
+  how: [
+    {
+      step: "1. Identify the distributed components",
+      description:
+        "Determine which nodes, replicas, regions, or services participate in maintaining the same logical data.",
+    },
+    {
+      step: "2. Identify the communication dependency",
+      description:
+        "Understand how the components communicate and what happens if communication between them fails.",
+    },
+    {
+      step: "3. Model the network partition",
+      description:
+        "Assume that two or more healthy nodes cannot communicate reliably because of a network partition.",
+    },
+    {
+      step: "4. Ask what happens to writes",
+      description:
+        "Determine whether partitioned nodes are allowed to continue accepting writes when they cannot coordinate with the rest of the system.",
+    },
+    {
+      step: "5. Evaluate consistency",
+      description:
+        "If independent nodes continue accepting writes, determine whether clients could observe conflicting or stale values.",
+    },
+    {
+      step: "6. Evaluate availability",
+      description:
+        "If the system blocks or rejects operations until coordination is restored, determine which requests become unavailable.",
+    },
+    {
+      step: "7. Define the partition behavior",
+      description:
+        "Choose whether the system should prioritize the required consistency guarantee or continued availability during the partition.",
+    },
+    {
+      step: "8. Design recovery",
+      description:
+        "Define how the system reconciles state, restores replicas, re-establishes leadership or quorum, and returns to normal operation after the partition heals.",
+    },
+    {
+      step: "9. Validate against business requirements",
+      description:
+        "Check whether stale data, conflicting writes, rejected requests, or temporary unavailability are acceptable for the specific business operation.",
+    },
+  ],
+
+  interviewTraps: [
+    {
+      trap: '"CAP means choose any two of three"',
+      wrongApproach:
+        "Saying that a system can freely select any two properties and permanently keep them under every failure condition.",
+      whyWrong:
+        "The important CAP trade-off occurs when a network partition happens. During that partition, a distributed system cannot guarantee both strong consistency and availability.",
+      betterApproach:
+        "Say: 'When a partition occurs, we must choose whether to preserve strong consistency or availability.'",
+    },
+
+    {
+      trap: '"Partition tolerance means the server does not crash"',
+      wrongApproach:
+        "Defining partition tolerance as protection against server failure.",
+      whyWrong:
+        "A network partition specifically concerns communication failure between distributed components.",
+      betterApproach:
+        "Explain that nodes can remain healthy while communication between them is disrupted.",
+    },
+
+    {
+      trap: '"Availability means zero downtime"',
+      wrongApproach:
+        "Using CAP availability as a synonym for perfect uptime.",
+      whyWrong:
+        "CAP availability has a formal distributed-system meaning involving responses from non-failing nodes.",
+      betterApproach:
+        "Explain that a non-failing node should return a non-error response according to the availability guarantee.",
+    },
+
+    {
+      trap: '"Consistency means the database never contains bad data"',
+      wrongApproach:
+        "Equating CAP consistency with general correctness or ACID consistency.",
+      whyWrong:
+        "CAP consistency concerns the visibility of distributed data across nodes.",
+      betterApproach:
+        "Distinguish CAP consistency from ACID transaction consistency.",
+    },
+
+    {
+      trap: '"AP means the system returns incorrect data"',
+      wrongApproach:
+        "Calling stale or temporarily divergent data incorrect data.",
+      whyWrong:
+        "AP systems may intentionally allow temporary staleness or divergence and later converge.",
+      betterApproach:
+        "Say the system may return stale or temporarily divergent data according to its consistency model.",
+    },
+
+    {
+      trap: '"CP means the system is always unavailable"',
+      wrongApproach:
+        "Saying a CP system cannot serve any requests.",
+      whyWrong:
+        "The availability sacrifice specifically concerns operations affected by the partition and the system's consistency requirements.",
+      betterApproach:
+        "Say that some operations may be rejected or delayed during the partition to preserve consistency.",
+    },
+
+    {
+      trap: '"CAP and ACID consistency are the same"',
+      wrongApproach:
+        "Defining CAP consistency as the C in ACID.",
+      whyWrong:
+        "They describe different consistency concepts.",
+      betterApproach:
+        "Explain CAP consistency in terms of distributed replicas and explain ACID consistency in terms of database integrity constraints.",
+    },
+
+    {
+      trap: '"Consensus eliminates CAP"',
+      wrongApproach:
+        "Claiming Raft, Paxos, or another consensus protocol allows a system to guarantee everything.",
+      whyWrong:
+        "Consensus can preserve agreement by sacrificing availability when quorum cannot be reached.",
+      betterApproach:
+        "Explain that consensus helps maintain consistency but can reduce availability during a partition.",
+    },
+
+    {
+      trap: '"More replicas automatically mean more availability"',
+      wrongApproach:
+        "Assuming replicas alone guarantee the system remains available.",
+      whyWrong:
+        "Routing, quorum, failover, capacity, and partition behavior determine actual availability.",
+      betterApproach:
+        "Analyze the complete failure and failover architecture.",
+    },
+
+    {
+      trap: '"CAP applies only to databases"',
+      wrongApproach:
+        "Limiting CAP to relational databases.",
+      whyWrong:
+        "CAP is a distributed-systems concept and can apply to replicated state maintained by distributed components.",
+      betterApproach:
+        "Discuss CAP in the context of distributed databases, storage systems, caches, and coordination systems where appropriate.",
+    },
+
+    {
+      trap: '"CAP means consistency and availability can never coexist"',
+      wrongApproach:
+        "Saying a system must always sacrifice one of them.",
+      whyWrong:
+        "The fundamental CAP trade-off concerns behavior during a network partition.",
+      betterApproach:
+        "State that a system can provide both consistency and availability when communication is healthy, but cannot guarantee both during a partition.",
+    },
+
+    {
+      trap: '"Eventual consistency means data is permanently inconsistent"',
+      wrongApproach:
+        "Saying replicas never become consistent.",
+      whyWrong:
+        "Eventual consistency means replicas may temporarily diverge but can converge when updates stop and communication recovers.",
+      betterApproach:
+        "Explain temporary divergence followed by convergence.",
+    },
+  ],
+
+  when: [
+    "Use CAP reasoning whenever designing a distributed system with replicated state.",
+    "Analyze CP-oriented behavior when conflicting or stale data is more harmful than temporary unavailability.",
+    "Analyze AP-oriented behavior when continued service is more important than immediate consistency.",
+    "Use strong consistency-oriented designs for operations such as financial balances, inventory allocation, and correctness-sensitive coordination when business requirements demand it.",
+    "Use availability-oriented designs for workloads such as feeds, recommendations, browsing, and content where temporary stale data is acceptable.",
+    "Apply CAP reasoning explicitly to multi-region architectures because communication failures between regions must be considered.",
+    "Do not describe CAP as a permanent choice made under all circumstances. Focus on system behavior during a network partition.",
+    "Do not use CAP as the only reliability model. Combine it with replication, failover, retries, timeouts, idempotency, monitoring, backups, and disaster recovery as required.",
+  ],
+
+  tradeOffs: [
+    {
+      label: "Consistency",
+      points: [
+        "+ Prevents clients from observing conflicting successful states when the consistency guarantee is maintained",
+        "- May require rejecting or delaying operations during a network partition",
+      ],
+    },
+    {
+      label: "Availability",
+      points: [
+        "+ Allows healthy nodes to continue responding during a partition",
+        "- May allow stale or temporarily divergent data",
+      ],
+    },
+    {
+      label: "Partition Tolerance",
+      points: [
+        "+ Allows the distributed system to define behavior despite communication failures",
+        "- Forces a consistency/availability decision during the partition",
+      ],
+    },
+    {
+      label: "CP Approach",
+      points: [
+        "+ Appropriate when correctness and consistency are more important than uninterrupted service",
+        "- Some requests may fail or wait during partitions",
+      ],
+    },
+    {
+      label: "AP Approach",
+      points: [
+        "+ Allows continued service during partitions",
+        "- Requires tolerance for stale, divergent, or eventually consistent data",
+      ],
+    },
+    {
+      label: "Strong Consistency",
+      points: [
+        "+ Easier reasoning for correctness-sensitive operations",
+        "- Can increase coordination, latency, and availability cost during failures",
+      ],
+    },
+    {
+      label: "Eventual Consistency",
+      points: [
+        "+ Can improve availability and reduce coordination requirements",
+        "- Application must tolerate temporary stale or divergent state",
+      ],
+    },
+    {
+      label: "Multi-Region",
+      points: [
+        "+ Improves geographic resilience and can reduce user latency",
+        "- Increases network latency, partition scenarios, consistency complexity, and operational cost",
+      ],
+    },
+  ],
+
+  thirtySecondAnswer:
+    "CAP Theorem states that when a network partition occurs, a distributed system cannot simultaneously guarantee strong consistency and availability. Consistency means a successful read observes the latest successful write according to the consistency guarantee, while availability means requests to non-failing nodes continue receiving responses. Partition tolerance means the system continues operating despite communication failures between distributed nodes. Because partitions are possible in distributed systems, the practical decision during a partition is generally whether to favor consistency or availability. CP systems may reject or delay operations to preserve consistency, while AP systems continue serving requests and may temporarily return stale or divergent data. CAP is not simply 'choose any two' under all conditions; the trade-off becomes critical specifically during partitions.",
+
+  secondaryAnswer: {
+    question:
+      "How would you decide between CP and AP for a real-world system?",
+    answer:
+      "I would first identify what happens if the system serves stale or conflicting data and compare that with the business impact of temporarily rejecting requests. For a payment balance or inventory reservation, incorrect concurrent state can be more harmful, so I would favor a consistency-oriented design. For a social feed or recommendation system, temporary stale data may be acceptable, so I could favor availability and eventual convergence. I would then define the partition behavior, recovery strategy, reconciliation mechanism, monitoring, and failure-handling requirements rather than making the CAP choice in isolation.",
+  },
+
+  keyTakeaways: [
+    "CAP stands for Consistency, Availability, and Partition Tolerance.",
+    "The fundamental CAP trade-off appears when a network partition occurs.",
+    "During a partition, a distributed system cannot guarantee both strong consistency and availability.",
+    "Consistency means successful reads observe the required latest state or the system returns an error.",
+    "Availability means requests to non-failing nodes receive non-error responses according to the system's availability guarantee.",
+    "Partition tolerance means continuing according to the system's design despite communication failures between distributed nodes.",
+    "CAP is not simply 'choose any two' under all conditions.",
+    "A CP-oriented system favors consistency during a partition and may reject or delay some operations.",
+    "An AP-oriented system favors availability during a partition and may temporarily serve stale or divergent data.",
+    "A CA characterization is meaningful when there is no partition, but a distributed system cannot guarantee C and A together during a partition.",
+    "CAP consistency is different from ACID consistency.",
+    "Eventual consistency allows temporary divergence followed by convergence.",
+    "Consensus helps distributed nodes agree but may sacrifice availability when quorum cannot be reached.",
+    "More replicas do not automatically guarantee availability.",
+    "Multi-region systems must explicitly define their partition behavior.",
+    "The correct CP/AP decision depends on business requirements rather than a universally better architecture.",
+    "CAP does not replace reliability engineering; it is one part of distributed-system design.",
+  ],
+
+  interviewQuestions: [
+    {
+      level: "Basic",
+      questions: [
+        {
+          id: "b1",
+          question: "What does CAP stand for?",
+          answer:
+            "CAP stands for Consistency, Availability, and Partition Tolerance.",
+        },
+        {
+          id: "b2",
+          question: "What is CAP Theorem?",
+          answer:
+            "CAP Theorem states that when a network partition occurs, a distributed system cannot simultaneously guarantee strong consistency and availability.",
+        },
+        {
+          id: "b3",
+          question: "What is consistency in CAP?",
+          answer:
+            "Consistency means that a successful read observes the most recent successful write according to the relevant consistency guarantee, or the system returns an error.",
+        },
+        {
+          id: "b4",
+          question: "What is availability in CAP?",
+          answer:
+            "Availability means requests to non-failing nodes receive non-error responses according to the system's availability guarantee.",
+        },
+        {
+          id: "b5",
+          question: "What is partition tolerance?",
+          answer:
+            "Partition tolerance means the distributed system continues operating according to its design despite communication failures between nodes.",
+        },
+        {
+          id: "b6",
+          question: "What is a network partition?",
+          answer:
+            "It is a communication failure where distributed nodes may remain operational but cannot reliably communicate with one another.",
+        },
+        {
+          id: "b7",
+          question: "What is a CP system?",
+          answer:
+            "A CP-oriented system favors consistency during a network partition and may reject or delay operations to preserve that consistency.",
+        },
+        {
+          id: "b8",
+          question: "What is an AP system?",
+          answer:
+            "An AP-oriented system favors availability during a network partition and may temporarily serve stale or divergent data.",
+        },
+        {
+          id: "b9",
+          question: "When does the CAP trade-off matter?",
+          answer:
+            "The fundamental CAP trade-off matters when a network partition occurs.",
+        },
+        {
+          id: "b10",
+          question: "Is CAP only about databases?",
+          answer:
+            "No. CAP is a distributed-systems concept applicable to distributed systems that maintain replicated state and can experience communication partitions.",
+        },
+      ],
+    },
+
+    {
+      level: "Intermediate",
+      questions: [
+        {
+          id: "i1",
+          question: "Why can't a distributed system guarantee both C and A during a partition?",
+          answer:
+            "Because partitioned nodes cannot reliably coordinate their state. Continuing to accept operations can cause divergent state, while blocking operations to preserve consistency reduces availability.",
+        },
+        {
+          id: "i2",
+          question: "Does CAP mean choose any two of three?",
+          answer:
+            "Not exactly. The important trade-off occurs during a network partition. At that point, a distributed system cannot guarantee both strong consistency and availability.",
+        },
+        {
+          id: "i3",
+          question: "Can a system be both consistent and available when there is no partition?",
+          answer:
+            "Yes. The CAP restriction becomes relevant when a network partition occurs.",
+        },
+        {
+          id: "i4",
+          question: "What happens to a CP system during a partition?",
+          answer:
+            "It may reject or delay operations that cannot be safely coordinated in order to preserve the required consistency guarantee.",
+        },
+        {
+          id: "i5",
+          question: "What happens to an AP system during a partition?",
+          answer:
+            "It continues serving requests and may temporarily return stale or divergent data.",
+        },
+        {
+          id: "i6",
+          question: "What is the difference between CAP consistency and ACID consistency?",
+          answer:
+            "CAP consistency concerns the consistency of distributed data across nodes, while ACID consistency concerns preservation of database integrity constraints across transactions.",
+        },
+        {
+          id: "i7",
+          question: "What is eventual consistency?",
+          answer:
+            "It is a consistency model where replicas may temporarily differ but converge to the same state after updates stop and communication recovers.",
+        },
+        {
+          id: "i8",
+          question: "Why might a social feed favor AP behavior?",
+          answer:
+            "Users may prefer seeing slightly stale content rather than receiving errors when regions cannot communicate.",
+        },
+        {
+          id: "i9",
+          question: "Why might a payment system favor CP behavior?",
+          answer:
+            "Incorrect or conflicting financial state can be more harmful than temporarily rejecting a transaction.",
+        },
+        {
+          id: "i10",
+          question: "Does partition tolerance mean the servers cannot fail?",
+          answer:
+            "No. Partition tolerance specifically concerns communication failures between distributed components.",
+        },
+      ],
+    },
+
+    {
+      level: "Advanced",
+      questions: [
+        {
+          id: "a1",
+          question: "Explain CAP using a two-node database.",
+          answer:
+            "Suppose Node A and Node B replicate the same data. If a network partition prevents them from communicating, allowing both to accept writes can create conflicting state, while preventing one side from accepting writes sacrifices availability. Therefore the system cannot guarantee both strong consistency and availability during the partition.",
+        },
+        {
+          id: "a2",
+          question: "Why is partition tolerance generally assumed in distributed systems?",
+          answer:
+            "Because distributed components communicate over networks and communication failures can occur. A practical distributed architecture must define behavior when nodes cannot communicate.",
+        },
+        {
+          id: "a3",
+          question: "Does consensus solve CAP?",
+          answer:
+            "No. Consensus helps nodes agree on state or leadership, but a partition can prevent a quorum from forming, causing the system to sacrifice availability to preserve consistency.",
+        },
+        {
+          id: "a4",
+          question: "How does quorum relate to CAP?",
+          answer:
+            "Quorum mechanisms require a sufficient number of nodes to participate in operations. During a partition, a side without sufficient quorum may reject operations, preserving consistency at the cost of availability.",
+        },
+        {
+          id: "a5",
+          question: "Can eventual consistency support an AP design?",
+          answer:
+            "Yes. Eventual consistency allows replicas to temporarily diverge while continuing to serve requests, with the expectation that they converge later.",
+        },
+        {
+          id: "a6",
+          question: "Why is multi-region architecture strongly affected by CAP?",
+          answer:
+            "Because regions communicate over networks and can become disconnected or experience severe communication delays, forcing explicit decisions about consistency and availability.",
+        },
+        {
+          id: "a7",
+          question: "What is the practical meaning of CP?",
+          answer:
+            "During a partition, the system prefers preserving its consistency guarantee even if some requests must fail or wait.",
+        },
+        {
+          id: "a8",
+          question: "What is the practical meaning of AP?",
+          answer:
+            "During a partition, the system prefers continuing to respond even if some responses can temporarily contain stale or divergent state.",
+        },
+        {
+          id: "a9",
+          question: "Why isn't CA a useful permanent classification for a distributed system?",
+          answer:
+            "Because if a real network partition occurs, the distributed system cannot simultaneously guarantee strong consistency and availability. CA behavior describes operation when communication is healthy.",
+        },
+        {
+          id: "a10",
+          question: "What should you ask before choosing CP or AP?",
+          answer:
+            "Ask what happens if stale or conflicting data is served, what happens if requests are rejected, what the business can tolerate, and what consistency guarantee the operation actually requires.",
+        },
+      ],
+    },
+
+    {
+      level: "Scenario",
+      questions: [
+        {
+          id: "s1",
+          question:
+            "Two database replicas lose communication, but both remain healthy. What CAP problem has occurred?",
+          answer:
+            "A network partition has occurred. The system must define whether to preserve consistency by restricting operations or preserve availability by continuing to serve requests.",
+        },
+        {
+          id: "s2",
+          question:
+            "A payment database is partitioned. Both sides can receive payment writes. Why is this dangerous?",
+          answer:
+            "Both sides may accept conflicting financial state, potentially causing double spending or inconsistent balances. A consistency-oriented design may restrict writes until coordination is restored.",
+        },
+        {
+          id: "s3",
+          question:
+            "A social-media system continues serving feeds while two regions cannot communicate. What trade-off is it making?",
+          answer:
+            "It is favoring availability and accepting that users may temporarily see stale or divergent data.",
+        },
+        {
+          id: "s4",
+          question:
+            "A CP system rejects requests during a network partition. Is that a system failure?",
+          answer:
+            "Not necessarily. If rejecting or delaying requests is the designed behavior required to preserve the consistency guarantee, it is the intended partition behavior.",
+        },
+        {
+          id: "s5",
+          question:
+            "An AP system returns an older value during a partition. Is that automatically a bug?",
+          answer:
+            "Not necessarily. If the system intentionally allows temporary stale data as part of its consistency model, the behavior may be expected.",
+        },
+        {
+          id: "s6",
+          question:
+            "A three-node consensus cluster is partitioned into a 2-node side and a 1-node side. What can happen?",
+          answer:
+            "The side with quorum can generally continue making coordinated progress according to the protocol, while the side without quorum cannot safely commit new decisions if consistency is preserved.",
+        },
+        {
+          id: "s7",
+          question:
+            "Your product catalog can tolerate a few seconds of stale price information, but the payment system cannot. Would you use the same CAP behavior for both?",
+          answer:
+            "Not necessarily. The catalog may tolerate availability-oriented eventual behavior, while payment operations may require stronger consistency and stricter partition handling.",
+        },
+        {
+          id: "s8",
+          question:
+            "Two regions cannot communicate for five minutes. Users in both regions need to continue browsing products. What would you consider?",
+          answer:
+            "If product browsing can tolerate temporary stale data, an availability-oriented approach can continue serving regional data while replication catches up after communication is restored.",
+        },
+        {
+          id: "s9",
+          question:
+            "An inventory system allows both partitioned regions to decrement the same inventory item independently. What problem can occur?",
+          answer:
+            "Both regions can make decisions using stale inventory state, potentially overselling the item. A stronger consistency strategy or controlled partition behavior may be required.",
+        },
+        {
+          id: "s10",
+          question:
+            "An interviewer says, 'CAP means pick any two.' How would you correct the statement?",
+          answer:
+            "I would say that the important CAP trade-off occurs during a network partition. At that point, a distributed system cannot simultaneously guarantee strong consistency and availability. Partition tolerance is the condition being tolerated, and the practical decision is generally between consistency and availability.",
+        },
+      ],
+    },
+  ],
+},
 };
 
 export const getTopicContent = (blockId: string): TopicContent | undefined =>

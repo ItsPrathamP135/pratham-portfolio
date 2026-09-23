@@ -2138,7 +2138,293 @@ export const systemDesignVisuals: Record<string, TopicVisualization> = {
       ]
     }
   ]
-}
+},"cap-theorem": {
+  topicId: "cap-theorem",
+  type: "stage-flow",
+  summary:
+    "CAP Theorem explains the trade-off a distributed system faces when a network partition occurs: it cannot simultaneously guarantee strong consistency and availability while also tolerating that partition.",
+
+  stages: [
+    {
+      title: "1. Distributed System Before Partition",
+      caption:
+        "Multiple nodes communicate over a network and maintain distributed data.",
+      layers: [
+        {
+          boxes: ["Client"],
+        },
+        {
+          boxes: ["Node A", "Node B", "Node C"],
+        },
+        {
+          boxes: ["Network"],
+        },
+      ],
+    },
+
+    {
+      title: "2. The Three CAP Properties",
+      caption:
+        "CAP describes three properties: Consistency, Availability, and Partition Tolerance.",
+      layers: [
+        {
+          boxes: [
+            "Consistency (C)",
+            "Availability (A)",
+            "Partition Tolerance (P)",
+          ],
+        },
+        {
+          boxes: [
+            "Same logical view of data",
+            "Every request receives a response",
+            "System continues despite network partition",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "3. Network Partition Occurs",
+      caption:
+        "The critical CAP scenario occurs when nodes can no longer reliably communicate with each other.",
+      layers: [
+        {
+          boxes: ["Node A", "Node B"],
+        },
+        {
+          boxes: ["❌ Network Partition"],
+        },
+        {
+          boxes: ["Node C", "Node D"],
+        },
+      ],
+    },
+
+    {
+      title: "4. Partition Forces a Choice",
+      caption:
+        "During a partition, the system must decide whether to reject some operations to preserve consistency or continue serving requests while allowing divergent state.",
+      layers: [
+        {
+          boxes: ["Network Partition"],
+        },
+        {
+          boxes: [
+            "Preserve Consistency → Reject / delay some requests",
+            "Preserve Availability → Continue responding",
+          ],
+        },
+        {
+          boxes: [
+            "CP Behavior",
+            "AP Behavior",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "5. CP System",
+      caption:
+        "A CP-oriented system preserves consistency during a partition by sacrificing availability for some operations.",
+      layers: [
+        {
+          boxes: ["Client"],
+        },
+        {
+          boxes: ["Node A", "Node B"],
+        },
+        {
+          boxes: ["❌ Network Partition"],
+        },
+        {
+          boxes: ["Node C", "Node D"],
+        },
+        {
+          boxes: [
+            "Consistency Preserved",
+            "Some Requests Rejected / Delayed",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "6. AP System",
+      caption:
+        "An AP-oriented system continues accepting requests during a partition, accepting that different nodes may temporarily have different views of data.",
+      layers: [
+        {
+          boxes: ["Client"],
+        },
+        {
+          boxes: ["Node A", "Node B"],
+        },
+        {
+          boxes: ["❌ Network Partition"],
+        },
+        {
+          boxes: ["Node C", "Node D"],
+        },
+        {
+          boxes: [
+            "Requests Continue",
+            "Temporary Data Divergence",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "7. CAP Is About Behavior During Partition",
+      caption:
+        "The key interview point is that the trade-off matters when a partition occurs, not simply during normal operation.",
+      layers: [
+        {
+          boxes: [
+            "Normal Operation",
+            "Nodes Communicate",
+            "CAP Trade-off Not Forced",
+          ],
+        },
+        {
+          boxes: [
+            "Network Partition",
+            "Communication Breaks",
+          ],
+        },
+        {
+          boxes: [
+            "Consistency Priority → CP",
+            "Availability Priority → AP",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "8. CAP vs ACID Consistency",
+      caption:
+        "CAP consistency and ACID consistency are related to data correctness but describe different concepts.",
+      layers: [
+        {
+          boxes: ["CAP Consistency (Distributed-system consistency)"],
+        },
+        {
+          boxes: ["ACID Consistency (Database transaction invariants)"],
+        },
+        {
+          boxes: [
+            "Do Not Treat Them as the Same Concept",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "9. CAP vs Eventual Consistency",
+      caption:
+        "Eventual consistency is one possible consistency model; it is not synonymous with AP.",
+      layers: [
+        {
+          boxes: ["CAP Theorem"],
+        },
+        {
+          boxes: [
+            "Consistency",
+            "Availability",
+            "Partition Tolerance",
+          ],
+        },
+        {
+          boxes: [
+            "Eventual Consistency",
+            "One Possible Consistency Model",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "10. CAP Decision Framework",
+      caption:
+        "Start with the failure assumption, then decide which behavior is required during a partition.",
+      layers: [
+        {
+          boxes: ["Can a Network Partition Occur?"],
+        },
+        {
+          boxes: ["Yes → Partition Tolerance Matters"],
+        },
+        {
+          boxes: ["What Must Happen During Partition?"],
+        },
+        {
+          boxes: [
+            "Correct / Consistent Result Required → CP",
+            "Request Must Continue → AP",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "11. Real-World Examples",
+      caption:
+        "Different systems make different consistency and availability trade-offs depending on business requirements.",
+      layers: [
+        {
+          boxes: [
+            "Banking / Payment State",
+            "Strong Correctness Requirement",
+          ],
+        },
+        {
+          boxes: [
+            "Social Feed",
+            "Availability + Low Latency",
+          ],
+        },
+        {
+          boxes: [
+            "Inventory / Booking",
+            "Consistency Often Critical",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "12. CAP Mental Model",
+      caption:
+        "The interview-ready mental model is simple: assume partitions can happen, then explain the required behavior.",
+      layers: [
+        {
+          boxes: ["Distributed System"],
+        },
+        {
+          boxes: ["Network Partition"],
+        },
+        {
+          boxes: ["Choose Required Behavior"],
+        },
+        {
+          boxes: [
+            "Consistency Priority",
+            "Availability Priority",
+          ],
+        },
+        {
+          boxes: [
+            "CP",
+            "AP",
+          ],
+        },
+      ],
+    },
+  ],
+},
 };
 
 export const getTopicVisualization = (
