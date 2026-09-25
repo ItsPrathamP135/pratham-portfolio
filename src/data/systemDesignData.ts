@@ -104,7 +104,13 @@ export const systemDesignData: SystemDesignCategory[] = [
         hasContent: true,
         completedOn: "2026-09-23",
       },
-      block(13, "Distributed Transactions"),
+      {
+        ...block(13, "Eventual Consistency", "COMPLETED"),
+        targetDate: "September 2, 2026",
+        hasContent: true,
+        completedOn: "2026-09-2",
+      },
+      block(14, "Distributed Transactions"),
 
     ],
   },

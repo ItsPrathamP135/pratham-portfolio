@@ -2138,7 +2138,8 @@ export const systemDesignVisuals: Record<string, TopicVisualization> = {
       ]
     }
   ]
-},"cap-theorem": {
+},
+"cap-theorem": {
   topicId: "cap-theorem",
   type: "stage-flow",
   summary:
@@ -2419,6 +2420,418 @@ export const systemDesignVisuals: Record<string, TopicVisualization> = {
           boxes: [
             "CP",
             "AP",
+          ],
+        },
+      ],
+    },
+  ],
+},
+"eventual-consistency": {
+  topicId: "eventual-consistency",
+  type: "stage-flow",
+  summary:
+    "Eventual consistency allows replicas to temporarily diverge while updates propagate asynchronously, with the expectation that replicas eventually converge.",
+
+  stages: [
+    {
+      title: "1. Strong vs Eventual Consistency",
+      caption:
+        "The fundamental difference is whether temporary stale reads are allowed.",
+      layers: [
+        {
+          boxes: [
+            "Strong Consistency → Latest value according to guarantee",
+            "Eventual Consistency → Temporary stale value allowed",
+          ],
+        },
+        {
+          boxes: [
+            "Strong → More coordination",
+            "Eventual → Less immediate coordination",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "2. Write Reaches Primary",
+      caption:
+        "The authoritative write path accepts the new value.",
+      layers: [
+        {
+          boxes: ["Client", "Write Request"],
+        },
+        {
+          boxes: ["Primary / Leader"],
+        },
+        {
+          boxes: ["NEW VALUE → Rohit"],
+        },
+      ],
+    },
+
+    {
+      title: "3. Replicas Have Not Caught Up",
+      caption:
+        "Asynchronous propagation creates a temporary period where replicas can contain older data.",
+      layers: [
+        {
+          boxes: ["Primary → Rohit"],
+        },
+        {
+          boxes: [
+            "Replica A → Rohit",
+            "Replica B → Rahul",
+            "Replica C → Rahul",
+          ],
+        },
+        {
+          boxes: ["Replication Lag"],
+        },
+      ],
+    },
+
+    {
+      title: "4. Stale Read",
+      caption:
+        "A request routed to a lagging replica can temporarily return an older valid value.",
+      layers: [
+        {
+          boxes: ["User"],
+        },
+        {
+          boxes: ["Load Balancer / Read Router"],
+        },
+        {
+          boxes: ["Replica B"],
+        },
+        {
+          boxes: ["OLD VALUE → Rahul"],
+        },
+      ],
+    },
+
+    {
+      title: "5. Asynchronous Propagation",
+      caption:
+        "The new value is propagated to replicas without requiring every replica to be immediately synchronized.",
+      layers: [
+        {
+          boxes: ["Primary → Rohit"],
+        },
+        {
+          boxes: ["Async Replication"],
+        },
+        {
+          boxes: [
+            "Replica A → Update",
+            "Replica B → Update",
+            "Replica C → Update",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "6. Replicas Converge",
+      caption:
+        "Once replication catches up, the replicas represent the same logical state.",
+      layers: [
+        {
+          boxes: ["Primary → Rohit"],
+        },
+        {
+          boxes: [
+            "Replica A → Rohit",
+            "Replica B → Rohit",
+            "Replica C → Rohit",
+          ],
+        },
+        {
+          boxes: ["CONVERGENCE"],
+        },
+      ],
+    },
+
+    {
+      title: "7. Read-After-Write Problem",
+      caption:
+        "A user can write to the primary and immediately read from a stale replica.",
+      layers: [
+        {
+          boxes: ["WRITE → Primary → Rohit"],
+        },
+        {
+          boxes: ["READ → Lagging Replica → Rahul"],
+        },
+        {
+          boxes: ["Problem → User sees old value"],
+        },
+      ],
+    },
+
+    {
+      title: "8. Read-After-Write Solutions",
+      caption:
+        "Critical user workflows can use stronger guarantees without making every read globally strong.",
+      layers: [
+        {
+          boxes: [
+            "Read From Primary",
+            "Session-Aware Routing",
+            "Version-Aware Routing",
+          ],
+        },
+        {
+          boxes: [
+            "Track Required Version",
+            "Use Stronger Consistency",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "9. Read Your Writes + Monotonic Reads",
+      caption:
+        "Useful consistency guarantees can provide a more predictable user experience.",
+      layers: [
+        {
+          boxes: [
+            "Read Your Writes → See your successful update",
+            "Monotonic Reads → Never move backward to an older version",
+          ],
+        },
+        {
+          boxes: [
+            "Write → Version 10",
+            "Read → Version 10",
+            "Next Read → Version 10 or newer",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "10. Concurrent Writes Create Conflicts",
+      caption:
+        "Multiple replicas accepting writes independently can temporarily produce conflicting states.",
+      layers: [
+        {
+          boxes: ["Replica A → Address = Pune"],
+        },
+        {
+          boxes: ["Replica B → Address = Mumbai"],
+        },
+        {
+          boxes: ["Conflict → Divergent State"],
+        },
+      ],
+    },
+
+    {
+      title: "11. Conflict Resolution",
+      caption:
+        "The system needs a defined way to reconcile concurrent updates.",
+      layers: [
+        {
+          boxes: [
+            "Version Numbers",
+            "Last Write Wins",
+            "Application-Level Merge",
+            "CRDTs",
+          ],
+        },
+        {
+          boxes: ["Resolve Conflict → Final Logical State"],
+        },
+      ],
+    },
+
+    {
+      title: "12. Multi-Region Eventual Consistency",
+      caption:
+        "Geographically distributed replicas can reduce latency while allowing temporary regional divergence.",
+      layers: [
+        {
+          boxes: ["Users"],
+        },
+        {
+          boxes: ["Region A", "Region B", "Region C"],
+        },
+        {
+          boxes: [
+            "Local Database A",
+            "Local Database B",
+            "Local Database C",
+          ],
+        },
+        {
+          boxes: ["Asynchronous Cross-Region Replication"],
+        },
+      ],
+    },
+
+    {
+      title: "13. Search Index Example",
+      caption:
+        "The source database and derived search index may temporarily contain different information.",
+      layers: [
+        {
+          boxes: ["Product Created"],
+        },
+        {
+          boxes: ["Database → Product Exists"],
+        },
+        {
+          boxes: ["Event / Async Pipeline"],
+        },
+        {
+          boxes: ["Search Index → Not Yet Updated"],
+        },
+        {
+          boxes: ["Eventually → Product Appears in Search"],
+        },
+      ],
+    },
+
+    {
+      title: "14. Cache Staleness",
+      caption:
+        "A cache may temporarily contain an older representation of the source data.",
+      layers: [
+        {
+          boxes: ["Database → Price = ₹120"],
+        },
+        {
+          boxes: ["Cache → Price = ₹100"],
+        },
+        {
+          boxes: ["TTL / Invalidation / Refresh"],
+        },
+        {
+          boxes: ["Cache → Price = ₹120"],
+        },
+      ],
+    },
+
+    {
+      title: "15. Hybrid Consistency",
+      caption:
+        "Real systems can choose different consistency guarantees for different components.",
+      layers: [
+        {
+          boxes: [
+            "Payment → Stronger Consistency",
+            "Inventory Reservation → Stronger Consistency",
+          ],
+        },
+        {
+          boxes: [
+            "Search → Eventual Consistency",
+            "Analytics → Eventual Consistency",
+            "Recommendations → Eventual Consistency",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "16. When Eventual Consistency Fits",
+      caption:
+        "Use it when temporary staleness is acceptable and scalability or latency benefits matter.",
+      layers: [
+        {
+          boxes: [
+            "Search",
+            "Analytics",
+            "Recommendations",
+            "Social Feeds",
+            "Counters",
+          ],
+        },
+        {
+          boxes: [
+            "Temporary Staleness Acceptable",
+            "Low Latency Important",
+            "Distributed / Multi-Region",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "17. When Stronger Consistency Is Needed",
+      caption:
+        "Critical business state may require stronger correctness guarantees.",
+      layers: [
+        {
+          boxes: [
+            "Payment State",
+            "Authoritative Balance",
+            "Inventory Reservation",
+            "Critical Security State",
+          ],
+        },
+        {
+          boxes: [
+            "Stronger Consistency",
+            "Concurrency Control",
+            "Idempotency",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "18. Eventual Consistency Mental Model",
+      caption:
+        "The complete flow to remember for interviews.",
+      layers: [
+        {
+          boxes: ["WRITE"],
+        },
+        {
+          boxes: ["Primary / Authoritative State"],
+        },
+        {
+          boxes: ["Temporary Divergence"],
+        },
+        {
+          boxes: ["Replication / Propagation"],
+        },
+        {
+          boxes: ["Possible Stale Reads"],
+        },
+        {
+          boxes: ["Conflict Resolution if Required"],
+        },
+        {
+          boxes: ["CONVERGENCE"],
+        },
+      ],
+    },
+
+    {
+      title: "19. Final Decision Framework",
+      caption:
+        "Choose consistency based on the business requirement, not simply the technology.",
+      layers: [
+        {
+          boxes: ["Can Stale Data Be Tolerated?"],
+        },
+        {
+          boxes: [
+            "YES → Eventual Consistency May Fit",
+            "NO → Stronger Guarantee Required",
+          ],
+        },
+        {
+          boxes: [
+            "How Much Staleness Is Acceptable?",
+            "What Happens During Partition?",
+            "Can Conflicts Be Resolved?",
+            "What Does Each Operation Require?",
           ],
         },
       ],
