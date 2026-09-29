@@ -2838,6 +2838,1308 @@ export const systemDesignVisuals: Record<string, TopicVisualization> = {
     },
   ],
 },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+"solid-principles": {
+  topicId: "solid-principles",
+  type: "stage-flow",
+
+  summary:
+    "SOLID is a set of five connected object-oriented design principles that help control responsibility, extension, substitution, interfaces, and dependency direction.",
+
+  stages: [
+    {
+      title: "1. Why SOLID Exists",
+      caption:
+        "As software grows, unrelated responsibilities and tight dependencies make change increasingly risky.",
+
+      layers: [
+        {
+          boxes: [
+            "New Features",
+            "Changing Requirements",
+            "New Implementations",
+            "Changing Integrations",
+          ],
+        },
+        {
+          boxes: [
+            "Large Classes",
+            "Tight Coupling",
+            "Large Interfaces",
+            "Fragile Inheritance",
+          ],
+        },
+        {
+          boxes: [
+            "Harder Testing",
+            "Higher Regression Risk",
+            "Harder Maintenance",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "2. SOLID",
+      caption:
+        "Five principles address different problems in object-oriented design.",
+
+      layers: [
+        {
+          boxes: [
+            "S — Single Responsibility",
+            "O — Open / Closed",
+            "L — Liskov Substitution",
+            "I — Interface Segregation",
+            "D — Dependency Inversion",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "3. What Each Principle Solves",
+      caption:
+        "Think of SOLID as five design questions.",
+
+      layers: [
+        {
+          boxes: [
+            "SRP → Is responsibility focused?",
+            "OCP → Can behavior be extended safely?",
+            "LSP → Can implementations be substituted?",
+            "ISP → Do clients depend only on what they need?",
+            "DIP → Does business logic depend on abstractions?",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "4. SRP — Responsibility",
+      caption:
+        "Keep related behavior together and separate unrelated reasons to change.",
+
+      layers: [
+        {
+          boxes: [
+            "Business Logic",
+            "Persistence",
+            "Reporting",
+            "Notifications",
+          ],
+        },
+        {
+          boxes: [
+            "Focused Responsibilities",
+            "Localized Changes",
+            "Higher Cohesion",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "5. OCP — Extension",
+      caption:
+        "New variations should be added through appropriate extension points rather than repeatedly modifying stable logic.",
+
+      layers: [
+        {
+          boxes: ["PaymentService"],
+        },
+        {
+          boxes: ["PaymentProcessor"],
+        },
+        {
+          boxes: [
+            "Card",
+            "UPI",
+            "PayPal",
+            "Future Payment Type",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "6. LSP — Substitution",
+      caption:
+        "Every subtype or implementation must preserve the behavioral expectations of its abstraction.",
+
+      layers: [
+        {
+          boxes: ["Base Abstraction"],
+        },
+        {
+          boxes: [
+            "Implementation A",
+            "Implementation B",
+            "Implementation C",
+          ],
+        },
+        {
+          boxes: [
+            "Same Contract",
+            "Expected Behavior",
+            "Safe Substitution",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "7. ISP — Focused Interfaces",
+      caption:
+        "Clients should not be forced to depend on operations they do not need.",
+
+      layers: [
+        {
+          boxes: ["Large Interface"],
+        },
+        {
+          boxes: [
+            "Work",
+            "Eat",
+            "Sleep",
+            "Other Unrelated Operations",
+          ],
+        },
+        {
+          boxes: [
+            "Focused Client Interfaces",
+            "Only Required Operations",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "8. DIP — Dependency Direction",
+      caption:
+        "High-level business logic should not be tightly coupled to low-level implementation details.",
+
+      layers: [
+        {
+          boxes: ["OrderService"],
+        },
+        {
+          boxes: ["OrderRepository"],
+        },
+        {
+          boxes: [
+            "MySQL Repository",
+            "Mongo Repository",
+            "Mock Repository",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "9. DIP vs Dependency Injection",
+      caption:
+        "DIP is the principle; Dependency Injection is a technique used to provide dependencies.",
+
+      layers: [
+        {
+          boxes: ["DIP → Depend on Abstractions"],
+        },
+        {
+          boxes: [
+            "Dependency Injection",
+            "Constructor Injection",
+            "Spring Container",
+          ],
+        },
+        {
+          boxes: ["Concrete Implementation"],
+        },
+      ],
+    },
+
+    {
+      title: "10. SOLID Working Together",
+      caption:
+        "The five principles reinforce each other rather than operating as isolated rules.",
+
+      layers: [
+        {
+          boxes: [
+            "SRP",
+            "OCP",
+            "LSP",
+            "ISP",
+            "DIP",
+          ],
+        },
+        {
+          boxes: [
+            "High Cohesion",
+            "Loose Coupling",
+            "Extensibility",
+            "Testability",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "11. SOLID in Java / Spring Boot",
+      caption:
+        "Java interfaces, polymorphism, composition, and Spring dependency injection commonly support SOLID-oriented designs.",
+
+      layers: [
+        {
+          boxes: ["Controller"],
+        },
+        {
+          boxes: ["Service"],
+        },
+        {
+          boxes: ["Interface / Abstraction"],
+        },
+        {
+          boxes: ["Concrete Implementation"],
+        },
+        {
+          boxes: [
+            "Constructor Injection",
+            "Loose Coupling",
+            "Testable Components",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "12. Avoid Overengineering",
+      caption:
+        "SOLID does not mean maximum abstraction or maximum number of classes.",
+
+      layers: [
+        {
+          boxes: [
+            "Real Design Problem",
+            "Expected Variation",
+            "Meaningful Boundary",
+          ],
+        },
+        {
+          boxes: [
+            "Apply Appropriate Principle",
+          ],
+        },
+        {
+          boxes: [
+            "Avoid Unnecessary Interfaces",
+            "Avoid Unnecessary Indirection",
+            "Keep Simple Things Simple",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "13. Final SOLID Mental Model",
+      caption:
+        "SOLID helps make change safer while keeping object-oriented design understandable.",
+
+      layers: [
+        {
+          boxes: [
+            "SRP → Responsibility",
+            "OCP → Extension",
+            "LSP → Substitution",
+            "ISP → Interfaces",
+            "DIP → Dependencies",
+          ],
+        },
+        {
+          boxes: [
+            "High Cohesion",
+            "Loose Coupling",
+            "Maintainability",
+            "Extensibility",
+            "Testability",
+          ],
+        },
+      ],
+    },
+  ],
+},
+"single-responsibility-principle": {
+  topicId: "single-responsibility-principle",
+  type: "stage-flow",
+
+  summary:
+    "SRP keeps a class focused on one cohesive responsibility and one primary reason to change, improving cohesion and localizing change.",
+
+  stages: [
+    {
+      title: "1. The SRP Problem",
+      caption:
+        "A class becomes difficult to maintain when unrelated responsibilities accumulate inside it.",
+
+      layers: [
+        {
+          boxes: [
+            "Business Logic",
+            "Database",
+            "Email",
+            "Reporting",
+          ],
+        },
+        {
+          boxes: [
+            "One Large Class",
+          ],
+        },
+        {
+          boxes: [
+            "Multiple Reasons to Change",
+            "Higher Coupling",
+            "Harder Testing",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "2. What SRP Means",
+      caption:
+        "The class should represent one cohesive responsibility and one primary reason to change.",
+
+      layers: [
+        {
+          boxes: [
+            "One Cohesive Responsibility",
+          ],
+        },
+        {
+          boxes: [
+            "Related Behavior",
+            "Related Data",
+            "Related Rules",
+          ],
+        },
+        {
+          boxes: [
+            "Focused Reason to Change",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "3. Responsibility",
+      caption:
+        "Responsibility is a meaningful area of behavior, not simply a single operation.",
+
+      layers: [
+        {
+          boxes: [
+            "Tax Calculation",
+            "Order Persistence",
+            "Notification",
+            "Reporting",
+          ],
+        },
+        {
+          boxes: [
+            "Different Concerns",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "4. Reason to Change",
+      caption:
+        "Ask whether different requirements could independently force the class to change.",
+
+      layers: [
+        {
+          boxes: [
+            "Tax Rules Change",
+            "Email Format Changes",
+            "Database Changes",
+            "Report Format Changes",
+          ],
+        },
+        {
+          boxes: [
+            "Independent Reasons to Change",
+          ],
+        },
+        {
+          boxes: [
+            "Potential SRP Violation",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "5. Before SRP",
+      caption:
+        "Unrelated responsibilities are combined inside one component.",
+
+      layers: [
+        {
+          boxes: [
+            "OrderService",
+          ],
+        },
+        {
+          boxes: [
+            "Calculate Price",
+            "Save Order",
+            "Send Email",
+            "Generate PDF",
+          ],
+        },
+        {
+          boxes: [
+            "Pricing",
+            "Persistence",
+            "Notification",
+            "Reporting",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "6. Apply SRP",
+      caption:
+        "Separate the concerns into meaningful cohesive components.",
+
+      layers: [
+        {
+          boxes: [
+            "OrderService",
+            "PricingService",
+            "OrderRepository",
+            "NotificationService",
+            "ReportService",
+          ],
+        },
+        {
+          boxes: [
+            "Orchestration",
+            "Pricing",
+            "Persistence",
+            "Notification",
+            "Reporting",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "7. Keep the Workflow",
+      caption:
+        "Separating responsibilities does not mean losing the overall business workflow.",
+
+      layers: [
+        {
+          boxes: [
+            "OrderService",
+          ],
+        },
+        {
+          boxes: [
+            "PricingService",
+            "InventoryService",
+            "PaymentService",
+            "NotificationService",
+          ],
+        },
+        {
+          boxes: [
+            "Focused Components",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "8. High Cohesion",
+      caption:
+        "Related behavior stays together around a focused concern.",
+
+      layers: [
+        {
+          boxes: [
+            "TaxCalculator",
+          ],
+        },
+        {
+          boxes: [
+            "Calculate Tax",
+            "Calculate Regional Tax",
+            "Calculate Tax Discount",
+          ],
+        },
+        {
+          boxes: [
+            "One Tax-Related Responsibility",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "9. Low Cohesion",
+      caption:
+        "Unrelated behavior inside one class makes responsibility boundaries unclear.",
+
+      layers: [
+        {
+          boxes: [
+            "UserService",
+          ],
+        },
+        {
+          boxes: [
+            "Validate User",
+            "Save User",
+            "Send Email",
+            "Generate CSV",
+            "Create Audit File",
+          ],
+        },
+        {
+          boxes: [
+            "Multiple Unrelated Concerns",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "10. God Class",
+      caption:
+        "A God Class accumulates excessive behavior and knowledge.",
+
+      layers: [
+        {
+          boxes: [
+            "OrderManager",
+          ],
+        },
+        {
+          boxes: [
+            "Pricing",
+            "Inventory",
+            "Payment",
+            "Database",
+            "Email",
+            "PDF",
+            "Logging",
+          ],
+        },
+        {
+          boxes: [
+            "High Complexity",
+            "Many Dependencies",
+            "Many Reasons to Change",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "11. SRP and Testing",
+      caption:
+        "Focused responsibilities make tests more targeted and reduce unrelated setup.",
+
+      layers: [
+        {
+          boxes: [
+            "TaxCalculator",
+          ],
+        },
+        {
+          boxes: [
+            "Tax Test Cases",
+          ],
+        },
+        {
+          boxes: [
+            "No Email Server",
+            "No Database",
+            "No PDF Infrastructure",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "12. SRP Does Not Mean One Method",
+      caption:
+        "Multiple methods are valid when they collectively implement one cohesive responsibility.",
+
+      layers: [
+        {
+          boxes: [
+            "TaxCalculator",
+          ],
+        },
+        {
+          boxes: [
+            "calculateTax()",
+            "calculateRegionalTax()",
+            "calculateDiscountTax()",
+          ],
+        },
+        {
+          boxes: [
+            "One Cohesive Responsibility",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "13. Avoid Over-Splitting",
+      caption:
+        "SRP should create meaningful boundaries, not one class for every tiny operation.",
+
+      layers: [
+        {
+          boxes: [
+            "One Tiny Method",
+          ],
+        },
+        {
+          boxes: [
+            "Unnecessary Class",
+            "Unnecessary Interface",
+            "Unnecessary Indirection",
+          ],
+        },
+        {
+          boxes: [
+            "Overengineering",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "14. SRP in Spring Boot",
+      caption:
+        "Spring applications commonly use focused services, repositories, and integration components.",
+
+      layers: [
+        {
+          boxes: [
+            "Controller",
+          ],
+        },
+        {
+          boxes: [
+            "OrderService",
+          ],
+        },
+        {
+          boxes: [
+            "OrderRepository",
+            "NotificationService",
+            "PaymentService",
+          ],
+        },
+        {
+          boxes: [
+            "Focused Responsibilities",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "15. Change Localization",
+      caption:
+        "The main benefit of SRP is reducing the blast radius of changes.",
+
+      layers: [
+        {
+          boxes: [
+            "Pricing Rules Change",
+          ],
+        },
+        {
+          boxes: [
+            "PricingService",
+          ],
+        },
+        {
+          boxes: [
+            "Order Persistence Unchanged",
+            "Notification Unchanged",
+            "Reporting Unchanged",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "16. SRP Decision Framework",
+      caption:
+        "Use these questions before splitting a class.",
+
+      layers: [
+        {
+          boxes: [
+            "What responsibility does this class own?",
+            "What are its reasons to change?",
+          ],
+        },
+        {
+          boxes: [
+            "Are the reasons related?",
+            "Are the behaviors cohesive?",
+          ],
+        },
+        {
+          boxes: [
+            "Separate only if the boundary is meaningful",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "17. Final SRP Mental Model",
+      caption:
+        "Think responsibility first, then reason for change, then cohesion.",
+
+      layers: [
+        {
+          boxes: [
+            "One Cohesive Responsibility",
+          ],
+        },
+        {
+          boxes: [
+            "One Primary Reason to Change",
+          ],
+        },
+        {
+          boxes: [
+            "High Cohesion",
+            "Localized Changes",
+            "Better Testability",
+          ],
+        },
+      ],
+    },
+  ],
+},
+"open-closed-principle": {
+  topicId: "open-closed-principle",
+  type: "stage-flow",
+
+  summary:
+    "OCP protects stable code from unnecessary modification by allowing new behavior to be introduced through meaningful extension points.",
+
+  stages: [
+    {
+      title: "1. The OCP Problem",
+      caption:
+        "A stable component becomes a modification hotspot when every new variation requires changing the same code.",
+
+      layers: [
+        {
+          boxes: [
+            "Existing Behavior",
+            "New Variation",
+            "Another Variation",
+            "Future Variation",
+          ],
+        },
+        {
+          boxes: [
+            "One Large Class",
+          ],
+        },
+        {
+          boxes: [
+            "Repeated Modification",
+            "Regression Risk",
+            "Growing Complexity",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "2. What OCP Means",
+      caption:
+        "Open for extension, closed for unnecessary modification.",
+
+      layers: [
+        {
+          boxes: [
+            "Open for Extension",
+          ],
+        },
+        {
+          boxes: [
+            "New Behavior",
+            "New Implementations",
+            "New Strategies",
+          ],
+        },
+        {
+          boxes: [
+            "Closed for Unnecessary Modification",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "3. Before OCP",
+      caption:
+        "Every new payment type modifies the same payment service.",
+
+      layers: [
+        {
+          boxes: [
+            "PaymentService",
+          ],
+        },
+        {
+          boxes: [
+            "CARD",
+            "UPI",
+            "WALLET",
+            "NET_BANKING",
+          ],
+        },
+        {
+          boxes: [
+            "Growing if / else",
+            "Growing switch",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "4. OCP with Abstraction",
+      caption:
+        "Move varying behavior behind a stable contract.",
+
+      layers: [
+        {
+          boxes: [
+            "PaymentService",
+          ],
+        },
+        {
+          boxes: [
+            "PaymentProcessor",
+          ],
+        },
+        {
+          boxes: [
+            "CardPayment",
+            "UPIPayment",
+            "WalletPayment",
+            "NetBankingPayment",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "5. Extension",
+      caption:
+        "A new implementation can be added without modifying the stable payment workflow.",
+
+      layers: [
+        {
+          boxes: [
+            "Existing PaymentService",
+          ],
+        },
+        {
+          boxes: [
+            "Existing PaymentProcessor Contract",
+          ],
+        },
+        {
+          boxes: [
+            "New Payment Implementation",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "6. Abstraction",
+      caption:
+        "The abstraction defines the behavior that clients need while hiding implementation-specific details.",
+
+      layers: [
+        {
+          boxes: [
+            "Client",
+          ],
+        },
+        {
+          boxes: [
+            "PaymentProcessor",
+          ],
+        },
+        {
+          boxes: [
+            "Card",
+            "UPI",
+            "Wallet",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "7. Polymorphism",
+      caption:
+        "The client calls the abstraction while the concrete implementation provides the actual behavior.",
+
+      layers: [
+        {
+          boxes: [
+            "paymentProcessor.process()",
+          ],
+        },
+        {
+          boxes: [
+            "CardPayment.process()",
+            "UPIPayment.process()",
+            "WalletPayment.process()",
+          ],
+        },
+        {
+          boxes: [
+            "Different Behavior",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "8. Conditional Explosion",
+      caption:
+        "A growing type-based conditional is a signal to investigate whether the variation belongs behind an abstraction.",
+
+      layers: [
+        {
+          boxes: [
+            "if CARD",
+            "else if UPI",
+            "else if WALLET",
+            "else if NEW_TYPE",
+          ],
+        },
+        {
+          boxes: [
+            "Every New Type",
+          ],
+        },
+        {
+          boxes: [
+            "Modify Core Logic",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "9. Strategy Pattern",
+      caption:
+        "Strategy is a common mechanism for applying OCP to interchangeable behavior.",
+
+      layers: [
+        {
+          boxes: [
+            "OrderService",
+          ],
+        },
+        {
+          boxes: [
+            "DiscountStrategy",
+          ],
+        },
+        {
+          boxes: [
+            "PercentageDiscount",
+            "FlatDiscount",
+            "FestivalDiscount",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "10. Composition",
+      caption:
+        "OCP does not require inheritance. Behavior can be extended through composition.",
+
+      layers: [
+        {
+          boxes: [
+            "OrderService",
+          ],
+        },
+        {
+          boxes: [
+            "DiscountStrategy",
+            "PaymentProcessor",
+            "NotificationChannel",
+          ],
+        },
+        {
+          boxes: [
+            "Composable Behavior",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "11. Factory",
+      caption:
+        "Factory can separate object creation from business behavior, but it does not automatically guarantee OCP.",
+
+      layers: [
+        {
+          boxes: [
+            "Client",
+          ],
+        },
+        {
+          boxes: [
+            "PaymentFactory",
+          ],
+        },
+        {
+          boxes: [
+            "CardPayment",
+            "UPIPayment",
+            "WalletPayment",
+          ],
+        },
+        {
+          boxes: [
+            "Creation Logic",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "12. DIP + OCP",
+      caption:
+        "DIP provides dependency direction while OCP allows implementations to vary behind the abstraction.",
+
+      layers: [
+        {
+          boxes: [
+            "High-Level Service",
+          ],
+        },
+        {
+          boxes: [
+            "PaymentProcessor",
+          ],
+        },
+        {
+          boxes: [
+            "CardPayment",
+            "UPIPayment",
+            "WalletPayment",
+          ],
+        },
+        {
+          boxes: [
+            "Abstraction Boundary",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "13. Spring Boot Example",
+      caption:
+        "Spring dependency injection can provide different implementations of an abstraction.",
+
+      layers: [
+        {
+          boxes: [
+            "OrderService",
+          ],
+        },
+        {
+          boxes: [
+            "DiscountStrategy",
+          ],
+        },
+        {
+          boxes: [
+            "FestivalDiscount",
+            "LoyaltyDiscount",
+            "BulkDiscount",
+          ],
+        },
+        {
+          boxes: [
+            "Spring Dependency Injection",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "14. OCP and Testing",
+      caption:
+        "Stable client logic can remain unchanged while new implementations receive their own tests.",
+
+      layers: [
+        {
+          boxes: [
+            "Existing Client Tests",
+          ],
+        },
+        {
+          boxes: [
+            "Stable Core",
+          ],
+        },
+        {
+          boxes: [
+            "New Implementation Tests",
+          ],
+        },
+        {
+          boxes: [
+            "Smaller Modification Surface",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "15. Avoid Speculative Abstraction",
+      caption:
+        "Do not create extension points for every hypothetical future requirement.",
+
+      layers: [
+        {
+          boxes: [
+            "Real Variation",
+            "Expected Change",
+            "Meaningful Contract",
+          ],
+        },
+        {
+          boxes: [
+            "Appropriate Abstraction",
+          ],
+        },
+        {
+          boxes: [
+            "Avoid Unnecessary Interfaces",
+            "Avoid Excessive Factories",
+            "Avoid Unnecessary Indirection",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "16. OCP Decision Framework",
+      caption:
+        "Before introducing an abstraction, identify whether the variation is real and worth protecting.",
+
+      layers: [
+        {
+          boxes: [
+            "What is likely to vary?",
+          ],
+        },
+        {
+          boxes: [
+            "Does it change repeatedly?",
+            "Is the variation meaningful?",
+          ],
+        },
+        {
+          boxes: [
+            "Can a stable abstraction isolate it?",
+          ],
+        },
+        {
+          boxes: [
+            "Will the abstraction reduce future change cost?",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "17. Final OCP Mental Model",
+      caption:
+        "Protect stable behavior and place predictable variation behind meaningful extension points.",
+
+      layers: [
+        {
+          boxes: [
+            "Stable Core",
+          ],
+        },
+        {
+          boxes: [
+            "Abstraction / Extension Point",
+          ],
+        },
+        {
+          boxes: [
+            "New Implementations",
+            "New Strategies",
+            "New Behavior",
+          ],
+        },
+        {
+          boxes: [
+            "Less Core Modification",
+            "Lower Change Impact",
+            "Reduced Regression Risk",
+          ],
+        },
+      ],
+    },
+  ],
+},
 };
 
 export const getTopicVisualization = (

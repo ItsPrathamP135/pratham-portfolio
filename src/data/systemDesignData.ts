@@ -160,9 +160,24 @@ export const systemDesignData: SystemDesignCategory[] = [
     blocks: [
       block(1, "Dependency Injection"),
       block(2, "Loose Coupling & High Cohesion"),
-      block(3, "SOLID Principles"),
-      block(4, "Single Responsibility Principle"),
-      block(5, "Open/Closed Principle"),
+      {
+        ...block(3, "SOLID Principles", "COMPLETED"),
+        targetDate: "September 2, 2026",
+        hasContent: true,
+        completedOn: "2026-09-29",
+      },
+      {
+        ...block(4, "Single Responsibility Principle", "COMPLETED"),
+        targetDate: "September 2, 2026",
+        hasContent: true,
+        completedOn: "2026-09-29",
+      },
+        {
+        ...block(5, "Open/Closed Principle", "COMPLETED"),
+        targetDate: "September 2, 2026",
+        hasContent: true,
+        completedOn: "2026-09-30",
+      },
       block(6, "Liskov Substitution Principle"),
       block(7, "Interface Segregation Principle"),
       block(8, "Dependency Inversion Principle"),

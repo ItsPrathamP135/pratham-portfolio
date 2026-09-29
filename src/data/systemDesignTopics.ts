@@ -11889,6 +11889,2297 @@ export const systemDesignTopics: Record<string, TopicContent> = {
     }
   ]
 },
+
+
+
+
+
+
+
+
+
+
+"solid-principles": {
+  blockId: "solid-principles",
+  categoryId: "lld-fundamentals",
+
+  what: [
+    "SOLID is a set of five object-oriented design principles used to build software that is maintainable, extensible, testable, reusable, and easier to change safely.",
+    "SOLID stands for Single Responsibility Principle, Open/Closed Principle, Liskov Substitution Principle, Interface Segregation Principle, and Dependency Inversion Principle.",
+    "SOLID is primarily about managing change in object-oriented software. The principles help reduce unnecessary coupling, improve cohesion, protect stable code from frequent modification, and make behavior easier to extend and test.",
+    "The five principles are connected rather than isolated rules. Together they encourage focused responsibilities, safe extension, behavioral substitutability, focused interfaces, and dependency on abstractions.",
+    "SOLID does not mean creating more classes, interfaces, or abstractions everywhere. The goal is to manage real complexity and make changes safer without introducing unnecessary design complexity."
+  ],
+
+  deepConcepts: [
+    {
+      term: "SOLID",
+      simpleDefinition:
+        "Five object-oriented design principles for building maintainable and change-friendly software.",
+      interviewDefinition:
+        "SOLID is a set of five object-oriented design principles that promote maintainability, extensibility, testability, high cohesion, loose coupling, and dependency on appropriate abstractions.",
+      whyItMatters:
+        "As software grows, changes can affect unrelated parts of the system. SOLID helps keep responsibilities and dependencies organized so changes remain more localized.",
+      example:
+        "A payment system separates payment responsibilities and uses abstractions so new payment methods can be added without rewriting unrelated business logic.",
+      whenItMatters:
+        "When designing or refactoring object-oriented applications, especially code that is expected to evolve.",
+      commonMistake:
+        "Treating SOLID as a requirement to create maximum abstraction or many small classes.",
+      interviewQuestion:
+        "What is SOLID?",
+      interviewAnswer:
+        "SOLID is a set of five object-oriented design principles that help make software maintainable, extensible, testable, and loosely coupled."
+    },
+
+    {
+      term: "Single Responsibility Principle",
+      simpleDefinition:
+        "A class should have one cohesive responsibility and one primary reason to change.",
+      interviewDefinition:
+        "SRP focuses on keeping a class responsible for one cohesive concern rather than combining unrelated responsibilities.",
+      whyItMatters:
+        "It reduces the impact of unrelated changes and makes classes easier to understand and test.",
+      example:
+        "Separating payment processing, notification, persistence, and reporting instead of placing them all in one service.",
+      whenItMatters:
+        "When classes contain multiple unrelated responsibilities.",
+      commonMistake:
+        "Thinking SRP means a class can contain only one method.",
+      interviewQuestion:
+        "What does SRP contribute to SOLID?",
+      interviewAnswer:
+        "SRP keeps responsibilities focused so unrelated changes do not unnecessarily affect the same class."
+    },
+
+    {
+      term: "Open/Closed Principle",
+      simpleDefinition:
+        "Software should be designed so new behavior can be added through extension without unnecessary modification of stable code.",
+      interviewDefinition:
+        "OCP encourages stable components to expose appropriate extension points so new variations can be introduced through abstractions and polymorphism.",
+      whyItMatters:
+        "Repeated modification of stable logic increases regression risk as the number of variations grows.",
+      example:
+        "Adding a new PaymentProcessor implementation instead of repeatedly adding conditions to PaymentService.",
+      whenItMatters:
+        "When a component is expected to support multiple implementations or future variations.",
+      commonMistake:
+        "Saying OCP means existing code must never be modified.",
+      interviewQuestion:
+        "What does OCP contribute to SOLID?",
+      interviewAnswer:
+        "OCP encourages new behavior to be introduced through extension points rather than repeatedly modifying stable core logic."
+    },
+
+    {
+      term: "Liskov Substitution Principle",
+      simpleDefinition:
+        "A subtype should be safely usable wherever its base abstraction is expected.",
+      interviewDefinition:
+        "LSP requires subtypes to preserve the behavioral expectations and contract of their base abstraction.",
+      whyItMatters:
+        "Inheritance and polymorphism become unsafe when a subtype cannot correctly fulfill the behavior promised by the abstraction.",
+      example:
+        "A subtype that throws an unsupported-operation exception for a behavior required by its parent may violate LSP.",
+      whenItMatters:
+        "When designing inheritance hierarchies or polymorphic implementations.",
+      commonMistake:
+        "Reducing LSP to simply saying that a child class inherits from a parent.",
+      interviewQuestion:
+        "What does LSP contribute to SOLID?",
+      interviewAnswer:
+        "LSP ensures that subtypes remain behaviorally substitutable for the abstractions they implement or extend."
+    },
+
+    {
+      term: "Interface Segregation Principle",
+      simpleDefinition:
+        "Clients should not be forced to depend on methods they do not use.",
+      interviewDefinition:
+        "ISP encourages focused interfaces so clients depend only on the operations relevant to their needs.",
+      whyItMatters:
+        "Large interfaces create unnecessary coupling and force clients or implementations to depend on irrelevant operations.",
+      example:
+        "Splitting a large Worker interface into focused capabilities such as Workable, Eatable, and Sleepable.",
+      whenItMatters:
+        "When different clients need different subsets of an interface.",
+      commonMistake:
+        "Thinking ISP means every interface must contain exactly one method.",
+      interviewQuestion:
+        "What does ISP contribute to SOLID?",
+      interviewAnswer:
+        "ISP keeps interfaces focused so clients are not coupled to operations they do not need."
+    },
+
+    {
+      term: "Dependency Inversion Principle",
+      simpleDefinition:
+        "High-level business logic should depend on abstractions rather than directly on low-level implementation details.",
+      interviewDefinition:
+        "DIP says high-level and low-level modules should depend on abstractions rather than high-level policy directly depending on concrete implementation details.",
+      whyItMatters:
+        "It separates business logic from infrastructure details and improves flexibility and testability.",
+      example:
+        "OrderService depends on OrderRepository instead of directly depending on MySqlOrderRepository.",
+      whenItMatters:
+        "When business logic directly depends on databases, external APIs, messaging systems, or other implementation details.",
+      commonMistake:
+        "Confusing DIP with Dependency Injection.",
+      interviewQuestion:
+        "What does DIP contribute to SOLID?",
+      interviewAnswer:
+        "DIP changes dependency direction so high-level business logic depends on abstractions rather than concrete implementation details."
+    },
+
+    {
+      term: "High Cohesion",
+      simpleDefinition:
+        "Related behavior should stay together in a focused component.",
+      interviewDefinition:
+        "High cohesion means the responsibilities inside a component are strongly related and collectively represent a focused concern.",
+      whyItMatters:
+        "High cohesion improves readability, maintainability, and testability.",
+      example:
+        "A TaxCalculator containing tax-related calculations is more cohesive than a class containing tax, payment, email, and database logic.",
+      whenItMatters:
+        "When deciding which responsibilities belong together.",
+      commonMistake:
+        "Thinking high cohesion simply means putting many methods into one class.",
+      interviewQuestion:
+        "How does SOLID relate to cohesion?",
+      interviewAnswer:
+        "SOLID, especially SRP, encourages related responsibilities to stay together while unrelated responsibilities are separated."
+    },
+
+    {
+      term: "Loose Coupling",
+      simpleDefinition:
+        "Components should have minimal unnecessary dependency on each other's implementation details.",
+      interviewDefinition:
+        "Loose coupling means components depend on stable contracts rather than unnecessary concrete implementation details.",
+      whyItMatters:
+        "Lower coupling makes components easier to change, replace, test, and extend.",
+      example:
+        "OrderService depending on OrderRepository instead of MySqlOrderRepository.",
+      whenItMatters:
+        "When designing component boundaries and dependencies.",
+      commonMistake:
+        "Thinking loose coupling means components should have no dependencies at all.",
+      interviewQuestion:
+        "How does SOLID help achieve loose coupling?",
+      interviewAnswer:
+        "DIP, ISP, abstractions, and focused responsibilities reduce unnecessary dependencies between components."
+    },
+
+    {
+      term: "SOLID and Dependency Injection",
+      simpleDefinition:
+        "Dependency Injection is a technique commonly used to support SOLID-oriented dependency design.",
+      interviewDefinition:
+        "DIP is the design principle, while Dependency Injection is a mechanism for supplying dependencies externally.",
+      whyItMatters:
+        "The distinction is frequently tested in Java and Spring Boot interviews.",
+      example:
+        "OrderService depends on OrderRepository and receives its implementation through constructor injection.",
+      whenItMatters:
+        "When connecting SOLID principles to Spring Boot.",
+      commonMistake:
+        "Saying DIP and DI are the same thing.",
+      interviewQuestion:
+        "What is the relationship between DIP and DI?",
+      interviewAnswer:
+        "DIP is a design principle about dependency direction toward abstractions; DI is a technique for supplying those dependencies from outside."
+    }
+  ],
+
+  comparisonTables: [
+    {
+      title: "SOLID at a Glance",
+      items: [
+        {
+          statement: "One cohesive responsibility and reason to change",
+          label: "SRP"
+        },
+        {
+          statement: "Extend behavior without unnecessary modification",
+          label: "OCP"
+        },
+        {
+          statement: "Subtypes preserve expected behavior",
+          label: "LSP"
+        },
+        {
+          statement: "Clients depend only on interfaces they need",
+          label: "ISP"
+        },
+        {
+          statement: "Depend on abstractions rather than concrete details",
+          label: "DIP"
+        }
+      ]
+    },
+
+    {
+      title: "What Problem Does Each Principle Address?",
+      items: [
+        {
+          statement: "Too many unrelated responsibilities",
+          label: "SRP"
+        },
+        {
+          statement: "Frequent modification for every new variation",
+          label: "OCP"
+        },
+        {
+          statement: "Subtypes breaking caller expectations",
+          label: "LSP"
+        },
+        {
+          statement: "Large interfaces with unused operations",
+          label: "ISP"
+        },
+        {
+          statement: "High-level code coupled to implementation details",
+          label: "DIP"
+        }
+      ]
+    },
+
+    {
+      title: "SOLID vs Core Design Goals",
+      items: [
+        {
+          statement: "Focused responsibilities",
+          label: "High Cohesion"
+        },
+        {
+          statement: "Minimal unnecessary dependencies",
+          label: "Loose Coupling"
+        },
+        {
+          statement: "Safe addition of new behavior",
+          label: "Extensibility"
+        },
+        {
+          statement: "Components that can be tested independently",
+          label: "Testability"
+        }
+      ]
+    }
+  ],
+
+  why: [
+    "Software changes continuously. New features, business rules, integrations, and implementations can make tightly coupled code increasingly difficult to maintain.",
+    "SOLID provides design principles that help keep responsibilities focused and dependencies controlled as the application evolves.",
+    "The principles reduce unnecessary coupling, improve cohesion, make extension safer, and help separate business logic from implementation details.",
+    "SOLID is especially relevant to Java because object-oriented programming, interfaces, inheritance, polymorphism, composition, and dependency injection are central to typical Java applications.",
+    "The goal is not to create the most abstract architecture possible. The goal is to create a design where change can happen safely without unnecessary complexity."
+  ],
+
+  how: [
+    {
+      step: "Identify responsibilities",
+      description:
+        "Determine whether each class or component represents a focused responsibility or combines unrelated concerns."
+    },
+    {
+      step: "Identify expected changes",
+      description:
+        "Look for areas likely to change independently, such as payment methods, notification channels, storage providers, or report formats."
+    },
+    {
+      step: "Create meaningful abstractions",
+      description:
+        "Use interfaces or abstract types where they represent a genuine contract or variation point."
+    },
+    {
+      step: "Use polymorphism",
+      description:
+        "Allow different implementations to provide varying behavior behind a stable abstraction."
+    },
+    {
+      step: "Check behavioral substitution",
+      description:
+        "Verify that implementations can safely replace their abstractions without breaking callers."
+    },
+    {
+      step: "Segregate interfaces",
+      description:
+        "Keep interfaces focused around meaningful client requirements instead of forcing clients to depend on unrelated methods."
+    },
+    {
+      step: "Invert dependencies",
+      description:
+        "Make high-level business logic depend on abstractions instead of concrete infrastructure details."
+    },
+    {
+      step: "Inject dependencies",
+      description:
+        "Provide concrete implementations externally, commonly through constructor injection in Spring Boot."
+    },
+    {
+      step: "Review for overengineering",
+      description:
+        "Ensure each abstraction solves a real problem and does not add unnecessary indirection."
+    }
+  ],
+
+  interviewTraps: [
+    {
+      trap: "SOLID means more classes",
+      wrongApproach:
+        "Creating many classes and interfaces simply to claim the code follows SOLID.",
+      whyWrong:
+        "SOLID is about good design boundaries, not class count.",
+      betterApproach:
+        "Create abstractions and separate responsibilities only when they solve real design problems."
+    },
+    {
+      trap: "SOLID means no code should ever change",
+      wrongApproach:
+        "Treating OCP as a requirement that existing code must never be modified.",
+      whyWrong:
+        "OCP is about reducing unnecessary modification of stable code when adding predictable variations.",
+      betterApproach:
+        "Design appropriate extension points while accepting that legitimate changes to existing code will sometimes be necessary."
+    },
+    {
+      trap: "Interfaces automatically mean SOLID",
+      wrongApproach:
+        "Adding interfaces everywhere and assuming coupling has been solved.",
+      whyWrong:
+        "An interface can still be too large, unnecessary, poorly designed, or coupled to unstable concepts.",
+      betterApproach:
+        "Use focused abstractions where they provide a meaningful dependency or extension boundary."
+    },
+    {
+      trap: "DIP equals Dependency Injection",
+      wrongApproach:
+        "Using the terms interchangeably.",
+      whyWrong:
+        "DIP is a design principle while DI is a dependency-supply technique.",
+      betterApproach:
+        "Explain the dependency direction first, then explain how DI can implement that design."
+    },
+    {
+      trap: "SOLID means maximum abstraction",
+      wrongApproach:
+        "Adding interfaces, factories, wrappers, and patterns everywhere.",
+      whyWrong:
+        "Unnecessary abstraction increases complexity.",
+      betterApproach:
+        "Apply SOLID proportionally to actual complexity and expected change."
+    }
+  ],
+
+  when: [
+    "Designing object-oriented Java applications.",
+    "Refactoring classes that are becoming difficult to maintain.",
+    "Designing systems with multiple implementations of the same capability.",
+    "Building Spring Boot applications with testable business logic.",
+    "Designing reusable components and modules.",
+    "Reviewing inheritance and interface hierarchies.",
+    "Reducing unnecessary coupling between business logic and infrastructure.",
+    "Preparing for Java LLD interviews.",
+    "Before moving from LLD principles into design patterns and case studies."
+  ],
+
+  tradeOffs: [
+    {
+      label: "Maintainability vs Simplicity",
+      points: [
+        "Separation and abstraction can make future changes safer.",
+        "Too much separation can make simple code harder to understand."
+      ]
+    },
+    {
+      label: "Extensibility vs Complexity",
+      points: [
+        "Extension points make predictable variations easier to add.",
+        "Trying to predict every possible future variation can lead to overengineering."
+      ]
+    },
+    {
+      label: "Abstraction vs Directness",
+      points: [
+        "Abstractions reduce coupling and improve replaceability.",
+        "Too many abstractions increase indirection and cognitive overhead."
+      ]
+    },
+    {
+      label: "SOLID vs Overengineering",
+      points: [
+        "SOLID should solve real design problems.",
+        "Following the principles mechanically can produce unnecessarily complicated designs."
+      ]
+    }
+  ],
+
+  thirtySecondAnswer:
+    "SOLID is a set of five object-oriented design principles used to build maintainable, extensible, testable, and loosely coupled software. SRP focuses on one cohesive responsibility, OCP on extending behavior without unnecessary modification, LSP on behavioral substitutability, ISP on focused interfaces, and DIP on depending on abstractions rather than concrete implementation details. Together they help make change safer while keeping responsibilities and dependencies well controlled.",
+
+  secondaryAnswer: {
+    question: "How do the five SOLID principles work together?",
+    answer:
+      "SRP keeps responsibilities focused, OCP makes new behavior easier to add, LSP ensures implementations remain behaviorally compatible, ISP keeps client-facing contracts focused, and DIP separates high-level business logic from concrete implementation details. Together they encourage high cohesion, loose coupling, extensibility, and testability."
+  },
+
+  keyTakeaways: [
+    "SOLID is a group of five object-oriented design principles.",
+    "S = Single Responsibility Principle.",
+    "O = Open/Closed Principle.",
+    "L = Liskov Substitution Principle.",
+    "I = Interface Segregation Principle.",
+    "D = Dependency Inversion Principle.",
+    "SRP focuses on responsibility.",
+    "OCP focuses on extension.",
+    "LSP focuses on behavioral substitution.",
+    "ISP focuses on client-specific interfaces.",
+    "DIP focuses on dependency direction.",
+    "SOLID is mainly about managing change.",
+    "SOLID encourages high cohesion and loose coupling.",
+    "DIP and Dependency Injection are not the same thing.",
+    "SOLID does not mean creating maximum abstraction.",
+    "The five principles work together and will be studied individually in the following blocks."
+  ],
+
+  interviewQuestions: [
+    {
+      level: "Basic",
+      questions: [
+        {
+          id: "solid-b1",
+          question: "What does SOLID stand for?",
+          answer:
+            "Single Responsibility, Open/Closed, Liskov Substitution, Interface Segregation, and Dependency Inversion."
+        },
+        {
+          id: "solid-b2",
+          question: "Why do we use SOLID principles?",
+          answer:
+            "To improve maintainability, extensibility, testability, cohesion, and coupling in object-oriented software."
+        },
+        {
+          id: "solid-b3",
+          question: "What is SRP?",
+          answer:
+            "A class should have one cohesive responsibility and one primary reason to change."
+        },
+        {
+          id: "solid-b4",
+          question: "What is OCP?",
+          answer:
+            "New behavior should preferably be added through extension rather than unnecessary modification of stable code."
+        },
+        {
+          id: "solid-b5",
+          question: "What is LSP?",
+          answer:
+            "A subtype should be safely substitutable for its base abstraction without breaking expected behavior."
+        },
+        {
+          id: "solid-b6",
+          question: "What is ISP?",
+          answer:
+            "Clients should not be forced to depend on interface methods they do not need."
+        },
+        {
+          id: "solid-b7",
+          question: "What is DIP?",
+          answer:
+            "High-level and low-level modules should depend on abstractions rather than high-level logic directly depending on concrete details."
+        },
+        {
+          id: "solid-b8",
+          question: "Is SOLID only applicable to Java?",
+          answer:
+            "No. SOLID is applicable to object-oriented software in many languages."
+        }
+      ]
+    },
+
+    {
+      level: "Intermediate",
+      questions: [
+        {
+          id: "solid-i1",
+          question: "How are the five SOLID principles related?",
+          answer:
+            "They address different aspects of maintainable object-oriented design: responsibility, extension, substitution, interfaces, and dependency direction."
+        },
+        {
+          id: "solid-i2",
+          question: "How does SOLID help reduce coupling?",
+          answer:
+            "Focused responsibilities, focused interfaces, abstractions, and dependency inversion reduce unnecessary dependencies between components."
+        },
+        {
+          id: "solid-i3",
+          question: "How does SOLID improve cohesion?",
+          answer:
+            "Especially through SRP, related behavior stays together around a focused responsibility while unrelated concerns are separated."
+        },
+        {
+          id: "solid-i4",
+          question: "How does OCP commonly use polymorphism?",
+          answer:
+            "Core logic depends on an abstraction while new implementations provide new behavior behind that abstraction."
+        },
+        {
+          id: "solid-i5",
+          question: "How is DIP related to Spring Boot?",
+          answer:
+            "Spring's dependency injection can provide concrete implementations to components that depend on abstractions."
+        },
+        {
+          id: "solid-i6",
+          question: "Can SOLID lead to overengineering?",
+          answer:
+            "Yes. Excessive abstractions and unnecessary indirection can make the design more complicated."
+        }
+      ]
+    },
+
+    {
+      level: "Advanced",
+      questions: [
+        {
+          id: "solid-a1",
+          question: "Why are SOLID principles not strict rules?",
+          answer:
+            "They are design principles and guidelines. Their application depends on the problem, expected changes, complexity, and trade-offs."
+        },
+        {
+          id: "solid-a2",
+          question: "Why is DIP important for testability?",
+          answer:
+            "Business logic can depend on an abstraction and receive a mock or fake implementation during testing instead of requiring real infrastructure."
+        },
+        {
+          id: "solid-a3",
+          question: "How do OCP and DIP complement each other?",
+          answer:
+            "DIP makes core logic depend on abstractions, while OCP allows new implementations to extend behavior behind those abstractions."
+        },
+        {
+          id: "solid-a4",
+          question: "Why is LSP necessary when using OCP?",
+          answer:
+            "New implementations added through extension still need to honor the abstraction's behavioral contract; otherwise extension can introduce broken behavior."
+        },
+        {
+          id: "solid-a5",
+          question: "Why is ISP client-focused?",
+          answer:
+            "It evaluates whether a client is forced to depend on operations it does not actually need."
+        },
+        {
+          id: "solid-a6",
+          question: "What is the overall goal of SOLID?",
+          answer:
+            "To control complexity and make object-oriented software easier to change, test, extend, and maintain without unnecessary coupling."
+        }
+      ]
+    },
+
+    {
+      level: "Scenario",
+      questions: [
+        {
+          id: "solid-s1",
+          question: "A PaymentService contains Card, UPI, PayPal, and Apple Pay conditionals. Which SOLID principle should you consider?",
+          answer:
+            "OCP. A PaymentProcessor abstraction with separate implementations can allow new payment types to be added without repeatedly modifying the core service."
+        },
+        {
+          id: "solid-s2",
+          question: "A class handles business logic, database persistence, email, and reporting. Which principle is primarily violated?",
+          answer:
+            "SRP, because unrelated responsibilities and reasons to change are combined."
+        },
+        {
+          id: "solid-s3",
+          question: "A subtype cannot correctly implement an operation promised by its parent. Which principle should you investigate?",
+          answer:
+            "LSP, because the subtype may not be behaviorally substitutable for the parent abstraction."
+        },
+        {
+          id: "solid-s4",
+          question: "A client only needs two methods from a 15-method interface. Which principle is relevant?",
+          answer:
+            "ISP, because the client may be unnecessarily dependent on operations it does not need."
+        },
+        {
+          id: "solid-s5",
+          question: "A service directly creates a concrete database repository. Which principle is relevant?",
+          answer:
+            "DIP. The service should preferably depend on an abstraction rather than directly depending on the concrete infrastructure implementation."
+        },
+        {
+          id: "solid-s6",
+          question: "Your team wants an interface for every class purely to follow SOLID. What is the concern?",
+          answer:
+            "Overengineering. SOLID does not require maximum abstraction; abstractions should solve meaningful design problems."
+        }
+      ]
+    }
+  ]
+},  
+"single-responsibility-principle": {
+  blockId: "single-responsibility-principle",
+  categoryId: "lld-fundamentals",
+
+  what: [
+    "The Single Responsibility Principle (SRP) states that a class should have one cohesive responsibility and one primary reason to change.",
+    "SRP does not mean a class can contain only one method or perform only one tiny operation.",
+    "A responsibility represents a meaningful area of concern that belongs together and may change for a related reason.",
+    "The key question in SRP is: if two parts of this class change for different reasons, should they really belong to the same class?",
+    "SRP helps create high cohesion by keeping closely related behavior together while separating unrelated concerns.",
+    "The purpose of SRP is to reduce the impact of changes, make classes easier to understand and test, and prevent large classes from becoming responsible for unrelated concerns."
+  ],
+
+  deepConcepts: [
+    {
+      term: "Single Responsibility Principle",
+      simpleDefinition:
+        "A class should have one cohesive responsibility and one primary reason to change.",
+      interviewDefinition:
+        "SRP states that a class should have a single cohesive responsibility, meaning its behavior should belong to one meaningful concern and changes to that concern should be the primary reason for modifying the class.",
+      whyItMatters:
+        "When unrelated responsibilities are combined, a change in one concern can affect another concern, increasing coupling, testing effort, and regression risk.",
+      example:
+        "An OrderService should not simultaneously calculate orders, save them to the database, send emails, and generate PDF reports.",
+      whenItMatters:
+        "When a class contains multiple unrelated concerns or changes frequently for different business or technical reasons.",
+      commonMistake:
+        "Interpreting SRP as 'one class must do only one thing' or 'one method per class'.",
+      interviewQuestion:
+        "What is the Single Responsibility Principle?",
+      interviewAnswer:
+        "SRP says a class should have one cohesive responsibility and one primary reason to change. It is about responsibility and reasons for change, not about limiting a class to one method."
+    },
+
+    {
+      term: "Responsibility",
+      simpleDefinition:
+        "A responsibility is a meaningful area of behavior or concern owned by a component.",
+      interviewDefinition:
+        "A responsibility is a cohesive set of related behavior that belongs to one concern and changes for a related reason.",
+      whyItMatters:
+        "Identifying responsibilities correctly is the core of applying SRP.",
+      example:
+        "Calculating an invoice total is one concern, while persisting an invoice and sending an email are separate concerns.",
+      whenItMatters:
+        "During class design and refactoring.",
+      commonMistake:
+        "Defining responsibility too narrowly, resulting in unnecessary classes for every small operation.",
+      interviewQuestion:
+        "What do you mean by responsibility in SRP?",
+      interviewAnswer:
+        "A responsibility is a cohesive concern or area of behavior that belongs together and has a related reason to change."
+    },
+
+    {
+      term: "Reason to Change",
+      simpleDefinition:
+        "A reason to change represents a distinct source of requirements or change affecting a class.",
+      interviewDefinition:
+        "SRP uses the idea of a primary reason to change to identify whether unrelated responsibilities are combined within one class.",
+      whyItMatters:
+        "If a class changes for multiple unrelated reasons, it may have multiple responsibilities.",
+      example:
+        "An invoice class changing because tax rules changed and also because email formatting changed indicates two unrelated reasons to change.",
+      whenItMatters:
+        "When determining whether a class should be split.",
+      commonMistake:
+        "Counting every individual requirement as a separate reason to change.",
+      interviewQuestion:
+        "Why is 'reason to change' important in SRP?",
+      interviewAnswer:
+        "It helps identify whether a class contains multiple unrelated responsibilities. If different concerns cause independent changes, separating them may improve the design."
+    },
+
+    {
+      term: "High Cohesion",
+      simpleDefinition:
+        "Highly related behavior should stay together in the same component.",
+      interviewDefinition:
+        "High cohesion means the responsibilities within a class are strongly related and collectively represent a focused concern.",
+      whyItMatters:
+        "High cohesion makes classes easier to understand, maintain, reuse, and test.",
+      example:
+        "A TaxCalculator containing tax-related calculation rules is cohesive because its methods serve the same concern.",
+      whenItMatters:
+        "When deciding which methods belong in a class.",
+      commonMistake:
+        "Assuming a class is cohesive simply because all its methods are somehow used by the same application.",
+      interviewQuestion:
+        "How is SRP related to cohesion?",
+      interviewAnswer:
+        "SRP encourages related behavior to stay together and unrelated behavior to be separated, which generally improves cohesion."
+    },
+
+    {
+      term: "Low Cohesion",
+      simpleDefinition:
+        "A class has unrelated responsibilities grouped together.",
+      interviewDefinition:
+        "Low cohesion occurs when the behavior within a component has weak relationships and represents multiple unrelated concerns.",
+      whyItMatters:
+        "Low cohesion usually makes classes harder to understand and increases the number of unrelated reasons they can change.",
+      example:
+        "A UserService that validates users, writes audit files, sends emails, generates reports, and performs database operations may have low cohesion.",
+      whenItMatters:
+        "When identifying SRP violations.",
+      commonMistake:
+        "Keeping unrelated methods together simply because they operate on the same entity.",
+      interviewQuestion:
+        "What is a common sign of low cohesion?",
+      interviewAnswer:
+        "A class contains methods belonging to multiple unrelated concerns or changes independently for different reasons."
+    },
+
+    {
+      term: "God Class",
+      simpleDefinition:
+        "A very large class that accumulates many unrelated responsibilities.",
+      interviewDefinition:
+        "A God Class is an overly large component that centralizes excessive behavior and knowledge, often violating SRP and increasing coupling.",
+      whyItMatters:
+        "God classes become difficult to test, understand, modify, and safely reuse.",
+      example:
+        "A single OrderManager handles pricing, inventory, payment, database persistence, email, PDF generation, and logging.",
+      whenItMatters:
+        "During code reviews and refactoring.",
+      commonMistake:
+        "Splitting a God Class mechanically without identifying meaningful responsibilities.",
+      interviewQuestion:
+        "How would you identify an SRP violation in a large class?",
+      interviewAnswer:
+        "I would look for unrelated responsibilities, multiple independent reasons to change, unrelated dependencies, and methods that belong to different concerns."
+    },
+
+    {
+      term: "Separation of Concerns",
+      simpleDefinition:
+        "Different concerns should be organized into appropriate components.",
+      interviewDefinition:
+        "Separation of concerns means organizing distinct aspects of system behavior so each can evolve independently where appropriate.",
+      whyItMatters:
+        "It reduces the impact of changes and makes responsibilities easier to reason about.",
+      example:
+        "Separating business logic, persistence, presentation, and notification concerns.",
+      whenItMatters:
+        "When designing layers and component boundaries.",
+      commonMistake:
+        "Assuming separation of concerns always requires separate classes for every concern.",
+      interviewQuestion:
+        "How is SRP related to separation of concerns?",
+      interviewAnswer:
+        "SRP applies the idea of separating concerns at the class responsibility level by keeping unrelated responsibilities apart."
+    },
+
+    {
+      term: "SRP and Business vs Technical Responsibility",
+      simpleDefinition:
+        "A class can violate SRP by combining different business concerns or different technical concerns.",
+      interviewDefinition:
+        "SRP concerns cohesive responsibility regardless of whether the responsibility is business-oriented or technical.",
+      whyItMatters:
+        "A class can still be poorly designed even when all its methods appear technically related.",
+      example:
+        "A service that contains business pricing rules and infrastructure-specific email formatting may mix distinct concerns.",
+      whenItMatters:
+        "When reviewing service classes and infrastructure integrations.",
+      commonMistake:
+        "Thinking SRP only applies to business functionality.",
+      interviewQuestion:
+        "Can technical responsibilities violate SRP?",
+      interviewAnswer:
+        "Yes. SRP applies to cohesive responsibility generally, including infrastructure and technical concerns."
+    },
+
+    {
+      term: "SRP and Change Impact",
+      simpleDefinition:
+        "Separating responsibilities limits how far a change needs to propagate.",
+      interviewDefinition:
+        "A well-applied SRP boundary localizes changes so modifications to one concern are less likely to affect unrelated behavior.",
+      whyItMatters:
+        "Reducing change impact lowers regression risk and makes maintenance easier.",
+      example:
+        "Changing email formatting should not require modifying order calculation logic.",
+      whenItMatters:
+        "When designing components around expected change boundaries.",
+      commonMistake:
+        "Splitting classes without actually reducing change coupling.",
+      interviewQuestion:
+        "How does SRP reduce regression risk?",
+      interviewAnswer:
+        "By separating unrelated responsibilities, a change in one concern is less likely to modify or break unrelated behavior."
+    },
+
+    {
+      term: "SRP in Service Classes",
+      simpleDefinition:
+        "A service should contain a cohesive application or domain responsibility rather than becoming a container for unrelated operations.",
+      interviewDefinition:
+        "Spring service classes should represent focused business/application responsibilities and delegate persistence, external integration, or unrelated concerns to appropriate components.",
+      whyItMatters:
+        "Large service classes are common sources of SRP violations in enterprise Java applications.",
+      example:
+        "OrderService handles order orchestration while OrderRepository handles persistence and NotificationService handles notifications.",
+      whenItMatters:
+        "When designing Spring Boot service layers.",
+      commonMistake:
+        "Assuming every service must be small or that every method needs its own service.",
+      interviewQuestion:
+        "How would you apply SRP in a Spring Boot application?",
+      interviewAnswer:
+        "I would keep each service focused on a cohesive business responsibility and delegate persistence, external communication, notification, and other distinct concerns to appropriate components."
+    },
+
+    {
+      term: "SRP and Testing",
+      simpleDefinition:
+        "Focused classes are generally easier to test independently.",
+      interviewDefinition:
+        "SRP improves testability by reducing the number of unrelated behaviors and dependencies that must be considered when testing a component.",
+      whyItMatters:
+        "Tests become more focused and failures are easier to diagnose.",
+      example:
+        "Testing TaxCalculator should not require setting up an email server or database.",
+      whenItMatters:
+        "When designing testable business logic.",
+      commonMistake:
+        "Assuming SRP automatically means a class has no dependencies.",
+      interviewQuestion:
+        "How does SRP improve testability?",
+      interviewAnswer:
+        "A focused class has fewer unrelated behaviors and dependencies, so its tests can target one cohesive responsibility more directly."
+    },
+
+    {
+      term: "SRP vs One Method",
+      simpleDefinition:
+        "SRP is about responsibility, not method count.",
+      interviewDefinition:
+        "A class can contain multiple methods and still follow SRP when those methods collectively implement one cohesive responsibility.",
+      whyItMatters:
+        "This is one of the most common interview misunderstandings.",
+      example:
+        "TaxCalculator can have calculateTax(), calculateRegionalTax(), and calculateDiscountTax() while still representing one tax-related responsibility.",
+      whenItMatters:
+        "Whenever someone proposes splitting a class solely because it has multiple methods.",
+      commonMistake:
+        "Creating a separate class for every method.",
+      interviewQuestion:
+        "Does SRP mean a class should have only one method?",
+      interviewAnswer:
+        "No. SRP is about one cohesive responsibility and reason to change, not the number of methods."
+    },
+
+    {
+      term: "SRP and Composition",
+      simpleDefinition:
+        "Separate responsibilities can be composed together by a higher-level component.",
+      interviewDefinition:
+        "SRP often leads to smaller focused components that can be composed to implement a larger workflow.",
+      whyItMatters:
+        "Composition allows responsibilities to remain independent while business workflows coordinate them.",
+      example:
+        "OrderService can coordinate PricingService, InventoryService, PaymentService, and NotificationService.",
+      whenItMatters:
+        "When refactoring a large service into focused components.",
+      commonMistake:
+        "Thinking that splitting responsibilities means the overall business workflow disappears.",
+      interviewQuestion:
+        "Does SRP prevent one component from coordinating multiple responsibilities?",
+      interviewAnswer:
+        "No. A coordinator can orchestrate focused components while each component retains its own cohesive responsibility."
+    }
+  ],
+
+  comparisonTables: [
+    {
+      title: "SRP: Good vs Poor Design",
+      items: [
+        {
+          statement:
+            "Class contains closely related behavior for one concern",
+          label: "SRP-friendly"
+        },
+        {
+          statement:
+            "Class changes because multiple unrelated concerns change",
+          label: "SRP violation"
+        },
+        {
+          statement:
+            "Multiple methods implement one cohesive responsibility",
+          label: "Valid SRP"
+        },
+        {
+          statement:
+            "One tiny operation is forced into a separate class without a meaningful boundary",
+          label: "Possible overengineering"
+        }
+      ]
+    },
+
+    {
+      title: "Common SRP Signals",
+      items: [
+        {
+          statement: "Multiple unrelated reasons to change",
+          label: "Strong warning"
+        },
+        {
+          statement: "Unrelated dependencies",
+          label: "Strong warning"
+        },
+        {
+          statement: "Large number of unrelated methods",
+          label: "Warning"
+        },
+        {
+          statement: "Class name becomes difficult to describe clearly",
+          label: "Warning"
+        },
+        {
+          statement: "Methods belong to different business or technical concerns",
+          label: "Strong warning"
+        }
+      ]
+    },
+
+    {
+      title: "SRP vs Related Concepts",
+      items: [
+        {
+          statement:
+            "One cohesive responsibility / reason to change",
+          label: "SRP"
+        },
+        {
+          statement:
+            "Related behavior stays together",
+          label: "High Cohesion"
+        },
+        {
+          statement:
+            "Different concerns are separated",
+          label: "Separation of Concerns"
+        },
+        {
+          statement:
+            "Dependencies between components are minimized",
+          label: "Loose Coupling"
+        }
+      ]
+    },
+
+    {
+      title: "Typical Order Processing Design",
+      items: [
+        {
+          statement: "Coordinates the order workflow",
+          label: "OrderService"
+        },
+        {
+          statement: "Calculates prices/taxes",
+          label: "PricingService"
+        },
+        {
+          statement: "Persists orders",
+          label: "OrderRepository"
+        },
+        {
+          statement: "Sends notifications",
+          label: "NotificationService"
+        },
+        {
+          statement: "Generates reports/documents",
+          label: "ReportService"
+        }
+      ]
+    }
+  ],
+
+  why: [
+    "Classes that contain unrelated responsibilities become harder to understand because a developer must reason about multiple concerns at once.",
+    "A change to one responsibility can accidentally affect another responsibility when both are tightly combined.",
+    "Large classes often accumulate dependencies required by unrelated features, increasing coupling and making testing harder.",
+    "SRP helps localize changes so that changes to pricing, persistence, notifications, or reporting can happen independently.",
+    "SRP improves maintainability by creating clear boundaries around responsibilities.",
+    "SRP also improves testability because focused components require less unrelated setup.",
+    "SRP is especially useful in enterprise Java applications where service classes can gradually become large orchestration or utility classes."
+  ],
+
+  how: [
+    {
+      step: "Identify what the class does",
+      description:
+        "List the meaningful responsibilities currently handled by the class instead of looking only at its method names."
+    },
+    {
+      step: "Group related behavior",
+      description:
+        "Determine which methods and data belong to the same cohesive concern."
+    },
+    {
+      step: "Identify independent reasons to change",
+      description:
+        "Ask which different business or technical requirements could independently force the class to change."
+    },
+    {
+      step: "Detect unrelated dependencies",
+      description:
+        "Look for database, email, reporting, external API, file, or infrastructure dependencies that exist only for unrelated responsibilities."
+    },
+    {
+      step: "Define responsibility boundaries",
+      description:
+        "Separate genuinely independent concerns into focused components."
+    },
+    {
+      step: "Keep the workflow intact",
+      description:
+        "Use a coordinator or application service when necessary to orchestrate the focused components."
+    },
+    {
+      step: "Apply meaningful names",
+      description:
+        "Name each component around its responsibility so the purpose and boundary are clear."
+    },
+    {
+      step: "Review for over-separation",
+      description:
+        "Do not create classes merely because a method exists. Verify that each extracted component represents a meaningful cohesive responsibility."
+    }
+  ],
+
+  interviewTraps: [
+    {
+      trap: "SRP means one method per class",
+      wrongApproach:
+        "Splitting every method into a separate class.",
+      whyWrong:
+        "SRP is about responsibility and reason to change, not method count.",
+      betterApproach:
+        "Keep related methods together when they collectively implement one cohesive responsibility."
+    },
+    {
+      trap: "Every large class violates SRP",
+      wrongApproach:
+        "Assuming class size alone proves an SRP violation.",
+      whyWrong:
+        "A class can have many methods while still having one cohesive responsibility.",
+      betterApproach:
+        "Look for unrelated concerns and independent reasons to change."
+    },
+    {
+      trap: "SRP means every class should be tiny",
+      wrongApproach:
+        "Creating dozens of tiny classes for trivial operations.",
+      whyWrong:
+        "This can create unnecessary indirection and make the system harder to understand.",
+      betterApproach:
+        "Create boundaries around meaningful responsibilities."
+    },
+    {
+      trap: "Same entity means same responsibility",
+      wrongApproach:
+        "Putting every operation related to Order into OrderService.",
+      whyWrong:
+        "Persistence, reporting, notification, pricing, and business orchestration can still be distinct concerns.",
+      betterApproach:
+        "Group behavior by responsibility rather than only by entity name."
+    },
+    {
+      trap: "SRP means no class can coordinate other components",
+      wrongApproach:
+        "Avoiding orchestration because a workflow calls multiple services.",
+      whyWrong:
+        "Coordination itself can be a legitimate cohesive responsibility.",
+      betterApproach:
+        "Keep the coordinator focused on orchestration while delegated components own their specific concerns."
+    },
+    {
+      trap: "SRP automatically solves coupling",
+      wrongApproach:
+        "Assuming that simply splitting one class solves all dependency problems.",
+      whyWrong:
+        "Components can still be tightly coupled after extraction.",
+      betterApproach:
+        "Use SRP together with appropriate abstractions, interfaces, composition, and DIP."
+    },
+    {
+      trap: "SRP is only for business logic",
+      wrongApproach:
+        "Ignoring technical responsibilities when reviewing a class.",
+      whyWrong:
+        "Persistence, messaging, formatting, file handling, and external integration can also represent distinct concerns.",
+      betterApproach:
+        "Evaluate all responsibilities, both business and technical."
+    }
+  ],
+
+  when: [
+    "A class changes for multiple unrelated reasons.",
+    "A service class contains business logic, persistence, notifications, and reporting together.",
+    "A class has dependencies that are used by unrelated groups of methods.",
+    "A class is becoming difficult to test because tests require unrelated infrastructure.",
+    "A large class has methods that clearly belong to different concerns.",
+    "A code review reveals that different teams or requirements repeatedly modify the same class for unrelated reasons.",
+    "Refactoring legacy Java or Spring Boot code.",
+    "Designing LLD components before implementation.",
+    "Breaking down a God Class."
+  ],
+
+  tradeOffs: [
+    {
+      label: "Separation vs Simplicity",
+      points: [
+        "Separating unrelated responsibilities makes changes more localized.",
+        "Excessive separation can create too many small classes and increase navigation overhead."
+      ]
+    },
+    {
+      label: "Cohesion vs Reuse",
+      points: [
+        "Keeping related behavior together improves cohesion.",
+        "Moving every potentially reusable method into a utility class can reduce cohesion."
+      ]
+    },
+    {
+      label: "Orchestration vs Responsibility",
+      points: [
+        "A coordinator can legitimately orchestrate multiple focused components.",
+        "The coordinator should not absorb the internal responsibilities of those components."
+      ]
+    },
+    {
+      label: "Refactoring vs Stability",
+      points: [
+        "Splitting a class can improve maintainability.",
+        "Large refactors should be justified by actual design problems rather than applying SRP mechanically."
+      ]
+    }
+  ],
+
+  thirtySecondAnswer:
+    "The Single Responsibility Principle says a class should have one cohesive responsibility and one primary reason to change. It does not mean one method per class. The goal is to keep related behavior together and separate unrelated concerns so changes are localized, classes have higher cohesion, and testing becomes easier. For example, an OrderService can coordinate an order workflow while pricing, persistence, notifications, and reporting remain separate responsibilities.",
+
+  secondaryAnswer: {
+    question: "How do you identify an SRP violation?",
+    answer:
+      "I look for multiple unrelated responsibilities, independent reasons to change, unrelated dependencies, and methods that belong to different concerns. If a class changes because pricing rules, database requirements, email formatting, and reporting requirements change independently, I would consider separating those responsibilities."
+  },
+
+  keyTakeaways: [
+    "SRP means one cohesive responsibility and one primary reason to change.",
+    "SRP does not mean one method per class.",
+    "SRP is about responsibility, not class size.",
+    "A class can contain multiple methods and still follow SRP.",
+    "High cohesion is closely related to SRP.",
+    "Unrelated responsibilities create multiple reasons to change.",
+    "God Classes are a common symptom of poor responsibility separation.",
+    "Different concerns can be composed through a higher-level coordinator.",
+    "SRP can improve testability by reducing unrelated dependencies.",
+    "SRP applies to both business and technical responsibilities.",
+    "Do not split classes mechanically.",
+    "A meaningful responsibility boundary is more important than a small class.",
+    "SRP works together with OCP, LSP, ISP, and DIP.",
+    "In Spring Boot, keep services focused and delegate persistence/integration concerns appropriately.",
+    "The goal is to localize change and control complexity."
+  ],
+
+  interviewQuestions: [
+    {
+      level: "Basic",
+      questions: [
+        {
+          id: "srp-b1",
+          question: "What is the Single Responsibility Principle?",
+          answer:
+            "A class should have one cohesive responsibility and one primary reason to change."
+        },
+        {
+          id: "srp-b2",
+          question: "Does SRP mean one method per class?",
+          answer:
+            "No. SRP is about responsibility and reason to change, not method count."
+        },
+        {
+          id: "srp-b3",
+          question: "What is a responsibility?",
+          answer:
+            "A meaningful cohesive concern or area of behavior that belongs together."
+        },
+        {
+          id: "srp-b4",
+          question: "What is meant by reason to change?",
+          answer:
+            "A distinct source of requirements or change that can cause a class to be modified."
+        },
+        {
+          id: "srp-b5",
+          question: "What is high cohesion?",
+          answer:
+            "Keeping closely related behavior together around a focused responsibility."
+        },
+        {
+          id: "srp-b6",
+          question: "What is a God Class?",
+          answer:
+            "A class that accumulates excessive responsibilities and knowledge, often becoming difficult to maintain."
+        },
+        {
+          id: "srp-b7",
+          question: "How does SRP improve maintainability?",
+          answer:
+            "It keeps unrelated changes from being concentrated in the same component."
+        },
+        {
+          id: "srp-b8",
+          question: "Can a class with ten methods follow SRP?",
+          answer:
+            "Yes, if those methods collectively implement one cohesive responsibility."
+        },
+        {
+          id: "srp-b9",
+          question: "Does SRP apply only to business logic?",
+          answer:
+            "No. It applies to technical and infrastructure responsibilities as well."
+        },
+        {
+          id: "srp-b10",
+          question: "What is a common sign of an SRP violation?",
+          answer:
+            "A class has unrelated responsibilities or multiple independent reasons to change."
+        }
+      ]
+    },
+
+    {
+      level: "Intermediate",
+      questions: [
+        {
+          id: "srp-i1",
+          question: "How is SRP related to high cohesion?",
+          answer:
+            "SRP encourages related behavior to remain together around one focused concern, which improves cohesion."
+        },
+        {
+          id: "srp-i2",
+          question: "How is SRP related to loose coupling?",
+          answer:
+            "Separating unrelated responsibilities can reduce unnecessary dependencies, although SRP alone does not guarantee loose coupling."
+        },
+        {
+          id: "srp-i3",
+          question: "How does SRP improve testability?",
+          answer:
+            "Focused components contain fewer unrelated behaviors and dependencies, making tests more targeted."
+        },
+        {
+          id: "srp-i4",
+          question: "Can a service coordinate multiple components and still follow SRP?",
+          answer:
+            "Yes. Orchestration can itself be a cohesive responsibility."
+        },
+        {
+          id: "srp-i5",
+          question: "Should every entity have exactly one service?",
+          answer:
+            "No. Service boundaries should be based on cohesive responsibilities, not simply entity count."
+        },
+        {
+          id: "srp-i6",
+          question: "How would you refactor a God Class?",
+          answer:
+            "Identify cohesive responsibilities, separate unrelated concerns into focused components, and keep orchestration where it represents a meaningful responsibility."
+        },
+        {
+          id: "srp-i7",
+          question: "What is the relationship between SRP and separation of concerns?",
+          answer:
+            "SRP applies separation of concerns at the responsibility/component level."
+        },
+        {
+          id: "srp-i8",
+          question: "Can two responsibilities belong in one class?",
+          answer:
+            "Yes, if they are actually part of one cohesive responsibility and change for a related reason."
+        }
+      ]
+    },
+
+    {
+      level: "Advanced",
+      questions: [
+        {
+          id: "srp-a1",
+          question: "Why is 'reason to change' better than simply saying 'one responsibility'?",
+          answer:
+            "It provides a practical way to identify whether apparently different behaviors actually represent independent concerns."
+        },
+        {
+          id: "srp-a2",
+          question: "Can a large class still follow SRP?",
+          answer:
+            "Yes. Size alone does not determine SRP; the key question is whether the class represents one cohesive responsibility."
+        },
+        {
+          id: "srp-a3",
+          question: "Why can over-applying SRP be harmful?",
+          answer:
+            "It can produce excessive fragmentation, unnecessary abstractions, and increased cognitive overhead."
+        },
+        {
+          id: "srp-a4",
+          question: "How does SRP support OCP?",
+          answer:
+            "Focused responsibilities create clearer boundaries and make it easier to extend one concern without modifying unrelated concerns."
+        },
+        {
+          id: "srp-a5",
+          question: "How does SRP support DIP?",
+          answer:
+            "Once responsibilities are clearly separated, dependencies can be directed through appropriate abstractions rather than one large class depending on many implementation details."
+        },
+        {
+          id: "srp-a6",
+          question: "Why is 'same entity' not enough to justify putting methods together?",
+          answer:
+            "An entity can participate in multiple unrelated concerns such as persistence, reporting, notification, and business rules."
+        },
+        {
+          id: "srp-a7",
+          question: "How can unrelated dependencies indicate an SRP problem?",
+          answer:
+            "If different groups of methods require unrelated dependencies, the class may be combining multiple concerns."
+        },
+        {
+          id: "srp-a8",
+          question: "Is SRP about business reasons to change only?",
+          answer:
+            "No. Both business and technical reasons can indicate separate responsibilities."
+        }
+      ]
+    },
+
+    {
+      level: "Scenario",
+      questions: [
+        {
+          id: "srp-s1",
+          question:
+            "An OrderService calculates prices, saves orders, sends emails, and generates PDFs. What would you do?",
+          answer:
+            "Separate the distinct responsibilities while allowing OrderService to coordinate the overall order workflow."
+        },
+        {
+          id: "srp-s2",
+          question:
+            "A TaxCalculator has five calculation methods for different tax rules. Does that automatically violate SRP?",
+          answer:
+            "No. If all methods belong to the cohesive responsibility of tax calculation, the class can still follow SRP."
+        },
+        {
+          id: "srp-s3",
+          question:
+            "A UserService contains user validation, database persistence, password email notifications, and CSV reporting. What is the problem?",
+          answer:
+            "It likely combines multiple unrelated responsibilities and therefore has multiple reasons to change."
+        },
+        {
+          id: "srp-s4",
+          question:
+            "A developer creates one class for every method to strictly follow SRP. What would you say?",
+          answer:
+            "That is mechanical over-application. SRP does not require one method per class; classes should represent meaningful cohesive responsibilities."
+        },
+        {
+          id: "srp-s5",
+          question:
+            "A class has 30 methods, but all implement one domain responsibility. Does size alone prove SRP violation?",
+          answer:
+            "No. Class size is a warning signal, not proof. The responsibilities and reasons to change must be examined."
+        },
+        {
+          id: "srp-s6",
+          question:
+            "Changing email formatting requires modifying order calculation code. What does this suggest?",
+          answer:
+            "It suggests unrelated notification and order calculation responsibilities may be coupled and should potentially be separated."
+        },
+        {
+          id: "srp-s7",
+          question:
+            "A service coordinates payment, inventory, and notification services. Does that violate SRP?",
+          answer:
+            "Not necessarily. If its cohesive responsibility is orchestrating the order workflow, coordination can be its single responsibility."
+        },
+        {
+          id: "srp-s8",
+          question:
+            "A class directly contains business rules, SQL statements, email templates, and PDF generation. What is your first concern?",
+          answer:
+            "The class likely violates SRP because it combines several independent business and technical responsibilities."
+        }
+      ]
+    }
+  ]
+},
+"open-closed-principle": {
+  blockId: "open-closed-principle",
+  categoryId: "lld-fundamentals",
+
+  what: [
+    "The Open/Closed Principle (OCP) states that software entities such as classes, modules, and components should be open for extension but closed for unnecessary modification.",
+    "Open for extension means new behavior can be added through appropriate extension mechanisms such as interfaces, polymorphism, composition, or strategy implementations.",
+    "Closed for modification means stable, already-tested core behavior should not need to be repeatedly changed whenever a new variation is introduced.",
+    "OCP is primarily about managing change and reducing the risk of modifying stable code.",
+    "OCP does not mean existing code can never be modified. Requirements can change and legitimate modifications are sometimes necessary.",
+    "The goal is to identify likely variation points and design suitable abstractions so new behavior can be introduced with limited impact on existing code.",
+    "OCP commonly works together with abstraction, polymorphism, composition, Dependency Inversion, and the Strategy and Factory design patterns."
+  ],
+
+  deepConcepts: [
+    {
+      term: "Open/Closed Principle",
+      simpleDefinition:
+        "A component should allow new behavior to be added without unnecessary modification of stable existing behavior.",
+      interviewDefinition:
+        "OCP states that software entities should be open for extension but closed for modification, meaning new variations should preferably be introduced through extension points rather than repeatedly changing stable core logic.",
+      whyItMatters:
+        "Repeatedly modifying stable code for every new variation increases regression risk and makes maintenance harder.",
+      example:
+        "A payment system uses a PaymentProcessor interface so CardPayment, UPIPayment, and WalletPayment can be added without repeatedly modifying the main payment workflow.",
+      whenItMatters:
+        "When a component is expected to support multiple implementations or predictable future variations.",
+      commonMistake:
+        "Saying OCP means existing code must never be modified.",
+      interviewQuestion:
+        "What is the Open/Closed Principle?",
+      interviewAnswer:
+        "OCP says software should be designed so new behavior can be added through extension points without unnecessary modification of stable existing code."
+    },
+
+    {
+      term: "Open for Extension",
+      simpleDefinition:
+        "New behavior can be introduced without rewriting the core logic.",
+      interviewDefinition:
+        "A design is open for extension when it provides meaningful variation points through abstractions, polymorphism, composition, configuration, or other appropriate mechanisms.",
+      whyItMatters:
+        "New business variations can be added while keeping existing behavior stable.",
+      example:
+        "PaymentProcessor allows new payment implementations such as CardPayment and UPIPayment.",
+      whenItMatters:
+        "When a system has known or likely variations.",
+      commonMistake:
+        "Adding an interface even when there is no meaningful variation.",
+      interviewQuestion:
+        "What does 'open for extension' mean?",
+      interviewAnswer:
+        "It means the design provides a suitable way to add new behavior or implementations without rewriting the stable core."
+    },
+
+    {
+      term: "Closed for Modification",
+      simpleDefinition:
+        "Stable code should not need to be repeatedly changed for every new variation.",
+      interviewDefinition:
+        "Closed for modification means stable, tested behavior should be protected from unnecessary changes when extending the system.",
+      whyItMatters:
+        "Every modification to stable code can introduce regressions or require retesting unrelated behavior.",
+      example:
+        "Adding a new notification channel should not require modifying a stable notification workflow if the design already supports NotificationChannel implementations.",
+      whenItMatters:
+        "When a component has frequent additions of similar behavior.",
+      commonMistake:
+        "Interpreting closed for modification as 'never modify existing code under any circumstances.'",
+      interviewQuestion:
+        "Does OCP mean existing code can never change?",
+      interviewAnswer:
+        "No. It means unnecessary modification should be minimized when adding new variations. Legitimate requirement changes may still require modifying existing code."
+    },
+
+    {
+      term: "Abstraction",
+      simpleDefinition:
+        "A stable contract hides implementation-specific behavior behind a common interface.",
+      interviewDefinition:
+        "An abstraction defines the behavior required by clients while allowing multiple implementations to vary behind that contract.",
+      whyItMatters:
+        "Abstractions provide extension points without forcing clients to know concrete implementation details.",
+      example:
+        "PaymentProcessor defines processPayment(), while CardPayment and UPIPayment provide different implementations.",
+      whenItMatters:
+        "When multiple implementations share a meaningful contract.",
+      commonMistake:
+        "Creating abstractions purely to satisfy OCP without an actual variation point.",
+      interviewQuestion:
+        "How do abstractions help implement OCP?",
+      interviewAnswer:
+        "They provide stable contracts behind which new implementations can be added without changing the code that depends on the abstraction."
+    },
+
+    {
+      term: "Polymorphism",
+      simpleDefinition:
+        "Different implementations can provide different behavior through the same abstraction.",
+      interviewDefinition:
+        "Polymorphism allows client code to invoke a stable abstraction while the concrete implementation determines the specific behavior.",
+      whyItMatters:
+        "It allows new implementations to be introduced without adding new conditional branches to the core workflow.",
+      example:
+        "PaymentService calls PaymentProcessor.process() while CardPayment and UPIPayment provide different implementations.",
+      whenItMatters:
+        "When behavior varies based on type or strategy.",
+      commonMistake:
+        "Assuming inheritance is always required for polymorphism.",
+      interviewQuestion:
+        "Why is polymorphism useful for OCP?",
+      interviewAnswer:
+        "Polymorphism allows new implementations to provide new behavior behind an existing abstraction without changing the client logic."
+    },
+
+    {
+      term: "Conditional Explosion",
+      simpleDefinition:
+        "A growing chain of if/else or switch statements for every new variation can indicate poor extensibility.",
+      interviewDefinition:
+        "Conditional explosion occurs when core logic repeatedly changes to accommodate additional types or behaviors, often indicating that a variation point could be represented through polymorphism or another suitable abstraction.",
+      whyItMatters:
+        "Every new branch requires modification and retesting of the existing component.",
+      example:
+        "if type == CARD, else if type == UPI, else if type == WALLET, followed by another branch for every new payment type.",
+      whenItMatters:
+        "When the same type-based conditional keeps growing.",
+      commonMistake:
+        "Assuming every if/else statement violates OCP.",
+      interviewQuestion:
+        "Does every conditional violate OCP?",
+      interviewAnswer:
+        "No. Conditionals are not automatically violations. The concern is repeated modification of stable core logic for a growing set of variations."
+    },
+
+    {
+      term: "Strategy Pattern and OCP",
+      simpleDefinition:
+        "Strategy encapsulates interchangeable behavior behind a common abstraction.",
+      interviewDefinition:
+        "The Strategy pattern is a common way to support OCP by allowing algorithms or behaviors to vary independently behind a stable interface.",
+      whyItMatters:
+        "It removes growing conditional logic from the core workflow when behavior represents genuine interchangeable strategies.",
+      example:
+        "Different discount strategies implement DiscountStrategy and can be selected without changing OrderService.",
+      whenItMatters:
+        "When an algorithm or business rule has multiple interchangeable implementations.",
+      commonMistake:
+        "Using Strategy for every conditional regardless of complexity.",
+      interviewQuestion:
+        "How does Strategy help OCP?",
+      interviewAnswer:
+        "Strategy moves varying behavior behind a common abstraction so new strategies can be added without modifying the core client."
+    },
+
+    {
+      term: "Factory and OCP",
+      simpleDefinition:
+        "A Factory can centralize creation of appropriate implementations.",
+      interviewDefinition:
+        "Factory patterns can complement OCP by separating object creation decisions from business behavior, although adding a new type may still require modifying the factory depending on its design.",
+      whyItMatters:
+        "Creation logic can otherwise become another source of conditional modification.",
+      example:
+        "PaymentProcessorFactory selects an appropriate payment implementation.",
+      whenItMatters:
+        "When object creation is complex or depends on runtime type/configuration.",
+      commonMistake:
+        "Assuming Factory automatically makes the entire system OCP-compliant.",
+      interviewQuestion:
+        "Does using Factory automatically satisfy OCP?",
+      interviewAnswer:
+        "No. A Factory can help separate creation logic, but whether the overall design follows OCP depends on where modifications are still required."
+    },
+
+    {
+      term: "Extension Point",
+      simpleDefinition:
+        "A deliberate place where new behavior can be introduced.",
+      interviewDefinition:
+        "An extension point is a stable contract or mechanism designed to allow additional behavior without modifying unrelated core logic.",
+      whyItMatters:
+        "Good extension points make expected changes safer and more localized.",
+      example:
+        "NotificationChannel is an extension point for Email, SMS, and Push implementations.",
+      whenItMatters:
+        "When a domain has predictable variations.",
+      commonMistake:
+        "Creating extension points for hypothetical changes that may never happen.",
+      interviewQuestion:
+        "What is an extension point?",
+      interviewAnswer:
+        "It is a deliberate abstraction or mechanism through which new behavior can be added without changing unrelated stable code."
+    },
+
+    {
+      term: "Stable Abstraction",
+      simpleDefinition:
+        "An abstraction should represent behavior that clients genuinely need and that can remain relatively stable.",
+      interviewDefinition:
+        "A useful OCP abstraction defines a meaningful contract that shields clients from implementation-specific variation.",
+      whyItMatters:
+        "Poorly designed abstractions can change as frequently as concrete implementations, defeating the purpose.",
+      example:
+        "PaymentProcessor should represent stable payment-processing behavior rather than expose implementation-specific database details.",
+      whenItMatters:
+        "When choosing where to introduce interfaces.",
+      commonMistake:
+        "Abstracting unstable details too early.",
+      interviewQuestion:
+        "What makes an abstraction useful for OCP?",
+      interviewAnswer:
+        "It should represent a meaningful stable contract while allowing implementations to vary behind it."
+    },
+
+    {
+      term: "Composition and OCP",
+      simpleDefinition:
+        "Behavior can be extended by composing existing components instead of modifying their internals.",
+      interviewDefinition:
+        "Composition supports OCP by allowing new behavior to be assembled from independent components without changing stable components.",
+      whyItMatters:
+        "Composition can avoid rigid inheritance hierarchies and make behavior easier to combine.",
+      example:
+        "OrderService receives a DiscountStrategy and uses whichever strategy is configured.",
+      whenItMatters:
+        "When behavior needs to vary independently of the object hierarchy.",
+      commonMistake:
+        "Assuming OCP requires inheritance.",
+      interviewQuestion:
+        "Does OCP require inheritance?",
+      interviewAnswer:
+        "No. OCP can be implemented through interfaces, composition, dependency injection, configuration, or other suitable extension mechanisms."
+    },
+
+    {
+      term: "OCP and Dependency Inversion",
+      simpleDefinition:
+        "DIP can provide the abstraction boundary through which OCP extensions are introduced.",
+      interviewDefinition:
+        "Dependency Inversion allows high-level code to depend on abstractions, while OCP allows new implementations to be added behind those abstractions.",
+      whyItMatters:
+        "The two principles often work together to isolate stable business logic from changing implementations.",
+      example:
+        "OrderService depends on PaymentProcessor while CardPayment and UPIPayment are injected implementations.",
+      whenItMatters:
+        "When designing extensible Spring Boot services.",
+      commonMistake:
+        "Treating DIP and OCP as identical principles.",
+      interviewQuestion:
+        "How do OCP and DIP complement each other?",
+      interviewAnswer:
+        "DIP establishes dependency on abstractions, while OCP allows new implementations to be introduced behind those abstractions."
+    },
+
+    {
+      term: "OCP and Testing",
+      simpleDefinition:
+        "Protecting stable code from unnecessary modification can reduce regression risk.",
+      interviewDefinition:
+        "OCP can improve testability by allowing new implementations to be tested independently while keeping stable client behavior unchanged.",
+      whyItMatters:
+        "Existing tests for stable code are less likely to require changes when a new implementation is introduced.",
+      example:
+        "Adding a new PaymentProcessor implementation can have its own tests while existing OrderService tests remain focused on orchestration.",
+      whenItMatters:
+        "When systems have frequent additions of interchangeable implementations.",
+      commonMistake:
+        "Claiming OCP automatically guarantees fewer tests.",
+      interviewQuestion:
+        "How can OCP reduce regression risk?",
+      interviewAnswer:
+        "By minimizing modifications to stable, tested code when adding new variations, reducing the surface area for accidental regressions."
+    }
+  ],
+
+  comparisonTables: [
+    {
+      title: "Open vs Closed",
+      items: [
+        {
+          statement:
+            "New behavior can be introduced through an extension mechanism",
+          label: "Open for Extension"
+        },
+        {
+          statement:
+            "Stable core behavior does not require unnecessary changes for every variation",
+          label: "Closed for Modification"
+        },
+        {
+          statement:
+            "Existing code may still change for genuine requirement changes",
+          label: "Important Qualification"
+        }
+      ]
+    },
+
+    {
+      title: "Conditional Design vs Extensible Design",
+      items: [
+        {
+          statement:
+            "Every new type requires another branch in the same class",
+          label: "Modification-heavy"
+        },
+        {
+          statement:
+            "Core workflow depends on a stable abstraction",
+          label: "Extension-friendly"
+        },
+        {
+          statement:
+            "New implementation is added behind the abstraction",
+          label: "Extension"
+        },
+        {
+          statement:
+            "Existing stable workflow remains unchanged",
+          label: "Reduced Regression Risk"
+        }
+      ]
+    },
+
+    {
+      title: "OCP vs Related SOLID Principles",
+      items: [
+        {
+          statement:
+            "Focuses on one responsibility and reason to change",
+          label: "SRP"
+        },
+        {
+          statement:
+            "Focuses on extension without unnecessary modification",
+          label: "OCP"
+        },
+        {
+          statement:
+            "Focuses on behavioral substitutability",
+          label: "LSP"
+        },
+        {
+          statement:
+            "Focuses on focused client interfaces",
+          label: "ISP"
+        },
+        {
+          statement:
+            "Focuses on dependency direction",
+          label: "DIP"
+        }
+      ]
+    },
+
+    {
+      title: "Common Extension Mechanisms",
+      items: [
+        {
+          statement:
+            "Different implementations behind a contract",
+          label: "Interface + Polymorphism"
+        },
+        {
+          statement:
+            "Interchangeable algorithms",
+          label: "Strategy"
+        },
+        {
+          statement:
+            "Object creation abstraction",
+          label: "Factory"
+        },
+        {
+          statement:
+            "Runtime behavior assembled from components",
+          label: "Composition"
+        },
+        {
+          statement:
+            "Externalized implementation selection",
+          label: "Dependency Injection / Configuration"
+        }
+      ]
+    },
+
+    {
+      title: "Good OCP vs Overengineering",
+      items: [
+        {
+          statement:
+            "Variation is real and expected",
+          label: "Good Extension Point"
+        },
+        {
+          statement:
+            "Abstraction represents a meaningful contract",
+          label: "Good Abstraction"
+        },
+        {
+          statement:
+            "Interface created only because OCP was mentioned",
+          label: "Overengineering"
+        },
+        {
+          statement:
+            "Abstraction predicts dozens of hypothetical futures",
+          label: "Overengineering"
+        }
+      ]
+    }
+  ],
+
+  why: [
+    "Without OCP, adding every new variation can require modifying the same stable class repeatedly.",
+    "Repeated modification increases regression risk because previously working logic is continually changed.",
+    "OCP helps isolate stable core workflows from changing implementations.",
+    "It is particularly useful when the system has a known family of variations such as payment methods, notification channels, discount rules, storage providers, or shipping strategies.",
+    "OCP can reduce the blast radius of new features because the new behavior is implemented in a separate extension rather than inserted into unrelated stable logic.",
+    "OCP also supports parallel development because different implementations can often be developed independently behind a stable contract.",
+    "The principle should be applied where variation is meaningful and expected rather than everywhere."
+  ],
+
+  how: [
+    {
+      step: "Identify likely variation",
+      description:
+        "Find behavior that changes based on type, strategy, provider, business rule, or implementation."
+    },
+    {
+      step: "Locate modification hotspots",
+      description:
+        "Look for classes that repeatedly require changes whenever another variation is introduced."
+    },
+    {
+      step: "Define a meaningful abstraction",
+      description:
+        "Create a stable contract representing the behavior clients actually need."
+    },
+    {
+      step: "Move variation behind the abstraction",
+      description:
+        "Implement each variation separately rather than adding more branches to the stable core."
+    },
+    {
+      step: "Use polymorphism or composition",
+      description:
+        "Let the core workflow operate through the abstraction while implementations provide the specific behavior."
+    },
+    {
+      step: "Inject or select the implementation",
+      description:
+        "Use dependency injection, configuration, a factory, or another appropriate mechanism to select the required implementation."
+    },
+    {
+      step: "Protect stable code",
+      description:
+        "Keep the existing workflow unchanged when a new variation can be introduced entirely through the extension point."
+    },
+    {
+      step: "Validate the abstraction",
+      description:
+        "Make sure the abstraction is based on a real variation and does not represent speculative future requirements."
+    },
+    {
+      step: "Review trade-offs",
+      description:
+        "Ensure the added abstraction reduces expected change cost rather than simply increasing code complexity."
+    }
+  ],
+
+  interviewTraps: [
+    {
+      trap: "OCP means existing code can never change",
+      wrongApproach:
+        "Claiming that a class must never be modified after it is written.",
+      whyWrong:
+        "Real requirements can change and sometimes legitimate modification is unavoidable.",
+      betterApproach:
+        "Say that stable code should be protected from unnecessary modification when adding predictable variations."
+    },
+    {
+      trap: "Every if statement violates OCP",
+      wrongApproach:
+        "Replacing every conditional with an interface and multiple classes.",
+      whyWrong:
+        "Simple conditionals can be perfectly appropriate, especially when behavior is unlikely to vary.",
+      betterApproach:
+        "Look for growing variation and repeated modification before introducing an abstraction."
+    },
+    {
+      trap: "Interfaces automatically satisfy OCP",
+      wrongApproach:
+        "Creating an interface without changing the dependency or extension boundary.",
+      whyWrong:
+        "An interface alone does not make a design extensible.",
+      betterApproach:
+        "Use a meaningful abstraction that allows new implementations without modifying stable client logic."
+    },
+    {
+      trap: "OCP requires inheritance",
+      wrongApproach:
+        "Using inheritance for every extension.",
+      whyWrong:
+        "Composition, interfaces, dependency injection, configuration, and strategy objects can also support OCP.",
+      betterApproach:
+        "Choose the extension mechanism that best fits the variation."
+    },
+    {
+      trap: "Factory automatically solves OCP",
+      wrongApproach:
+        "Claiming that using a Factory guarantees OCP.",
+      whyWrong:
+        "A factory can itself become a modification hotspot if every new type requires changing it.",
+      betterApproach:
+        "Evaluate the entire dependency and creation design."
+    },
+    {
+      trap: "Predict every future requirement",
+      wrongApproach:
+        "Creating abstractions for every hypothetical future feature.",
+      whyWrong:
+        "Speculative abstractions add complexity and may model the wrong variation.",
+      betterApproach:
+        "Design extension points around known or reasonably expected variations."
+    },
+    {
+      trap: "OCP means zero regression risk",
+      wrongApproach:
+        "Claiming that extensions cannot break existing behavior.",
+      whyWrong:
+        "New implementations can still contain defects and integration behavior can still change.",
+      betterApproach:
+        "Say OCP reduces the modification surface and therefore can reduce regression risk."
+    }
+  ],
+
+  when: [
+    "A class repeatedly changes whenever a new implementation is introduced.",
+    "A growing if/else or switch statement handles multiple variants of the same behavior.",
+    "A domain naturally contains interchangeable strategies or implementations.",
+    "Payment methods, notification channels, storage providers, shipping methods, or discount strategies are expected to grow.",
+    "A stable business workflow should remain unchanged while implementations evolve.",
+    "You need to support multiple implementations behind a common contract.",
+    "Designing extensible Java or Spring Boot components.",
+    "Applying the Strategy pattern to interchangeable business behavior.",
+    "Refactoring modification-heavy code into extension-friendly components."
+  ],
+
+  tradeOffs: [
+    {
+      label: "Extensibility vs Complexity",
+      points: [
+        "Extension points can make future variations easier to add.",
+        "Too many extension points can make simple code unnecessarily complicated."
+      ]
+    },
+    {
+      label: "Abstraction vs Directness",
+      points: [
+        "Abstraction protects stable clients from implementation changes.",
+        "Extra abstraction introduces indirection and can make simple flows harder to follow."
+      ]
+    },
+    {
+      label: "Future Flexibility vs YAGNI",
+      points: [
+        "Designing for known variations can reduce future modification.",
+        "Designing for every hypothetical variation can lead to overengineering."
+      ]
+    },
+    {
+      label: "Stability vs Change",
+      points: [
+        "Protecting stable code can reduce regression risk.",
+        "Sometimes modifying existing code is the simplest and most correct response to a genuine requirement change."
+      ]
+    }
+  ],
+
+  thirtySecondAnswer:
+    "The Open/Closed Principle says software should be open for extension but closed for unnecessary modification. When a system has predictable variations, we should create meaningful extension points using abstractions, polymorphism, composition, or similar mechanisms. For example, instead of repeatedly modifying PaymentService for Card, UPI, and Wallet payments, we can depend on a PaymentProcessor abstraction and add new implementations behind it. OCP does not mean existing code can never change; it means unnecessary modification of stable code should be minimized.",
+
+  secondaryAnswer: {
+    question: "How would you apply OCP in a Spring Boot application?",
+    answer:
+      "I would identify behavior that is likely to vary, define a meaningful interface for that behavior, create separate implementations, and make the high-level service depend on the abstraction. Spring dependency injection can then provide the appropriate implementation. For example, OrderService can depend on DiscountStrategy while different discount strategies implement the interface."
+  },
+
+  keyTakeaways: [
+    "OCP stands for Open/Closed Principle.",
+    "Open means open for extension.",
+    "Closed means closed for unnecessary modification.",
+    "OCP is mainly about managing change.",
+    "New behavior should preferably be added behind a meaningful extension point.",
+    "Interfaces and abstractions can support OCP but do not automatically guarantee it.",
+    "Polymorphism is a common mechanism for implementing OCP.",
+    "Composition can support OCP without inheritance.",
+    "Strategy is a common pattern for interchangeable behavior.",
+    "Factory can help with creation but does not automatically guarantee OCP.",
+    "Not every if/else statement violates OCP.",
+    "OCP does not mean existing code can never change.",
+    "Avoid speculative abstractions and overengineering.",
+    "OCP and DIP often work together.",
+    "The main benefit is reducing unnecessary modification of stable, tested code.",
+    "OCP reduces the modification surface and can reduce regression risk."
+  ],
+
+  interviewQuestions: [
+    {
+      level: "Basic",
+      questions: [
+        {
+          id: "ocp-b1",
+          question: "What is the Open/Closed Principle?",
+          answer:
+            "Software should be open for extension but closed for unnecessary modification."
+        },
+        {
+          id: "ocp-b2",
+          question: "What does open for extension mean?",
+          answer:
+            "New behavior can be added through an appropriate extension mechanism without rewriting stable core logic."
+        },
+        {
+          id: "ocp-b3",
+          question: "What does closed for modification mean?",
+          answer:
+            "Stable code should not need to be repeatedly modified whenever a new variation is introduced."
+        },
+        {
+          id: "ocp-b4",
+          question: "Does OCP mean existing code can never change?",
+          answer:
+            "No. Legitimate requirement changes may require modifying existing code. OCP focuses on avoiding unnecessary modification when extending behavior."
+        },
+        {
+          id: "ocp-b5",
+          question: "How does polymorphism help OCP?",
+          answer:
+            "Different implementations can provide different behavior behind the same abstraction without changing client code."
+        },
+        {
+          id: "ocp-b6",
+          question: "Does OCP require inheritance?",
+          answer:
+            "No. Interfaces, composition, dependency injection, configuration, and other mechanisms can support OCP."
+        },
+        {
+          id: "ocp-b7",
+          question: "What is an extension point?",
+          answer:
+            "A deliberate abstraction or mechanism through which new behavior can be added without changing unrelated stable code."
+        },
+        {
+          id: "ocp-b8",
+          question: "What is a common sign of an OCP problem?",
+          answer:
+            "The same class must repeatedly be modified whenever another variation is introduced."
+        },
+        {
+          id: "ocp-b9",
+          question: "Does every if/else violate OCP?",
+          answer:
+            "No. A conditional becomes a concern when it represents growing variations that repeatedly force modification of stable logic."
+        },
+        {
+          id: "ocp-b10",
+          question: "What is the main benefit of OCP?",
+          answer:
+            "It reduces unnecessary modification of stable code and can reduce regression risk when adding new behavior."
+        }
+      ]
+    },
+
+    {
+      level: "Intermediate",
+      questions: [
+        {
+          id: "ocp-i1",
+          question: "How would you implement OCP for different payment methods?",
+          answer:
+            "Define a PaymentProcessor abstraction and provide separate implementations for Card, UPI, Wallet, and other payment methods."
+        },
+        {
+          id: "ocp-i2",
+          question: "How does Strategy support OCP?",
+          answer:
+            "Strategy encapsulates interchangeable behavior behind a common abstraction so new strategies can be added without changing the core client."
+        },
+        {
+          id: "ocp-i3",
+          question: "How does DIP complement OCP?",
+          answer:
+            "DIP makes high-level logic depend on abstractions, while OCP allows new implementations to be added behind those abstractions."
+        },
+        {
+          id: "ocp-i4",
+          question: "Why can excessive abstraction be harmful?",
+          answer:
+            "It increases indirection and complexity and may solve hypothetical problems that never occur."
+        },
+        {
+          id: "ocp-i5",
+          question: "Can a Factory violate OCP?",
+          answer:
+            "Yes. If every new implementation requires modifying a central factory with another branch, the factory can become a modification hotspot."
+        },
+        {
+          id: "ocp-i6",
+          question: "What makes an abstraction suitable for OCP?",
+          answer:
+            "It should represent a meaningful and relatively stable contract while allowing implementation behavior to vary."
+        },
+        {
+          id: "ocp-i7",
+          question: "How does OCP reduce regression risk?",
+          answer:
+            "It minimizes the amount of stable, tested code that needs to change when a new variation is added."
+        },
+        {
+          id: "ocp-i8",
+          question: "When should you not introduce an abstraction for OCP?",
+          answer:
+            "When there is no meaningful variation or extension need and the abstraction would only add unnecessary complexity."
+        }
+      ]
+    },
+
+    {
+      level: "Advanced",
+      questions: [
+        {
+          id: "ocp-a1",
+          question: "Why is OCP about expected change rather than all possible change?",
+          answer:
+            "Trying to protect against every hypothetical change leads to speculative abstractions and overengineering. OCP should target meaningful and reasonably expected variations."
+        },
+        {
+          id: "ocp-a2",
+          question: "Why can polymorphism be preferable to conditionals?",
+          answer:
+            "It can move varying behavior into separate implementations so the core workflow does not need a new branch for every variation."
+        },
+        {
+          id: "ocp-a3",
+          question: "Can OCP ever increase complexity?",
+          answer:
+            "Yes. Abstractions, implementations, and indirection add complexity, so they should be justified by expected change."
+        },
+        {
+          id: "ocp-a4",
+          question: "How does OCP relate to SRP?",
+          answer:
+            "SRP keeps responsibilities focused, while OCP helps protect stable responsibilities from repeated modification when new variations are introduced."
+        },
+        {
+          id: "ocp-a5",
+          question: "How does OCP relate to LSP?",
+          answer:
+            "When new implementations extend an abstraction, LSP ensures those implementations remain behaviorally substitutable for that abstraction."
+        },
+        {
+          id: "ocp-a6",
+          question: "Why is a stable abstraction important for OCP?",
+          answer:
+            "If the abstraction itself changes every time an implementation changes, it does not effectively protect clients from variation."
+        },
+        {
+          id: "ocp-a7",
+          question: "Does adding an interface always improve extensibility?",
+          answer:
+            "No. An interface improves extensibility only when it represents a meaningful variation or dependency boundary."
+        },
+        {
+          id: "ocp-a8",
+          question: "Can configuration be an OCP extension mechanism?",
+          answer:
+            "Yes, when behavior can be varied through configuration without modifying stable core logic."
+        }
+      ]
+    },
+
+    {
+      level: "Scenario",
+      questions: [
+        {
+          id: "ocp-s1",
+          question:
+            "PaymentService has a switch statement for CARD, UPI, WALLET, and NET_BANKING. Every new payment type requires modifying it. What would you consider?",
+          answer:
+            "A PaymentProcessor abstraction with separate implementations could move the variation behind polymorphism and reduce repeated modification of PaymentService."
+        },
+        {
+          id: "ocp-s2",
+          question:
+            "A developer creates an interface for every class because 'OCP requires interfaces.' What is wrong?",
+          answer:
+            "OCP does not require interfaces everywhere. Abstractions should be introduced where they represent meaningful variation or dependency boundaries."
+        },
+        {
+          id: "ocp-s3",
+          question:
+            "You have only two payment types and no expected future variation. Should you automatically create five interfaces and factories?",
+          answer:
+            "Not necessarily. The abstraction should be justified by actual complexity or expected change rather than created speculatively."
+        },
+        {
+          id: "ocp-s4",
+          question:
+            "A new discount rule requires modifying OrderService every time. What design could help?",
+          answer:
+            "A DiscountStrategy abstraction with separate implementations can isolate varying discount behavior."
+        },
+        {
+          id: "ocp-s5",
+          question:
+            "A Factory has a large switch and must be modified for every new type. Does using Factory guarantee OCP?",
+          answer:
+            "No. The Factory itself may become a modification hotspot."
+        },
+        {
+          id: "ocp-s6",
+          question:
+            "A new implementation is added without modifying the existing client, but the new implementation contains a bug. Does that mean OCP failed?",
+          answer:
+            "No. OCP is about the extension and modification structure. A defect in a new implementation is a separate correctness issue."
+        },
+        {
+          id: "ocp-s7",
+          question:
+            "A business requirement changes the core calculation itself. Must you still avoid modifying the existing class?",
+          answer:
+            "No. OCP does not prohibit legitimate changes to existing behavior."
+        },
+        {
+          id: "ocp-s8",
+          question:
+            "A Spring Boot OrderService depends on DiscountStrategy and receives different implementations through dependency injection. Which principles are involved?",
+          answer:
+            "OCP is supported because new strategies can be added behind the abstraction, while DIP is supported because OrderService depends on the abstraction rather than concrete implementations."
+        }
+      ]
+    }
+  ]
+},
 };
 
 export const getTopicContent = (blockId: string): TopicContent | undefined =>
