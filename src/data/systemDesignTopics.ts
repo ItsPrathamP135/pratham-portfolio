@@ -14180,6 +14180,1754 @@ export const systemDesignTopics: Record<string, TopicContent> = {
     }
   ]
 },
+"liskov-substitution-principle": {
+  blockId: "liskov-substitution-principle",
+  categoryId: "lld-fundamentals",
+
+  what: [
+    "The Liskov Substitution Principle (LSP) states that objects of a subtype should be usable wherever objects of the base abstraction are expected without breaking the correctness or expected behavior of the program.",
+    "LSP is fundamentally about behavioral substitutability, not simply inheritance.",
+    "A subtype must honor the contract established by its base class or interface.",
+    "If client code works correctly with the abstraction but breaks when a valid subtype is substituted, the subtype may violate LSP.",
+    "LSP requires compatible expectations around inputs, outputs, side effects, exceptions, state changes, and other observable behavior.",
+    "A subtype should not require stronger conditions from callers than the base abstraction requires, and it should not provide weaker guarantees than the abstraction promises.",
+    "LSP is closely related to polymorphism, inheritance, abstraction contracts, OCP, and composition."
+  ],
+
+  deepConcepts: [
+    {
+      term: "Liskov Substitution Principle",
+      simpleDefinition:
+        "A subtype should be safely usable wherever its base abstraction is expected.",
+      interviewDefinition:
+        "LSP states that a subtype must preserve the behavioral contract of its base abstraction so that clients can substitute the subtype without breaking expected program behavior.",
+      whyItMatters:
+        "Inheritance is useful only when the subtype genuinely behaves like the abstraction it represents. Otherwise polymorphism becomes unsafe.",
+      example:
+        "If Bird has a fly() contract, making Penguin extend Bird while throwing UnsupportedOperationException from fly() indicates that Penguin may not be a valid behavioral subtype of Bird.",
+      whenItMatters:
+        "When designing inheritance hierarchies, interfaces, polymorphic implementations, and reusable abstractions.",
+      commonMistake:
+        "Thinking that any class that technically extends another class automatically satisfies LSP.",
+      interviewQuestion:
+        "What is the Liskov Substitution Principle?",
+      interviewAnswer:
+        "LSP says that a subtype should be behaviorally substitutable for its base abstraction without breaking the expectations of client code."
+    },
+
+    {
+      term: "Behavioral Substitutability",
+      simpleDefinition:
+        "The subtype must behave correctly when used through the base abstraction.",
+      interviewDefinition:
+        "Behavioral substitutability means clients relying on the base abstraction should continue to work correctly when a valid subtype is supplied.",
+      whyItMatters:
+        "It is the central idea that distinguishes LSP from simple inheritance.",
+      example:
+        "A PaymentProcessor implementation should fulfill the behavior promised by the PaymentProcessor contract regardless of which implementation is injected.",
+      whenItMatters:
+        "Whenever multiple implementations are used polymorphically.",
+      commonMistake:
+        "Checking only method signatures and ignoring runtime behavior.",
+      interviewQuestion:
+        "What is the difference between inheritance and substitutability?",
+      interviewAnswer:
+        "Inheritance is a structural relationship, while LSP requires the subtype to preserve the behavioral expectations of the base abstraction."
+    },
+
+    {
+      term: "Contract",
+      simpleDefinition:
+        "A contract defines what clients can expect from an abstraction.",
+      interviewDefinition:
+        "A contract consists of the behavioral expectations established by an abstraction, including valid inputs, expected outputs, state changes, exceptions, and other observable guarantees.",
+      whyItMatters:
+        "LSP requires subtypes to honor the abstraction's contract.",
+      example:
+        "If a repository contract says findById returns an entity or an expected absence result, an implementation should not unexpectedly return unrelated behavior.",
+      whenItMatters:
+        "When designing interfaces and inheritance hierarchies.",
+      commonMistake:
+        "Treating a contract as only a method signature.",
+      interviewQuestion:
+        "What does the contract of an abstraction include?",
+      interviewAnswer:
+        "It can include valid inputs, expected outputs, side effects, state transitions, exceptions, and other observable behavioral guarantees."
+    },
+
+    {
+      term: "Preconditions",
+      simpleDefinition:
+        "Conditions that must be true before an operation is called.",
+      interviewDefinition:
+        "A subtype should not strengthen the preconditions required by the base abstraction.",
+      whyItMatters:
+        "Callers written against the base abstraction should not suddenly need additional conditions when a subtype is substituted.",
+      example:
+        "If the base abstraction accepts any positive amount, a subtype should not unexpectedly require an additional special restriction unless that contract is explicitly part of the abstraction.",
+      whenItMatters:
+        "When subtype implementations impose additional input restrictions.",
+      commonMistake:
+        "Making a subtype more restrictive than the base contract.",
+      interviewQuestion:
+        "What does LSP say about preconditions?",
+      interviewAnswer:
+        "A subtype should not strengthen the preconditions expected by the base abstraction."
+    },
+
+    {
+      term: "Postconditions",
+      simpleDefinition:
+        "Guarantees that should hold after an operation completes.",
+      interviewDefinition:
+        "A subtype should preserve or strengthen the guarantees promised by the base abstraction rather than weakening them.",
+      whyItMatters:
+        "Clients depend on the guarantees of the base abstraction.",
+      example:
+        "If a base method guarantees that a successful operation persists a valid entity, a subtype should not silently weaken that guarantee.",
+      whenItMatters:
+        "When implementations provide different results or side effects.",
+      commonMistake:
+        "Returning weaker behavior while keeping the same method signature.",
+      interviewQuestion:
+        "What does LSP say about postconditions?",
+      interviewAnswer:
+        "A subtype should preserve or strengthen the postconditions promised by the base abstraction rather than weaken them."
+    },
+
+    {
+      term: "Invariants",
+      simpleDefinition:
+        "Conditions that must remain valid throughout the object's lifecycle.",
+      interviewDefinition:
+        "A subtype should preserve the invariants established by its base abstraction.",
+      whyItMatters:
+        "Breaking base invariants can cause client code relying on the abstraction to behave incorrectly.",
+      example:
+        "If an abstraction guarantees that an account balance cannot become invalid, a subtype should not introduce behavior that violates that invariant.",
+      whenItMatters:
+        "When extending domain objects with important state constraints.",
+      commonMistake:
+        "Changing state rules in a subtype without considering clients of the base abstraction.",
+      interviewQuestion:
+        "Why are invariants relevant to LSP?",
+      interviewAnswer:
+        "Subtypes must preserve the important state and behavioral guarantees that clients of the base abstraction rely upon."
+    },
+
+    {
+      term: "Exception Behavior",
+      simpleDefinition:
+        "A subtype should not unexpectedly break the exception expectations of the base contract.",
+      interviewDefinition:
+        "Exception behavior is part of observable behavior, so a subtype should not introduce incompatible failures that violate the expectations of clients.",
+      whyItMatters:
+        "A method can have the same signature but still violate LSP by unexpectedly rejecting valid operations or throwing incompatible failures.",
+      example:
+        "An implementation that throws UnsupportedOperationException for a behavior promised by the abstraction may violate substitutability.",
+      whenItMatters:
+        "When subtypes support only part of the parent contract.",
+      commonMistake:
+        "Thinking method signatures alone guarantee substitutability.",
+      interviewQuestion:
+        "Can exception behavior cause an LSP violation?",
+      interviewAnswer:
+        "Yes. Unexpected exceptions or rejection of behavior promised by the abstraction can break client expectations."
+    },
+
+    {
+      term: "Rectangle and Square",
+      simpleDefinition:
+        "The Rectangle/Square example demonstrates how mathematically related types can still violate behavioral substitutability.",
+      interviewDefinition:
+        "If Rectangle allows width and height to vary independently but Square must keep them equal, substituting Square where independent width and height changes are expected can violate the behavioral contract.",
+      whyItMatters:
+        "It shows that an 'is-a' relationship in the real world does not automatically justify inheritance in software.",
+      example:
+        "Code expecting rectangle.setWidth(5) followed by setHeight(10) may break if a Square changes both dimensions together.",
+      whenItMatters:
+        "When evaluating inheritance relationships.",
+      commonMistake:
+        "Assuming mathematical or real-world classification automatically makes inheritance valid.",
+      interviewQuestion:
+        "Why is Rectangle/Square commonly used to explain LSP?",
+      interviewAnswer:
+        "Because although Square is mathematically a Rectangle, its behavior can violate assumptions made by code that expects width and height to change independently."
+    },
+
+    {
+      term: "Bird and Penguin",
+      simpleDefinition:
+        "The Bird/Penguin example shows that a subtype may share a broad category without supporting every behavior of the parent abstraction.",
+      interviewDefinition:
+        "If Bird exposes a fly() operation that clients expect all Birds to support, Penguin should not inherit that contract if it cannot honor the behavior.",
+      whyItMatters:
+        "It demonstrates that inheritance should model behavioral compatibility rather than only taxonomy.",
+      example:
+        "Instead of Bird having fly(), a Flyable capability can be introduced and implemented only by birds that can fly.",
+      whenItMatters:
+        "When an inheritance hierarchy contains optional or unsupported behaviors.",
+      commonMistake:
+        "Using a broad parent class that forces every subtype to implement behavior it cannot support.",
+      interviewQuestion:
+        "How can the Bird/Penguin example violate LSP?",
+      interviewAnswer:
+        "If Bird promises flying behavior, Penguin cannot safely substitute for Bird because it cannot honor that behavioral contract."
+    },
+
+    {
+      term: "Inheritance vs Composition",
+      simpleDefinition:
+        "Composition can be safer when inheritance would force incompatible behavior.",
+      interviewDefinition:
+        "When a subtype cannot genuinely satisfy the behavioral contract of a parent, composition or capability-based interfaces can model the relationship more accurately.",
+      whyItMatters:
+        "Avoiding inappropriate inheritance prevents LSP violations and rigid hierarchies.",
+      example:
+        "Use a Flyable interface for flying capability instead of putting fly() in every Bird subtype.",
+      whenItMatters:
+        "When inheritance creates unsupported operations or conflicting invariants.",
+      commonMistake:
+        "Using inheritance simply to reuse code.",
+      interviewQuestion:
+        "What can you use instead of inheritance when LSP is difficult to satisfy?",
+      interviewAnswer:
+        "Composition or smaller capability-specific interfaces can often represent the relationship more safely."
+    },
+
+    {
+      term: "LSP and OCP",
+      simpleDefinition:
+        "OCP allows new implementations to be added, while LSP ensures those implementations remain valid substitutions.",
+      interviewDefinition:
+        "LSP provides the behavioral correctness required when extending a system through polymorphic abstractions, which supports OCP.",
+      whyItMatters:
+        "An extension is not useful if the new implementation breaks the contract of the abstraction.",
+      example:
+        "A new PaymentProcessor implementation can be added under OCP, but it must honor the PaymentProcessor contract to satisfy LSP.",
+      whenItMatters:
+        "When adding implementations behind an abstraction.",
+      commonMistake:
+        "Thinking that any new implementation automatically satisfies OCP and LSP.",
+      interviewQuestion:
+        "How are OCP and LSP related?",
+      interviewAnswer:
+        "OCP encourages adding new implementations through extension, while LSP ensures those implementations remain behaviorally substitutable for the abstraction."
+    },
+
+    {
+      term: "LSP and Interfaces",
+      simpleDefinition:
+        "Interfaces define contracts that implementations must honor.",
+      interviewDefinition:
+        "LSP applies to interface implementations just as it applies to class inheritance because clients depend on the interface's behavioral contract.",
+      whyItMatters:
+        "LSP is not limited to inheritance hierarchies.",
+      example:
+        "Every PaymentProcessor implementation should honor the behavior expected by clients of PaymentProcessor.",
+      whenItMatters:
+        "When designing Java interfaces and polymorphic implementations.",
+      commonMistake:
+        "Thinking LSP applies only to extends relationships.",
+      interviewQuestion:
+        "Does LSP apply to interfaces?",
+      interviewAnswer:
+        "Yes. An implementation must be behaviorally substitutable for the interface contract."
+    },
+
+    {
+      term: "LSP and Polymorphism",
+      simpleDefinition:
+        "Polymorphism is useful only when the substituted implementations preserve expected behavior.",
+      interviewDefinition:
+        "LSP provides the behavioral foundation that makes runtime polymorphism safe for clients relying on an abstraction.",
+      whyItMatters:
+        "Without substitutability, polymorphism can compile successfully while failing at runtime.",
+      example:
+        "OrderService can use any DiscountStrategy implementation as long as every implementation honors the DiscountStrategy contract.",
+      whenItMatters:
+        "When designing extensible polymorphic systems.",
+      commonMistake:
+        "Assuming successful compilation proves LSP compliance.",
+      interviewQuestion:
+        "Why is LSP important for polymorphism?",
+      interviewAnswer:
+        "Because polymorphism assumes that different implementations can safely replace the abstraction without breaking client expectations."
+    },
+
+    {
+      term: "LSP Violation",
+      simpleDefinition:
+        "A subtype violates LSP when substituting it causes client behavior or assumptions to break.",
+      interviewDefinition:
+        "An LSP violation occurs when a subtype cannot honor the behavioral contract expected from the base abstraction.",
+      whyItMatters:
+        "It indicates that the abstraction or subtype boundary is incorrectly modeled.",
+      example:
+        "A ReadOnlyFile implementation extending WritableFile but throwing UnsupportedOperationException from write() may violate the parent contract.",
+      whenItMatters:
+        "When subclasses reject inherited operations or change expected semantics.",
+      commonMistake:
+        "Fixing the violation with more conditionals in the client.",
+      interviewQuestion:
+        "What is a common sign of an LSP violation?",
+      interviewAnswer:
+        "Clients need instanceof checks, special cases, or exception handling for a particular subtype because the subtype cannot honor the base contract."
+    }
+  ],
+
+  comparisonTables: [
+    {
+      title: "Inheritance vs LSP",
+      items: [
+        {
+          statement:
+            "Child class extends or implements a parent abstraction",
+          label: "Inheritance / Implementation"
+        },
+        {
+          statement:
+            "Subtype preserves the behavioral contract of the abstraction",
+          label: "LSP"
+        },
+        {
+          statement:
+            "Same method signatures are present",
+          label: "Not sufficient"
+        },
+        {
+          statement:
+            "Clients can safely substitute the subtype",
+          label: "Behavioral Substitutability"
+        }
+      ]
+    },
+
+    {
+      title: "LSP Contract Rules",
+      items: [
+        {
+          statement:
+            "Do not require stronger conditions from callers",
+          label: "Preconditions"
+        },
+        {
+          statement:
+            "Preserve or strengthen promised guarantees",
+          label: "Postconditions"
+        },
+        {
+          statement:
+            "Preserve required object invariants",
+          label: "Invariants"
+        },
+        {
+          statement:
+            "Do not introduce incompatible observable behavior",
+          label: "Exceptions / Side Effects"
+        }
+      ]
+    },
+
+    {
+      title: "Good Subtype vs LSP Violation",
+      items: [
+        {
+          statement:
+            "Can be used through the parent abstraction without special handling",
+          label: "LSP-friendly"
+        },
+        {
+          statement:
+            "Preserves expected input and output behavior",
+          label: "LSP-friendly"
+        },
+        {
+          statement:
+            "Throws UnsupportedOperationException for promised behavior",
+          label: "Warning"
+        },
+        {
+          statement:
+            "Requires instanceof checks for one subtype",
+          label: "Strong Warning"
+        },
+        {
+          statement:
+            "Changes semantics unexpectedly",
+          label: "LSP Violation"
+        }
+      ]
+    },
+
+    {
+      title: "Inheritance vs Composition",
+      items: [
+        {
+          statement:
+            "Subtype genuinely satisfies the parent's behavioral contract",
+          label: "Inheritance can fit"
+        },
+        {
+          statement:
+            "Subtype cannot support part of the parent contract",
+          label: "Inheritance concern"
+        },
+        {
+          statement:
+            "Behavior can be assembled from independent capabilities",
+          label: "Composition"
+        },
+        {
+          statement:
+            "Different capabilities should be represented independently",
+          label: "Focused Interfaces"
+        }
+      ]
+    },
+
+    {
+      title: "LSP and Other SOLID Principles",
+      items: [
+        {
+          statement:
+            "Focuses on responsibility and reason to change",
+          label: "SRP"
+        },
+        {
+          statement:
+            "Focuses on safe extension",
+          label: "OCP"
+        },
+        {
+          statement:
+            "Focuses on behavioral substitutability",
+          label: "LSP"
+        },
+        {
+          statement:
+            "Focuses on client-specific interfaces",
+          label: "ISP"
+        },
+        {
+          statement:
+            "Focuses on dependency direction",
+          label: "DIP"
+        }
+      ]
+    }
+  ],
+
+  why: [
+    "Inheritance and interfaces allow polymorphic designs, but polymorphism is safe only when implementations honor the contract of the abstraction.",
+    "Without LSP, client code may need subtype-specific checks, exception handling, or special cases, defeating the purpose of abstraction.",
+    "LSP prevents misleading inheritance relationships where a subtype technically fits the type hierarchy but does not behave like the parent abstraction.",
+    "It helps make OCP-based designs safe because newly added implementations must remain valid substitutions.",
+    "LSP improves reliability by ensuring that code written against an abstraction does not unexpectedly fail when a valid implementation is substituted.",
+    "It encourages better abstraction boundaries and often reveals when composition or smaller interfaces are more appropriate than inheritance."
+  ],
+
+  how: [
+    {
+      step: "Define the abstraction contract",
+      description:
+        "Clearly identify what clients are allowed to expect from the base class or interface."
+    },
+    {
+      step: "Identify valid inputs",
+      description:
+        "Determine the input conditions that clients are allowed to provide."
+    },
+    {
+      step: "Identify expected outputs",
+      description:
+        "Determine the results and guarantees clients can rely on."
+    },
+    {
+      step: "Identify side effects and state rules",
+      description:
+        "Understand important state transitions, invariants, and observable side effects."
+    },
+    {
+      step: "Implement the subtype",
+      description:
+        "Provide the behavior while preserving the abstraction's contract."
+    },
+    {
+      step: "Check preconditions",
+      description:
+        "Ensure the subtype does not require callers to satisfy stronger conditions."
+    },
+    {
+      step: "Check postconditions",
+      description:
+        "Ensure the subtype does not weaken the guarantees promised by the abstraction."
+    },
+    {
+      step: "Check exceptions",
+      description:
+        "Ensure the subtype does not unexpectedly reject operations that the abstraction promises to support."
+    },
+    {
+      step: "Test through the abstraction",
+      description:
+        "Use the subtype through the base interface or class and verify that client expectations still hold."
+    },
+    {
+      step: "Replace inheritance when necessary",
+      description:
+        "If a subtype cannot honor the contract, redesign using composition or smaller capability-specific abstractions."
+    }
+  ],
+
+  interviewTraps: [
+    {
+      trap: "LSP means child must have the same methods",
+      wrongApproach:
+        "Checking only whether the subclass compiles against the parent type.",
+      whyWrong:
+        "LSP is behavioral, not merely structural.",
+      betterApproach:
+        "Verify that the subtype preserves the observable contract and expectations of the abstraction."
+    },
+    {
+      trap: "Inheritance automatically means LSP",
+      wrongApproach:
+        "Assuming every extends relationship is valid.",
+      whyWrong:
+        "A subtype can inherit from a parent while still violating its behavioral contract.",
+      betterApproach:
+        "Ask whether the subtype can genuinely substitute for the parent."
+    },
+    {
+      trap: "Throw UnsupportedOperationException",
+      wrongApproach:
+        "Allowing a subtype to reject an operation that the parent abstraction promises.",
+      whyWrong:
+        "Clients expect the parent contract to remain valid after substitution.",
+      betterApproach:
+        "Redesign the abstraction or split the capability so unsupported behavior is not part of the subtype's contract."
+    },
+    {
+      trap: "Rectangle is always safely substitutable by Square",
+      wrongApproach:
+        "Using only the mathematical relationship to justify inheritance.",
+      whyWrong:
+        "The software contract may require independently changing width and height.",
+      betterApproach:
+        "Evaluate behavioral expectations rather than real-world classification."
+    },
+    {
+      trap: "Bird must have fly() because birds are animals",
+      wrongApproach:
+        "Putting flying behavior into a broad Bird abstraction.",
+      whyWrong:
+        "Not every subtype can satisfy the behavior.",
+      betterApproach:
+        "Use a capability such as Flyable for objects that actually support flying."
+    },
+    {
+      trap: "LSP applies only to inheritance",
+      wrongApproach:
+        "Ignoring interface implementations.",
+      whyWrong:
+        "Interface implementations must also honor the interface contract.",
+      betterApproach:
+        "Apply LSP to both class inheritance and interface-based polymorphism."
+    },
+    {
+      trap: "Fix LSP violations with instanceof",
+      wrongApproach:
+        "Adding subtype checks throughout client code.",
+      whyWrong:
+        "This usually indicates that the abstraction does not correctly model the behavior.",
+      betterApproach:
+        "Redesign the abstraction, use composition, or separate capabilities."
+    }
+  ],
+
+  when: [
+    "Designing inheritance hierarchies.",
+    "Creating Java interfaces with multiple implementations.",
+    "Using polymorphism in LLD.",
+    "Adding new implementations behind an abstraction.",
+    "Reviewing whether a subclass genuinely represents the parent contract.",
+    "A subclass throws UnsupportedOperationException for inherited behavior.",
+    "Client code contains instanceof checks for specific subtypes.",
+    "Different implementations behave differently in ways the abstraction does not allow.",
+    "A real-world 'is-a' relationship seems valid but software behavior does not match.",
+    "Deciding between inheritance and composition."
+  ],
+
+  tradeOffs: [
+    {
+      label: "Inheritance vs Composition",
+      points: [
+        "Inheritance can provide reuse and polymorphism when the behavioral relationship is valid.",
+        "Composition can avoid rigid hierarchies when behaviors vary independently."
+      ]
+    },
+    {
+      label: "General Abstraction vs Specific Contract",
+      points: [
+        "A broad abstraction can simplify polymorphic use.",
+        "An overly broad abstraction may force subtypes to support behavior they cannot honor."
+      ]
+    },
+    {
+      label: "Reuse vs Behavioral Correctness",
+      points: [
+        "Inheritance can reuse existing implementation.",
+        "Code reuse is not sufficient justification for inheritance if the subtype violates the parent's behavior."
+      ]
+    },
+    {
+      label: "Polymorphism vs Special Cases",
+      points: [
+        "Valid LSP relationships allow clients to remain generic.",
+        "Invalid relationships force subtype-specific conditions and reduce the value of polymorphism."
+      ]
+    }
+  ],
+
+  thirtySecondAnswer:
+    "The Liskov Substitution Principle says that a subtype should be safely usable wherever its base abstraction is expected without breaking client behavior. It is about behavioral substitutability, not just inheritance. A subtype must honor the parent's contract, including expected inputs, outputs, state rules, and observable behavior. If a subtype cannot support part of the parent contract, we should reconsider the abstraction and potentially use composition or smaller interfaces instead.",
+
+  secondaryAnswer: {
+    question: "How do you identify an LSP violation?",
+    answer:
+      "I check whether the subtype can genuinely replace the parent without special handling. Warning signs include UnsupportedOperationException for promised operations, stronger input restrictions, weaker guarantees, unexpected exceptions, changed semantics, or client code needing instanceof checks for a specific subtype."
+  },
+
+  keyTakeaways: [
+    "LSP stands for Liskov Substitution Principle.",
+    "LSP is about behavioral substitutability.",
+    "Inheritance alone does not guarantee LSP.",
+    "A subtype must honor the contract of its abstraction.",
+    "Preconditions should not be strengthened.",
+    "Postconditions should not be weakened.",
+    "Important invariants should be preserved.",
+    "Unexpected exception behavior can violate substitutability.",
+    "LSP applies to interfaces as well as class inheritance.",
+    "LSP is important for safe polymorphism.",
+    "Bird/Penguin demonstrates unsupported behavior in inheritance.",
+    "Rectangle/Square demonstrates incompatible behavioral assumptions.",
+    "Composition can be preferable when inheritance cannot satisfy the contract.",
+    "OCP and LSP work together: extensions must remain valid substitutions.",
+    "instanceof checks and subtype-specific workarounds can indicate an abstraction problem.",
+    "The key interview phrase is: 'A subtype should be behaviorally substitutable for its base abstraction.'"
+  ],
+
+  interviewQuestions: [
+    {
+      level: "Basic",
+      questions: [
+        {
+          id: "lsp-b1",
+          question: "What is the Liskov Substitution Principle?",
+          answer:
+            "A subtype should be safely usable wherever its base abstraction is expected without breaking client behavior."
+        },
+        {
+          id: "lsp-b2",
+          question: "Is LSP only about inheritance?",
+          answer:
+            "No. It also applies to implementations of interfaces and other polymorphic abstractions."
+        },
+        {
+          id: "lsp-b3",
+          question: "What does substitutability mean?",
+          answer:
+            "Client code written against the abstraction should continue to work correctly when a valid subtype is supplied."
+        },
+        {
+          id: "lsp-b4",
+          question: "Does inheritance automatically satisfy LSP?",
+          answer:
+            "No. Inheritance is structural; LSP requires behavioral compatibility."
+        },
+        {
+          id: "lsp-b5",
+          question: "What is a contract?",
+          answer:
+            "The behavioral expectations clients can rely on, including inputs, outputs, state behavior, exceptions, and other observable guarantees."
+        },
+        {
+          id: "lsp-b6",
+          question: "What is a common LSP violation?",
+          answer:
+            "A subtype rejects behavior that the parent abstraction promises, such as throwing UnsupportedOperationException."
+        },
+        {
+          id: "lsp-b7",
+          question: "What is the Bird/Penguin example?",
+          answer:
+            "If Bird promises fly(), Penguin should not inherit that contract if it cannot fly."
+        },
+        {
+          id: "lsp-b8",
+          question: "What is the Rectangle/Square example?",
+          answer:
+            "A Square can violate LSP if code using Rectangle expects width and height to change independently."
+        },
+        {
+          id: "lsp-b9",
+          question: "Can composition help with LSP?",
+          answer:
+            "Yes. Composition can avoid forcing incompatible behavior into an inheritance hierarchy."
+        },
+        {
+          id: "lsp-b10",
+          question: "Why is LSP important?",
+          answer:
+            "It makes polymorphism safe by ensuring implementations preserve the behavioral expectations of their abstractions."
+        }
+      ]
+    },
+
+    {
+      level: "Intermediate",
+      questions: [
+        {
+          id: "lsp-i1",
+          question: "What does LSP say about preconditions?",
+          answer:
+            "A subtype should not strengthen the preconditions required by the base abstraction."
+        },
+        {
+          id: "lsp-i2",
+          question: "What does LSP say about postconditions?",
+          answer:
+            "A subtype should preserve or strengthen the guarantees promised by the base abstraction."
+        },
+        {
+          id: "lsp-i3",
+          question: "Why are exceptions relevant to LSP?",
+          answer:
+            "Exceptions are observable behavior. Unexpected rejection of operations can break client expectations."
+        },
+        {
+          id: "lsp-i4",
+          question: "How can instanceof checks indicate an LSP problem?",
+          answer:
+            "If clients need special handling for one subtype, that subtype may not behave consistently with the abstraction."
+        },
+        {
+          id: "lsp-i5",
+          question: "How does LSP relate to OCP?",
+          answer:
+            "OCP allows new implementations to extend a system, while LSP ensures those implementations remain valid substitutions."
+        },
+        {
+          id: "lsp-i6",
+          question: "How does LSP relate to polymorphism?",
+          answer:
+            "Polymorphism depends on implementations being safely substitutable for the abstraction."
+        },
+        {
+          id: "lsp-i7",
+          question: "Can an interface implementation violate LSP?",
+          answer:
+            "Yes. It can violate the behavioral contract even though it correctly implements the interface methods."
+        },
+        {
+          id: "lsp-i8",
+          question: "When should you prefer composition?",
+          answer:
+            "When inheritance would force a subtype to support behavior or invariants that it cannot correctly honor."
+        }
+      ]
+    },
+
+    {
+      level: "Advanced",
+      questions: [
+        {
+          id: "lsp-a1",
+          question: "Why is behavioral compatibility more important than method compatibility?",
+          answer:
+            "A subtype can have identical method signatures while changing the semantics, guarantees, exceptions, or state behavior expected by clients."
+        },
+        {
+          id: "lsp-a2",
+          question: "What does strengthening preconditions mean?",
+          answer:
+            "The subtype requires callers to satisfy stricter conditions than the base abstraction required."
+        },
+        {
+          id: "lsp-a3",
+          question: "What does weakening postconditions mean?",
+          answer:
+            "The subtype provides fewer guarantees than the base abstraction promises."
+        },
+        {
+          id: "lsp-a4",
+          question: "Why can code reuse be a bad reason for inheritance?",
+          answer:
+            "Inheritance creates a behavioral relationship, not merely a code-reuse relationship. The subtype must satisfy the parent's contract."
+        },
+        {
+          id: "lsp-a5",
+          question: "How can LSP reveal a bad abstraction?",
+          answer:
+            "If multiple implementations cannot honor the same contract without special cases, the abstraction may be too broad or incorrectly modeled."
+        },
+        {
+          id: "lsp-a6",
+          question: "How does LSP support OCP?",
+          answer:
+            "OCP relies on adding new implementations behind abstractions, and LSP ensures those implementations can actually replace the abstraction safely."
+        },
+        {
+          id: "lsp-a7",
+          question: "Why is throwing UnsupportedOperationException often a warning sign?",
+          answer:
+            "It can mean the subtype does not support behavior that the parent abstraction promises to clients."
+        },
+        {
+          id: "lsp-a8",
+          question: "Can a subtype add stronger guarantees?",
+          answer:
+            "Yes, strengthening guarantees can be compatible with LSP as long as the subtype still satisfies the original contract."
+        }
+      ]
+    },
+
+    {
+      level: "Scenario",
+      questions: [
+        {
+          id: "lsp-s1",
+          question:
+            "Bird has fly(), but Penguin extends Bird and throws UnsupportedOperationException from fly(). What is wrong?",
+          answer:
+            "Penguin cannot honor the behavioral contract of Bird, so it is not safely substitutable for that abstraction."
+        },
+        {
+          id: "lsp-s2",
+          question:
+            "Rectangle allows independent width and height changes, but Square forces both dimensions to be equal. What issue can occur?",
+          answer:
+            "Code written against Rectangle may break when Square is substituted because Square changes the expected behavior."
+        },
+        {
+          id: "lsp-s3",
+          question:
+            "A subclass requires a non-null value while the parent accepts null. What principle is relevant?",
+          answer:
+            "LSP, because the subtype strengthened the precondition imposed on callers."
+        },
+        {
+          id: "lsp-s4",
+          question:
+            "A repository interface promises a successful save operation, but one implementation silently ignores the save. What is the concern?",
+          answer:
+            "The implementation may violate LSP by weakening the behavioral guarantee of the repository contract."
+        },
+        {
+          id: "lsp-s5",
+          question:
+            "A client uses instanceof to handle one implementation differently because that implementation behaves differently. What would you investigate?",
+          answer:
+            "I would investigate whether the abstraction contract is valid for that implementation and whether there is an LSP violation."
+        },
+        {
+          id: "lsp-s6",
+          question:
+            "Several subtypes cannot implement one parent method meaningfully. What redesign could help?",
+          answer:
+            "Split the broad abstraction into smaller capability-specific interfaces or use composition."
+        },
+        {
+          id: "lsp-s7",
+          question:
+            "A new PaymentProcessor implementation requires callers to perform an extra validation that other implementations do not require. What is the concern?",
+          answer:
+            "The subtype may be strengthening the preconditions of the abstraction and therefore violating LSP."
+        },
+        {
+          id: "lsp-s8",
+          question:
+            "A subtype adds extra logging but preserves all existing behavior. Is that automatically an LSP violation?",
+          answer:
+            "No. Additional compatible behavior is not automatically a violation as long as the abstraction's expected contract remains valid."
+        }
+      ]
+    }
+  ]
+},
+"interface-segregation-principle": {
+  blockId: "interface-segregation-principle",
+  categoryId: "lld-fundamentals",
+
+  what: [
+    "The Interface Segregation Principle (ISP) states that clients should not be forced to depend on methods they do not use.",
+    "ISP encourages smaller, focused, client-specific interfaces instead of large interfaces containing unrelated operations.",
+    "The goal is not to make every interface contain only one method. The goal is to group methods according to the needs of the clients that actually use them.",
+    "A fat interface creates unnecessary coupling because a client becomes dependent on methods that are irrelevant to it.",
+    "ISP improves maintainability because changes to unrelated interface operations are less likely to affect clients that do not need those operations.",
+    "ISP is closely related to high cohesion, loose coupling, SRP, composition, and dependency inversion.",
+    "ISP applies to Java interfaces as well as other forms of contracts between components."
+  ],
+
+  deepConcepts: [
+    {
+      term: "Interface Segregation Principle",
+      simpleDefinition:
+        "Clients should not be forced to depend on methods they do not use.",
+      interviewDefinition:
+        "ISP states that interfaces should be sufficiently focused so that clients depend only on the operations relevant to them rather than being coupled to a large interface containing unrelated methods.",
+      whyItMatters:
+        "Large interfaces create unnecessary coupling, make implementations harder to maintain, and cause unrelated changes to affect clients that do not need those operations.",
+      example:
+        "Instead of one Worker interface containing work(), eat(), sleep(), and manage(), create focused interfaces based on the capabilities required by different clients.",
+      whenItMatters:
+        "When an interface becomes large, clients use different subsets of its methods, or implementations are forced to provide meaningless operations.",
+      commonMistake:
+        "Thinking ISP means every interface must contain exactly one method.",
+      interviewQuestion:
+        "What is the Interface Segregation Principle?",
+      interviewAnswer:
+        "ISP says clients should not be forced to depend on methods they do not use. Interfaces should therefore be focused around meaningful client requirements."
+    },
+
+    {
+      term: "Fat Interface",
+      simpleDefinition:
+        "A large interface containing many unrelated operations.",
+      interviewDefinition:
+        "A fat interface exposes more operations than many of its clients or implementations actually require, creating unnecessary dependencies.",
+      whyItMatters:
+        "Clients become coupled to unrelated methods and implementations may be forced to support operations they do not meaningfully provide.",
+      example:
+        "A Machine interface contains print(), scan(), fax(), staple(), and bind(), even though different devices support only some capabilities.",
+      whenItMatters:
+        "When multiple clients implement or consume different subsets of an interface.",
+      commonMistake:
+        "Assuming a large interface is automatically an ISP violation.",
+      interviewQuestion:
+        "What is a fat interface?",
+      interviewAnswer:
+        "A fat interface is an interface that contains more operations than particular clients or implementations need, causing unnecessary coupling."
+    },
+
+    {
+      term: "Client-Specific Interface",
+      simpleDefinition:
+        "An interface should expose the capabilities required by a particular client or group of related clients.",
+      interviewDefinition:
+        "A client-specific interface contains the smallest meaningful contract required by a client without forcing it to depend on unrelated operations.",
+      whyItMatters:
+        "It reduces dependency on irrelevant behavior and makes interfaces easier to evolve.",
+      example:
+        "A printer client depends on Printable rather than a large MultiFunctionDevice interface containing scan and fax operations.",
+      whenItMatters:
+        "When different consumers require different subsets of behavior.",
+      commonMistake:
+        "Creating extremely narrow interfaces without considering whether the grouped behavior represents a meaningful capability.",
+      interviewQuestion:
+        "What does client-specific mean in ISP?",
+      interviewAnswer:
+        "It means the interface is designed around the operations a particular client actually needs rather than around every operation supported by the overall system."
+    },
+
+    {
+      term: "Interface Segregation",
+      simpleDefinition:
+        "Split broad contracts into focused contracts when clients need different capabilities.",
+      interviewDefinition:
+        "Interface segregation restructures a broad contract into smaller cohesive interfaces so consumers depend only on relevant capabilities.",
+      whyItMatters:
+        "Changes to one capability become less likely to affect clients using other capabilities.",
+      example:
+        "Separate Printer, Scanner, and Fax interfaces rather than forcing every device to implement a single MultiFunctionDevice interface.",
+      whenItMatters:
+        "When consumers use different subsets of a contract.",
+      commonMistake:
+        "Splitting interfaces based only on method count instead of client needs.",
+      interviewQuestion:
+        "Why do we segregate interfaces?",
+      interviewAnswer:
+        "To reduce unnecessary client dependencies and allow each client to depend only on the capabilities it actually needs."
+    },
+
+    {
+      term: "Client Dependency",
+      simpleDefinition:
+        "A client depends on an interface when its code relies on that interface's contract.",
+      interviewDefinition:
+        "ISP focuses on reducing unnecessary dependencies between clients and operations they do not use.",
+      whyItMatters:
+        "Unnecessary dependencies increase the impact of unrelated interface changes.",
+      example:
+        "A reporting client depending on a 20-method UserOperations interface even though it uses only generateReport().",
+      whenItMatters:
+        "When analyzing coupling between consumers and interfaces.",
+      commonMistake:
+        "Looking only at implementation dependencies and ignoring consumer dependencies.",
+      interviewQuestion:
+        "What dependency does ISP try to reduce?",
+      interviewAnswer:
+        "ISP reduces unnecessary dependencies between clients and interface operations they do not need."
+    },
+
+    {
+      term: "Unused Methods",
+      simpleDefinition:
+        "Methods present in an interface but irrelevant to a particular client or implementation.",
+      interviewDefinition:
+        "Unused methods are a warning sign when clients or implementations are forced to depend on operations unrelated to their responsibilities.",
+      whyItMatters:
+        "They increase coupling and can force implementations to provide dummy or unsupported behavior.",
+      example:
+        "A ReadOnlyReportClient forced to implement updateReport() and deleteReport().",
+      whenItMatters:
+        "When an implementation throws UnsupportedOperationException or provides empty method bodies.",
+      commonMistake:
+        "Keeping unsupported methods simply because they exist in the parent interface.",
+      interviewQuestion:
+        "Why are unused interface methods a problem?",
+      interviewAnswer:
+        "They create unnecessary coupling and can force clients or implementations to depend on behavior they do not need."
+    },
+
+    {
+      term: "UnsupportedOperationException",
+      simpleDefinition:
+        "An implementation throws an exception because an interface method does not make sense for it.",
+      interviewDefinition:
+        "Repeated use of UnsupportedOperationException in interface implementations can indicate that the interface is too broad and violates ISP.",
+      whyItMatters:
+        "It suggests the contract is forcing an implementation to support behavior it cannot legitimately provide.",
+      example:
+        "ReadOnlyFile implements FileOperations but throws UnsupportedOperationException from write().",
+      whenItMatters:
+        "During interface and implementation reviews.",
+      commonMistake:
+        "Treating the exception as a normal way to satisfy a poorly designed interface.",
+      interviewQuestion:
+        "Can UnsupportedOperationException indicate an ISP violation?",
+      interviewAnswer:
+        "Yes. If implementations repeatedly cannot meaningfully support interface methods, the interface may be too broad."
+    },
+
+    {
+      term: "Capability Interface",
+      simpleDefinition:
+        "A focused interface representing one meaningful capability.",
+      interviewDefinition:
+        "A capability interface models a specific behavior that clients or implementations can depend on independently.",
+      whyItMatters:
+        "It allows clients to request only the capability they require.",
+      example:
+        "Printable, Scannable, and Faxable can represent independent device capabilities.",
+      whenItMatters:
+        "When different implementations support different combinations of behavior.",
+      commonMistake:
+        "Creating arbitrary one-method interfaces without meaningful capability boundaries.",
+      interviewQuestion:
+        "What is a capability interface?",
+      interviewAnswer:
+        "It is a focused interface representing a meaningful capability that clients can depend on independently."
+    },
+
+    {
+      term: "ISP and SRP",
+      simpleDefinition:
+        "Both focus on separation, but SRP focuses on class responsibilities while ISP focuses on client-facing contracts.",
+      interviewDefinition:
+        "SRP separates responsibilities within components, while ISP separates interface contracts according to the needs of their consumers.",
+      whyItMatters:
+        "Understanding the distinction prevents treating ISP as simply another version of SRP.",
+      example:
+        "SRP may separate printing and scanning responsibilities; ISP may provide Printable and Scannable interfaces to different clients.",
+      whenItMatters:
+        "When explaining relationships between SOLID principles.",
+      commonMistake:
+        "Saying SRP and ISP are exactly the same principle.",
+      interviewQuestion:
+        "How is ISP different from SRP?",
+      interviewAnswer:
+        "SRP focuses on cohesive responsibilities within a component, while ISP focuses on preventing clients from depending on interface operations they do not need."
+    },
+
+    {
+      term: "ISP and Loose Coupling",
+      simpleDefinition:
+        "Focused interfaces reduce unnecessary coupling between clients and providers.",
+      interviewDefinition:
+        "ISP promotes loose coupling by limiting a client's dependency to the contract and operations it actually requires.",
+      whyItMatters:
+        "A client becomes less affected by changes to unrelated capabilities.",
+      example:
+        "A scanner client depends only on Scannable rather than a large device interface.",
+      whenItMatters:
+        "When designing modular systems.",
+      commonMistake:
+        "Thinking ISP removes all dependencies.",
+      interviewQuestion:
+        "How does ISP promote loose coupling?",
+      interviewAnswer:
+        "It reduces the number of unrelated operations a client depends on, limiting the impact of changes to other capabilities."
+    },
+
+    {
+      term: "ISP and DIP",
+      simpleDefinition:
+        "DIP encourages dependence on abstractions, while ISP helps ensure those abstractions are appropriately focused.",
+      interviewDefinition:
+        "DIP controls the direction of dependency toward abstractions, while ISP helps ensure that the abstractions themselves do not force clients to depend on irrelevant operations.",
+      whyItMatters:
+        "A badly designed abstraction can still create excessive coupling even when dependency inversion is used.",
+      example:
+        "OrderService can depend on a focused PaymentProcessor interface rather than a giant PaymentOperations interface containing unrelated reporting and administration methods.",
+      whenItMatters:
+        "When designing Java/Spring abstractions.",
+      commonMistake:
+        "Assuming any interface used through dependency injection automatically follows ISP.",
+      interviewQuestion:
+        "How do ISP and DIP work together?",
+      interviewAnswer:
+        "DIP encourages clients to depend on abstractions, while ISP helps ensure those abstractions expose only the capabilities relevant to each client."
+    },
+
+    {
+      term: "ISP and Polymorphism",
+      simpleDefinition:
+        "Focused interfaces allow polymorphism around specific capabilities.",
+      interviewDefinition:
+        "ISP enables clients to use polymorphic abstractions that represent only the behavior they actually require.",
+      whyItMatters:
+        "Clients can substitute implementations without being exposed to unrelated functionality.",
+      example:
+        "A NotificationSender client depends on NotificationSender rather than a broad CommunicationService containing unrelated reporting and user-management methods.",
+      whenItMatters:
+        "When multiple implementations provide a specific capability.",
+      commonMistake:
+        "Using one universal interface for all related functionality.",
+      interviewQuestion:
+        "How does ISP improve polymorphism?",
+      interviewAnswer:
+        "It creates focused contracts so polymorphic clients depend only on the behavior relevant to them."
+    },
+
+    {
+      term: "Interface Size",
+      simpleDefinition:
+        "The number of methods alone does not determine whether an interface violates ISP.",
+      interviewDefinition:
+        "ISP is concerned with whether clients are forced to depend on irrelevant operations, not with an arbitrary maximum number of methods.",
+      whyItMatters:
+        "A cohesive interface can legitimately contain several closely related operations.",
+      example:
+        "A PaymentProcessor interface can contain authorize(), capture(), and refund() if the client genuinely needs the complete payment-processing capability.",
+      whenItMatters:
+        "When deciding whether to split an interface.",
+      commonMistake:
+        "Splitting every interface once it reaches a certain number of methods.",
+      interviewQuestion:
+        "Does ISP mean interfaces should have very few methods?",
+      interviewAnswer:
+        "Not necessarily. The important question is whether the methods form a cohesive contract relevant to the clients using the interface."
+    },
+
+    {
+      term: "ISP in Spring Boot",
+      simpleDefinition:
+        "Spring applications can use focused interfaces for services, repositories, and external integrations.",
+      interviewDefinition:
+        "In Spring Boot, ISP can be applied by defining interfaces around meaningful client requirements rather than creating broad service contracts with unrelated operations.",
+      whyItMatters:
+        "Focused interfaces improve testability, substitution, and separation between application components.",
+      example:
+        "A service depends on PaymentProcessor while an administrative component depends on PaymentAdminOperations instead of both depending on one large PaymentService interface.",
+      whenItMatters:
+        "When designing Spring service contracts or external integrations.",
+      commonMistake:
+        "Creating one giant service interface because all methods relate to the same domain entity.",
+      interviewQuestion:
+        "How would you apply ISP in Spring Boot?",
+      interviewAnswer:
+        "I would define interfaces around meaningful client capabilities so each component depends only on the operations it needs."
+    }
+  ],
+
+  comparisonTables: [
+    {
+      title: "Fat Interface vs Segregated Interfaces",
+      items: [
+        {
+          statement:
+            "One large interface contains many unrelated operations",
+          label: "Fat Interface"
+        },
+        {
+          statement:
+            "Clients depend on methods they do not use",
+          label: "Unnecessary Coupling"
+        },
+        {
+          statement:
+            "Multiple focused interfaces represent meaningful capabilities",
+          label: "Segregated Interfaces"
+        },
+        {
+          statement:
+            "Each client depends only on required capabilities",
+          label: "ISP"
+        }
+      ]
+    },
+
+    {
+      title: "ISP: Good vs Poor Design",
+      items: [
+        {
+          statement:
+            "Interface represents a cohesive capability",
+          label: "ISP-friendly"
+        },
+        {
+          statement:
+            "Client uses most or all operations it depends on",
+          label: "ISP-friendly"
+        },
+        {
+          statement:
+            "Client depends on many irrelevant methods",
+          label: "ISP warning"
+        },
+        {
+          statement:
+            "Implementation throws UnsupportedOperationException for interface methods",
+          label: "Strong warning"
+        },
+        {
+          statement:
+            "Interface is split into arbitrary one-method interfaces without meaningful boundaries",
+          label: "Possible overengineering"
+        }
+      ]
+    },
+
+    {
+      title: "SRP vs ISP",
+      items: [
+        {
+          statement:
+            "Focuses on responsibilities within a component",
+          label: "SRP"
+        },
+        {
+          statement:
+            "Focuses on what causes a component to change",
+          label: "SRP"
+        },
+        {
+          statement:
+            "Focuses on client dependencies on interface operations",
+          label: "ISP"
+        },
+        {
+          statement:
+            "Focuses on creating client-specific contracts",
+          label: "ISP"
+        }
+      ]
+    },
+
+    {
+      title: "ISP and Other SOLID Principles",
+      items: [
+        {
+          statement:
+            "Focused responsibility",
+          label: "SRP"
+        },
+        {
+          statement:
+            "Safe extension",
+          label: "OCP"
+        },
+        {
+          statement:
+            "Behavioral substitution",
+          label: "LSP"
+        },
+        {
+          statement:
+            "Focused client interfaces",
+          label: "ISP"
+        },
+        {
+          statement:
+            "Dependency on abstractions",
+          label: "DIP"
+        }
+      ]
+    },
+
+    {
+      title: "Common Capability Design",
+      items: [
+        {
+          statement:
+            "Printing capability",
+          label: "Printable"
+        },
+        {
+          statement:
+            "Scanning capability",
+          label: "Scannable"
+        },
+        {
+          statement:
+            "Fax capability",
+          label: "Faxable"
+        },
+        {
+          statement:
+            "Each client depends only on required capability",
+          label: "ISP"
+        }
+      ]
+    }
+  ],
+
+  why: [
+    "Large interfaces create unnecessary coupling because clients become dependent on operations they do not need.",
+    "When an interface changes, all clients depending on that interface may be affected even if they do not use the changed operation.",
+    "Large interfaces can force implementations to provide meaningless, empty, or unsupported methods.",
+    "ISP allows clients to depend on focused contracts that represent the capabilities they actually require.",
+    "Focused interfaces make changes more localized and reduce the impact of unrelated modifications.",
+    "ISP improves testability because clients can depend on smaller contracts and tests can provide focused implementations or mocks.",
+    "ISP is particularly useful in enterprise Java applications where service interfaces can grow as more functionality is added."
+  ],
+
+  how: [
+    {
+      step: "Identify the clients",
+      description:
+        "Determine which components consume the interface and which operations each client actually uses."
+    },
+    {
+      step: "Map client usage",
+      description:
+        "Group the interface methods according to the clients or capabilities that require them."
+    },
+    {
+      step: "Find unrelated operations",
+      description:
+        "Identify methods that are irrelevant to particular clients or implementations."
+    },
+    {
+      step: "Identify unsupported behavior",
+      description:
+        "Look for empty implementations, null returns, dummy behavior, or UnsupportedOperationException."
+    },
+    {
+      step: "Define cohesive capabilities",
+      description:
+        "Group related operations into meaningful capability-specific interfaces."
+    },
+    {
+      step: "Update client dependencies",
+      description:
+        "Make each client depend only on the focused interface containing the operations it requires."
+    },
+    {
+      step: "Keep implementations flexible",
+      description:
+        "Allow a concrete class to implement multiple focused interfaces when it genuinely supports multiple capabilities."
+    },
+    {
+      step: "Check interface cohesion",
+      description:
+        "Ensure each interface represents a meaningful capability rather than simply minimizing method count."
+    },
+    {
+      step: "Review change impact",
+      description:
+        "Verify that changes to one capability do not unnecessarily affect clients using unrelated capabilities."
+    }
+  ],
+
+  interviewTraps: [
+    {
+      trap: "ISP means one method per interface",
+      wrongApproach:
+        "Creating a separate interface for every individual method.",
+      whyWrong:
+        "ISP is about client needs and cohesive capabilities, not arbitrary method counts.",
+      betterApproach:
+        "Group related operations that represent a meaningful client-facing capability."
+    },
+    {
+      trap: "Large interfaces always violate ISP",
+      wrongApproach:
+        "Splitting every interface simply because it contains many methods.",
+      whyWrong:
+        "A large but cohesive interface can still be appropriate if clients genuinely depend on the complete contract.",
+      betterApproach:
+        "Evaluate which clients depend on which operations."
+    },
+    {
+      trap: "UnsupportedOperationException is normal",
+      wrongApproach:
+        "Allowing implementations to reject many interface methods.",
+      whyWrong:
+        "Repeated unsupported operations often indicate that the interface is too broad.",
+      betterApproach:
+        "Split the contract into focused capabilities."
+    },
+    {
+      trap: "Same domain means same interface",
+      wrongApproach:
+        "Creating one giant UserService or PaymentService interface because all methods belong to the same domain.",
+      whyWrong:
+        "Different clients may need different capabilities within the same domain.",
+      betterApproach:
+        "Design contracts around client needs and cohesive capabilities."
+    },
+    {
+      trap: "ISP removes all coupling",
+      wrongApproach:
+        "Claiming segregated interfaces eliminate dependencies.",
+      whyWrong:
+        "Clients still depend on the interfaces they use.",
+      betterApproach:
+        "Say ISP reduces unnecessary dependencies and limits coupling to relevant operations."
+    },
+    {
+      trap: "Every client gets its own interface",
+      wrongApproach:
+        "Creating arbitrary duplicate interfaces for every consumer.",
+      whyWrong:
+        "This can create unnecessary duplication and complexity.",
+      betterApproach:
+        "Create interfaces around meaningful shared capabilities and client requirements."
+    },
+    {
+      trap: "Dependency Injection automatically means ISP",
+      wrongApproach:
+        "Assuming Spring DI makes any interface well-designed.",
+      whyWrong:
+        "DI controls how dependencies are supplied; ISP controls what operations clients depend on.",
+      betterApproach:
+        "Use DI together with appropriately segregated abstractions."
+    }
+  ],
+
+  when: [
+    "An interface contains operations that many clients do not use.",
+    "Different implementations support different subsets of interface methods.",
+    "Implementations contain UnsupportedOperationException or empty methods.",
+    "A service interface keeps growing as unrelated functionality is added.",
+    "Different consumers need different capabilities from the same domain.",
+    "Changing one interface operation unnecessarily affects unrelated clients.",
+    "Designing Java service contracts.",
+    "Designing Spring Boot components with multiple consumers.",
+    "Creating reusable libraries or SDK interfaces.",
+    "Refactoring a fat interface."
+  ],
+
+  tradeOffs: [
+    {
+      label: "Focused Interfaces vs Interface Count",
+      points: [
+        "Smaller capability interfaces reduce unnecessary dependencies.",
+        "Too many interfaces can increase the number of types developers must understand."
+      ]
+    },
+    {
+      label: "Client Flexibility vs Duplication",
+      points: [
+        "Client-specific contracts can make consumers independent.",
+        "Poorly designed segregation can create duplicated or nearly identical interfaces."
+      ]
+    },
+    {
+      label: "Cohesion vs Fragmentation",
+      points: [
+        "Grouping related operations creates meaningful interfaces.",
+        "Splitting every method separately creates unnecessary fragmentation."
+      ]
+    },
+    {
+      label: "Change Isolation vs Complexity",
+      points: [
+        "Segregated interfaces limit the impact of unrelated changes.",
+        "Additional abstractions introduce more types and navigation overhead."
+      ]
+    }
+  ],
+
+  thirtySecondAnswer:
+    "The Interface Segregation Principle says clients should not be forced to depend on methods they do not use. Instead of creating one large interface containing unrelated operations, we create focused interfaces around meaningful client capabilities. For example, instead of forcing every device to implement print, scan, and fax, we can define Printable, Scannable, and Faxable interfaces. ISP reduces unnecessary coupling while keeping interfaces cohesive. It does not mean every interface must contain only one method.",
+
+  secondaryAnswer: {
+    question: "How would you identify an ISP violation?",
+    answer:
+      "I would check whether clients depend on methods they do not use, whether implementations contain unsupported or empty methods, and whether one interface combines unrelated capabilities. If different clients need different subsets of operations, I would consider segregating the interface into focused capability contracts."
+  },
+
+  keyTakeaways: [
+    "ISP stands for Interface Segregation Principle.",
+    "Clients should not be forced to depend on methods they do not use.",
+    "ISP is about client dependencies, not simply interface size.",
+    "A fat interface can create unnecessary coupling.",
+    "Focused interfaces should represent meaningful capabilities.",
+    "ISP does not mean one method per interface.",
+    "UnsupportedOperationException can indicate an overly broad interface.",
+    "Empty or meaningless implementations are warning signs.",
+    "Different clients can depend on different interfaces.",
+    "One implementation can implement multiple focused interfaces.",
+    "ISP is closely related to high cohesion and loose coupling.",
+    "SRP focuses on responsibility; ISP focuses on client-facing contracts.",
+    "DIP focuses on dependency direction; ISP helps make those abstractions appropriately focused.",
+    "Dependency Injection does not automatically satisfy ISP.",
+    "Avoid both fat interfaces and excessive interface fragmentation.",
+    "The goal is to reduce unnecessary client dependencies while preserving meaningful contracts."
+  ],
+
+  interviewQuestions: [
+    {
+      level: "Basic",
+      questions: [
+        {
+          id: "isp-b1",
+          question: "What is the Interface Segregation Principle?",
+          answer:
+            "Clients should not be forced to depend on methods they do not use."
+        },
+        {
+          id: "isp-b2",
+          question: "What is a fat interface?",
+          answer:
+            "An interface containing many operations that different clients or implementations do not all need."
+        },
+        {
+          id: "isp-b3",
+          question: "Does ISP mean one method per interface?",
+          answer:
+            "No. Methods should be grouped into meaningful cohesive client capabilities."
+        },
+        {
+          id: "isp-b4",
+          question: "Why are unused interface methods a problem?",
+          answer:
+            "They create unnecessary coupling and may force clients or implementations to depend on irrelevant behavior."
+        },
+        {
+          id: "isp-b5",
+          question: "What is a capability interface?",
+          answer:
+            "A focused interface representing one meaningful capability that clients can depend on independently."
+        },
+        {
+          id: "isp-b6",
+          question: "Can one class implement multiple interfaces?",
+          answer:
+            "Yes. A class can implement multiple focused interfaces when it genuinely supports those capabilities."
+        },
+        {
+          id: "isp-b7",
+          question: "Can UnsupportedOperationException indicate an ISP problem?",
+          answer:
+            "Yes. It can indicate that an implementation is being forced to support behavior it does not meaningfully provide."
+        },
+        {
+          id: "isp-b8",
+          question: "What is the main goal of ISP?",
+          answer:
+            "To reduce unnecessary dependencies between clients and interface operations they do not need."
+        },
+        {
+          id: "isp-b9",
+          question: "Does a large interface automatically violate ISP?",
+          answer:
+            "No. The key question is whether clients are forced to depend on irrelevant operations."
+        },
+        {
+          id: "isp-b10",
+          question: "How does ISP improve maintainability?",
+          answer:
+            "It limits the impact of changes to interface operations by reducing unnecessary client dependencies."
+        }
+      ]
+    },
+
+    {
+      level: "Intermediate",
+      questions: [
+        {
+          id: "isp-i1",
+          question: "How would you refactor a fat interface?",
+          answer:
+            "Analyze client usage, group related operations into meaningful capabilities, create focused interfaces, and update clients to depend only on the interfaces they need."
+        },
+        {
+          id: "isp-i2",
+          question: "How is ISP different from SRP?",
+          answer:
+            "SRP focuses on cohesive responsibilities and reasons to change, while ISP focuses on preventing clients from depending on interface operations they do not need."
+        },
+        {
+          id: "isp-i3",
+          question: "How does ISP promote loose coupling?",
+          answer:
+            "It limits a client's dependency to relevant operations instead of an unnecessarily broad contract."
+        },
+        {
+          id: "isp-i4",
+          question: "Can one implementation implement multiple segregated interfaces?",
+          answer:
+            "Yes, when the implementation genuinely supports all represented capabilities."
+        },
+        {
+          id: "isp-i5",
+          question: "How does ISP relate to DIP?",
+          answer:
+            "DIP encourages dependence on abstractions, while ISP helps ensure those abstractions are focused and do not expose irrelevant operations to clients."
+        },
+        {
+          id: "isp-i6",
+          question: "Why should interfaces be client-focused?",
+          answer:
+            "Different clients often need different capabilities, so client-focused contracts avoid unnecessary dependencies."
+        },
+        {
+          id: "isp-i7",
+          question: "Can splitting interfaces too much become a problem?",
+          answer:
+            "Yes. Excessive fragmentation can create unnecessary types and complexity."
+        },
+        {
+          id: "isp-i8",
+          question: "How would you apply ISP in Spring Boot?",
+          answer:
+            "Define focused interfaces around meaningful service capabilities and make each consumer depend only on the contract it actually needs."
+        }
+      ]
+    },
+
+    {
+      level: "Advanced",
+      questions: [
+        {
+          id: "isp-a1",
+          question: "Why is interface size not the main measure of ISP?",
+          answer:
+            "A large interface can still be cohesive if its clients genuinely need the complete contract. ISP is about unnecessary client dependencies."
+        },
+        {
+          id: "isp-a2",
+          question: "Why can UnsupportedOperationException be an architectural smell?",
+          answer:
+            "It may indicate that the interface requires implementations to provide behavior that does not belong to their capability."
+        },
+        {
+          id: "isp-a3",
+          question: "How does ISP reduce change impact?",
+          answer:
+            "Clients depend only on relevant contracts, so changes to unrelated capabilities are less likely to affect them."
+        },
+        {
+          id: "isp-a4",
+          question: "Why is one-interface-per-method not a good interpretation of ISP?",
+          answer:
+            "It ignores cohesion and client needs and can create unnecessary fragmentation."
+        },
+        {
+          id: "isp-a5",
+          question: "How does ISP support testability?",
+          answer:
+            "Clients depend on smaller focused contracts, making mocks, fakes, and test implementations simpler and more targeted."
+        },
+        {
+          id: "isp-a6",
+          question: "How does ISP work with LSP?",
+          answer:
+            "Segregated interfaces define focused contracts, and each implementation must remain behaviorally substitutable for the specific interface it implements."
+        },
+        {
+          id: "isp-a7",
+          question: "Can a domain have multiple interfaces for the same entity?",
+          answer:
+            "Yes. Different clients may require different capabilities of the same domain entity or service."
+        },
+        {
+          id: "isp-a8",
+          question: "What is the risk of designing interfaces around implementations instead of clients?",
+          answer:
+            "The interface may expose implementation-specific or unnecessary operations and force consumers to depend on behavior they do not need."
+        }
+      ]
+    },
+
+    {
+      level: "Scenario",
+      questions: [
+        {
+          id: "isp-s1",
+          question:
+            "A Worker interface has work(), eat(), sleep(), and manage(). A Robot implements it but does not need eat() or sleep(). What is the issue?",
+          answer:
+            "The interface is forcing Robot to depend on capabilities it does not need, indicating an ISP violation."
+        },
+        {
+          id: "isp-s2",
+          question:
+            "A Printer interface contains print(), scan(), and fax(), but a basic printer only supports print(). What would you do?",
+          answer:
+            "Separate the capabilities into focused interfaces such as Printable, Scannable, and Faxable."
+        },
+        {
+          id: "isp-s3",
+          question:
+            "A class implements an interface with ten methods but uses all ten meaningfully. Is that automatically an ISP violation?",
+          answer:
+            "No. If the interface is cohesive and the client genuinely requires all ten operations, it can be appropriate."
+        },
+        {
+          id: "isp-s4",
+          question:
+            "A ReadOnlyFile implementation throws UnsupportedOperationException from write(). What would you investigate?",
+          answer:
+            "I would investigate whether the file interface is too broad and whether read and write capabilities should be separated."
+        },
+        {
+          id: "isp-s5",
+          question:
+            "A PaymentService interface contains processPayment(), refund(), generateReport(), createUser(), and exportAuditData(). What is your concern?",
+          answer:
+            "The interface appears to combine unrelated capabilities and may be forcing clients to depend on operations they do not need."
+        },
+        {
+          id: "isp-s6",
+          question:
+            "A reporting client needs only generateReport(), but it depends on a 20-method ReportingOperations interface. What would you consider?",
+          answer:
+            "A focused reporting interface containing the capability required by that client may reduce unnecessary coupling."
+        },
+        {
+          id: "isp-s7",
+          question:
+            "You split one interface into 15 one-method interfaces. Is that automatically good ISP?",
+          answer:
+            "No. Excessive fragmentation can be overengineering. Interfaces should represent meaningful cohesive capabilities."
+        },
+        {
+          id: "isp-s8",
+          question:
+            "A Spring Boot service depends on a large UserService interface but only uses findUser(). What could you improve?",
+          answer:
+            "If the broader interface contains unrelated capabilities, introduce a focused interface for the client's required user lookup capability."
+        }
+      ]
+    }
+  ]
+},
 };
 
 export const getTopicContent = (blockId: string): TopicContent | undefined =>

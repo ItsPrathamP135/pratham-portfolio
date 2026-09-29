@@ -4140,6 +4140,1030 @@ export const systemDesignVisuals: Record<string, TopicVisualization> = {
     },
   ],
 },
+"liskov-substitution-principle": {
+  topicId: "liskov-substitution-principle",
+  type: "stage-flow",
+
+  summary:
+    "LSP ensures that subtypes and implementations preserve the behavioral contract of their abstractions so clients can safely substitute them.",
+
+  stages: [
+    {
+      title: "1. The LSP Problem",
+      caption:
+        "Inheritance can look correct structurally while still being wrong behaviorally.",
+
+      layers: [
+        {
+          boxes: [
+            "Base Class",
+            "Child Class",
+          ],
+        },
+        {
+          boxes: [
+            "Same Methods",
+            "Different Behavior",
+          ],
+        },
+        {
+          boxes: [
+            "Client Breaks",
+            "Unexpected Exceptions",
+            "Special Cases",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "2. What LSP Means",
+      caption:
+        "A subtype should be safely usable wherever the base abstraction is expected.",
+
+      layers: [
+        {
+          boxes: [
+            "Base Abstraction",
+          ],
+        },
+        {
+          boxes: [
+            "Subtype A",
+            "Subtype B",
+            "Subtype C",
+          ],
+        },
+        {
+          boxes: [
+            "Safe Substitution",
+            "Expected Behavior",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "3. Structural vs Behavioral",
+      caption:
+        "Having the same methods is not enough. The behavior must also satisfy the contract.",
+
+      layers: [
+        {
+          boxes: [
+            "Same Method Signature",
+          ],
+        },
+        {
+          boxes: [
+            "Expected Inputs",
+            "Expected Outputs",
+            "Expected State",
+            "Expected Exceptions",
+          ],
+        },
+        {
+          boxes: [
+            "Behavioral Compatibility",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "4. The Contract",
+      caption:
+        "The abstraction defines what client code is allowed to expect.",
+
+      layers: [
+        {
+          boxes: [
+            "Valid Inputs",
+            "Expected Outputs",
+            "State Guarantees",
+            "Side Effects",
+            "Exception Behavior",
+          ],
+        },
+        {
+          boxes: [
+            "Base Abstraction Contract",
+          ],
+        },
+        {
+          boxes: [
+            "Subtype Must Honor Contract",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "5. Preconditions",
+      caption:
+        "A subtype should not require callers to satisfy stronger conditions.",
+
+      layers: [
+        {
+          boxes: [
+            "Base",
+            "Accepts Valid Input",
+          ],
+        },
+        {
+          boxes: [
+            "Subtype",
+            "Requires Extra Condition",
+          ],
+        },
+        {
+          boxes: [
+            "Stronger Precondition",
+            "Potential LSP Violation",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "6. Postconditions",
+      caption:
+        "A subtype should preserve or strengthen the guarantees promised by the abstraction.",
+
+      layers: [
+        {
+          boxes: [
+            "Base Contract",
+            "Guarantee X",
+          ],
+        },
+        {
+          boxes: [
+            "Subtype",
+            "Guarantee X",
+            "Additional Guarantee",
+          ],
+        },
+        {
+          boxes: [
+            "Compatible",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "7. Invariants",
+      caption:
+        "Important state rules established by the abstraction should remain valid.",
+
+      layers: [
+        {
+          boxes: [
+            "Object State",
+          ],
+        },
+        {
+          boxes: [
+            "Base Invariant",
+          ],
+        },
+        {
+          boxes: [
+            "Subtype Preserves Invariant",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "8. Exception Behavior",
+      caption:
+        "Unexpected rejection of promised behavior can break substitutability.",
+
+      layers: [
+        {
+          boxes: [
+            "Base Contract",
+            "Operation Supported",
+          ],
+        },
+        {
+          boxes: [
+            "Subtype",
+            "UnsupportedOperationException",
+          ],
+        },
+        {
+          boxes: [
+            "Client Expectation Broken",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "9. Bird and Penguin",
+      caption:
+        "A broad abstraction should not promise behavior that some subtypes cannot support.",
+
+      layers: [
+        {
+          boxes: [
+            "Bird",
+            "fly()",
+          ],
+        },
+        {
+          boxes: [
+            "Eagle",
+            "Penguin",
+          ],
+        },
+        {
+          boxes: [
+            "Eagle → Can Fly",
+            "Penguin → Cannot Fly",
+          ],
+        },
+        {
+          boxes: [
+            "LSP Problem",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "10. Better Bird Design",
+      caption:
+        "Model optional capabilities separately instead of forcing them into the broad abstraction.",
+
+      layers: [
+        {
+          boxes: [
+            "Bird",
+          ],
+        },
+        {
+          boxes: [
+            "Flyable",
+          ],
+        },
+        {
+          boxes: [
+            "Eagle → Flyable",
+            "Penguin → Bird",
+          ],
+        },
+        {
+          boxes: [
+            "Focused Capability",
+            "Safe Substitution",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "11. Rectangle and Square",
+      caption:
+        "A real-world or mathematical relationship does not automatically create a valid behavioral subtype relationship.",
+
+      layers: [
+        {
+          boxes: [
+            "Rectangle",
+            "setWidth()",
+            "setHeight()",
+          ],
+        },
+        {
+          boxes: [
+            "Square",
+            "Width = Height",
+          ],
+        },
+        {
+          boxes: [
+            "Independent Dimension Assumption Breaks",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "12. Interface Implementations",
+      caption:
+        "LSP applies to interfaces as well as class inheritance.",
+
+      layers: [
+        {
+          boxes: [
+            "PaymentProcessor",
+          ],
+        },
+        {
+          boxes: [
+            "CardPayment",
+            "UPIPayment",
+            "WalletPayment",
+          ],
+        },
+        {
+          boxes: [
+            "Every Implementation Honors Contract",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "13. LSP and Polymorphism",
+      caption:
+        "Polymorphism is safe when each implementation can replace the abstraction without special handling.",
+
+      layers: [
+        {
+          boxes: [
+            "Client",
+          ],
+        },
+        {
+          boxes: [
+            "Abstraction",
+          ],
+        },
+        {
+          boxes: [
+            "Implementation A",
+            "Implementation B",
+            "Implementation C",
+          ],
+        },
+        {
+          boxes: [
+            "Same Expected Contract",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "14. LSP and OCP",
+      caption:
+        "OCP allows new implementations to be added; LSP ensures those implementations remain valid substitutions.",
+
+      layers: [
+        {
+          boxes: [
+            "Stable Abstraction",
+          ],
+        },
+        {
+          boxes: [
+            "Existing Implementation",
+          ],
+        },
+        {
+          boxes: [
+            "New Implementation",
+          ],
+        },
+        {
+          boxes: [
+            "Extension",
+            "Behavioral Substitutability",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "15. Inheritance vs Composition",
+      caption:
+        "When inheritance cannot preserve the contract, composition can represent the relationship more safely.",
+
+      layers: [
+        {
+          boxes: [
+            "Problematic Parent Contract",
+          ],
+        },
+        {
+          boxes: [
+            "Subtype Cannot Support Behavior",
+          ],
+        },
+        {
+          boxes: [
+            "Composition",
+            "Focused Interfaces",
+            "Independent Capabilities",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "16. Detecting LSP Violations",
+      caption:
+        "Look for runtime special cases that exist because one implementation behaves differently from the abstraction.",
+
+      layers: [
+        {
+          boxes: [
+            "instanceof",
+            "Type Checks",
+            "Special Cases",
+          ],
+        },
+        {
+          boxes: [
+            "UnsupportedOperationException",
+            "Unexpected Exceptions",
+            "Extra Input Restrictions",
+          ],
+        },
+        {
+          boxes: [
+            "Investigate Abstraction",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "17. LSP Decision Framework",
+      caption:
+        "Before using inheritance, verify the behavioral relationship.",
+
+      layers: [
+        {
+          boxes: [
+            "Can subtype honor the contract?",
+          ],
+        },
+        {
+          boxes: [
+            "Can it accept valid inputs?",
+            "Can it preserve guarantees?",
+            "Can it preserve invariants?",
+          ],
+        },
+        {
+          boxes: [
+            "Can clients substitute it safely?",
+          ],
+        },
+        {
+          boxes: [
+            "If No → Redesign",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "18. Final LSP Mental Model",
+      caption:
+        "The key question is not 'is this an inheritance relationship?' but 'can this subtype safely replace the abstraction?'",
+
+      layers: [
+        {
+          boxes: [
+            "Abstraction Contract",
+          ],
+        },
+        {
+          boxes: [
+            "Valid Inputs",
+            "Expected Outputs",
+            "Behavior",
+            "State",
+            "Exceptions",
+          ],
+        },
+        {
+          boxes: [
+            "Subtype Preserves Contract",
+          ],
+        },
+        {
+          boxes: [
+            "Safe Substitution",
+            "Safe Polymorphism",
+          ],
+        },
+      ],
+    },
+  ],
+},
+"interface-segregation-principle": {
+  topicId: "interface-segregation-principle",
+  type: "stage-flow",
+
+  summary:
+    "ISP creates focused interfaces so clients depend only on the capabilities and operations they actually need.",
+
+  stages: [
+    {
+      title: "1. The ISP Problem",
+      caption:
+        "A large interface can force unrelated clients and implementations to depend on operations they do not need.",
+
+      layers: [
+        {
+          boxes: [
+            "Large Interface",
+          ],
+        },
+        {
+          boxes: [
+            "Client A",
+            "Client B",
+            "Client C",
+          ],
+        },
+        {
+          boxes: [
+            "Unused Methods",
+            "Unnecessary Coupling",
+            "Unsupported Operations",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "2. What ISP Means",
+      caption:
+        "Clients should depend only on the interface operations relevant to them.",
+
+      layers: [
+        {
+          boxes: [
+            "Client",
+          ],
+        },
+        {
+          boxes: [
+            "Focused Interface",
+          ],
+        },
+        {
+          boxes: [
+            "Required Operations Only",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "3. Fat Interface",
+      caption:
+        "A broad contract combines multiple capabilities that different clients may not need.",
+
+      layers: [
+        {
+          boxes: [
+            "MultiFunctionDevice",
+          ],
+        },
+        {
+          boxes: [
+            "print()",
+            "scan()",
+            "fax()",
+            "staple()",
+            "bind()",
+          ],
+        },
+        {
+          boxes: [
+            "Different Clients Need Different Subsets",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "4. Client Dependency",
+      caption:
+        "The problem is not simply interface size; it is unnecessary dependency on irrelevant operations.",
+
+      layers: [
+        {
+          boxes: [
+            "Printing Client",
+          ],
+        },
+        {
+          boxes: [
+            "print()",
+            "scan()",
+            "fax()",
+          ],
+        },
+        {
+          boxes: [
+            "Client Depends on Unused Methods",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "5. Segregate Capabilities",
+      caption:
+        "Split the broad contract into meaningful capability interfaces.",
+
+      layers: [
+        {
+          boxes: [
+            "Printable",
+            "Scannable",
+            "Faxable",
+          ],
+        },
+        {
+          boxes: [
+            "print()",
+            "scan()",
+            "fax()",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "6. Focused Client Dependency",
+      caption:
+        "Each client now depends only on the capability it actually requires.",
+
+      layers: [
+        {
+          boxes: [
+            "Printing Client",
+          ],
+        },
+        {
+          boxes: [
+            "Printable",
+          ],
+        },
+        {
+          boxes: [
+            "print()",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "7. One Implementation, Multiple Capabilities",
+      caption:
+        "A concrete class can implement multiple focused interfaces when it genuinely supports those capabilities.",
+
+      layers: [
+        {
+          boxes: [
+            "MultiFunctionPrinter",
+          ],
+        },
+        {
+          boxes: [
+            "Printable",
+            "Scannable",
+            "Faxable",
+          ],
+        },
+        {
+          boxes: [
+            "print()",
+            "scan()",
+            "fax()",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "8. Worker Example",
+      caption:
+        "Do not force every Worker to support every human-specific capability.",
+
+      layers: [
+        {
+          boxes: [
+            "Worker",
+          ],
+        },
+        {
+          boxes: [
+            "work()",
+            "eat()",
+            "sleep()",
+          ],
+        },
+        {
+          boxes: [
+            "Human",
+            "Robot",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "9. Better Worker Design",
+      caption:
+        "Represent capabilities independently so each implementation depends only on behavior it supports.",
+
+      layers: [
+        {
+          boxes: [
+            "Workable",
+            "Eatable",
+            "Sleepable",
+          ],
+        },
+        {
+          boxes: [
+            "Human",
+            "Robot",
+          ],
+        },
+        {
+          boxes: [
+            "Human → All Required Capabilities",
+            "Robot → Workable",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "10. UnsupportedOperationException",
+      caption:
+        "Unsupported operations can reveal that an interface is forcing an implementation to provide irrelevant behavior.",
+
+      layers: [
+        {
+          boxes: [
+            "Large Interface",
+          ],
+        },
+        {
+          boxes: [
+            "Implementation",
+          ],
+        },
+        {
+          boxes: [
+            "UnsupportedOperationException",
+            "Empty Method",
+            "Dummy Implementation",
+          ],
+        },
+        {
+          boxes: [
+            "Investigate ISP",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "11. ISP vs SRP",
+      caption:
+        "SRP separates responsibilities; ISP separates client-facing contracts.",
+
+      layers: [
+        {
+          boxes: [
+            "SRP",
+            "Cohesive Responsibility",
+          ],
+        },
+        {
+          boxes: [
+            "ISP",
+            "Focused Client Contract",
+          ],
+        },
+        {
+          boxes: [
+            "High Cohesion",
+            "Lower Unnecessary Coupling",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "12. ISP and Loose Coupling",
+      caption:
+        "Focused interfaces limit the number of unrelated operations a client depends on.",
+
+      layers: [
+        {
+          boxes: [
+            "Client",
+          ],
+        },
+        {
+          boxes: [
+            "Required Capability",
+          ],
+        },
+        {
+          boxes: [
+            "Unrelated Capabilities Hidden",
+          ],
+        },
+        {
+          boxes: [
+            "Reduced Unnecessary Coupling",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "13. ISP and DIP",
+      caption:
+        "DIP says depend on abstractions; ISP helps ensure those abstractions are appropriately focused.",
+
+      layers: [
+        {
+          boxes: [
+            "Client",
+          ],
+        },
+        {
+          boxes: [
+            "Focused Abstraction",
+          ],
+        },
+        {
+          boxes: [
+            "Implementation",
+          ],
+        },
+        {
+          boxes: [
+            "Dependency on Relevant Contract",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "14. ISP and LSP",
+      caption:
+        "Each implementation must still honor the behavioral contract of the focused interface it implements.",
+
+      layers: [
+        {
+          boxes: [
+            "Focused Interface",
+          ],
+        },
+        {
+          boxes: [
+            "Implementation A",
+            "Implementation B",
+          ],
+        },
+        {
+          boxes: [
+            "Contract Preserved",
+            "Safe Substitution",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "15. Spring Boot Example",
+      caption:
+        "Spring services can expose focused contracts to different consumers.",
+
+      layers: [
+        {
+          boxes: [
+            "OrderService",
+          ],
+        },
+        {
+          boxes: [
+            "PaymentProcessor",
+            "PaymentAdminOperations",
+          ],
+        },
+        {
+          boxes: [
+            "Payment Implementation",
+          ],
+        },
+        {
+          boxes: [
+            "Consumer Gets Relevant Contract",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "16. Avoid Over-Segregation",
+      caption:
+        "ISP does not mean creating one interface for every method.",
+
+      layers: [
+        {
+          boxes: [
+            "One Method",
+          ],
+        },
+        {
+          boxes: [
+            "Interface A",
+            "Interface B",
+            "Interface C",
+            "Interface D",
+          ],
+        },
+        {
+          boxes: [
+            "Excessive Fragmentation",
+            "More Complexity",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "17. ISP Decision Framework",
+      caption:
+        "Segregate interfaces based on meaningful client needs and capabilities.",
+
+      layers: [
+        {
+          boxes: [
+            "Which clients use this interface?",
+          ],
+        },
+        {
+          boxes: [
+            "Which methods does each client need?",
+          ],
+        },
+        {
+          boxes: [
+            "Are unrelated capabilities mixed?",
+          ],
+        },
+        {
+          boxes: [
+            "Create Meaningful Focused Interfaces",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "18. Final ISP Mental Model",
+      caption:
+        "The goal is not small interfaces; the goal is relevant interfaces.",
+
+      layers: [
+        {
+          boxes: [
+            "Client",
+          ],
+        },
+        {
+          boxes: [
+            "Focused Capability Interface",
+          ],
+        },
+        {
+          boxes: [
+            "Relevant Operations",
+          ],
+        },
+        {
+          boxes: [
+            "Less Unnecessary Coupling",
+            "Better Maintainability",
+            "Better Testability",
+          ],
+        },
+      ],
+    },
+  ],
+},
 };
 
 export const getTopicVisualization = (
