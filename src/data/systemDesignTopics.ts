@@ -15928,6 +15928,1142 @@ export const systemDesignTopics: Record<string, TopicContent> = {
     }
   ]
 },
+"dependency-inversion-principle": {
+  blockId: "dependency-inversion-principle",
+  categoryId: "lld-fundamentals",
+
+  what: [
+    "The Dependency Inversion Principle (DIP) states that high-level modules should not depend directly on low-level modules. Both should depend on abstractions.",
+    "DIP also states that abstractions should not depend on details. Details should depend on abstractions.",
+    "High-level modules contain business rules and application policies, while low-level modules contain implementation details such as databases, external APIs, file systems, messaging systems, and third-party providers.",
+    "The main goal of DIP is to control dependency direction so that business logic is not tightly coupled to infrastructure details.",
+    "Instead of High-Level Module → Concrete Low-Level Module, DIP encourages High-Level Module → Abstraction ← Low-Level Module.",
+    "DIP improves maintainability because implementation details can change without forcing unnecessary changes in business logic.",
+    "DIP improves testability because concrete infrastructure implementations can be replaced with mocks, stubs, or fakes.",
+    "Dependency Injection is a technique commonly used to implement DIP, but DIP and Dependency Injection are not the same thing.",
+    "DIP is about architectural dependency direction, while Dependency Injection is about how dependencies are supplied to an object.",
+    "DIP does not mean every class must have an interface. Abstractions should be introduced where they provide meaningful decoupling, variation, testability, or architectural boundaries."
+  ],
+
+  deepConcepts: [
+    {
+      term: "Dependency Inversion Principle",
+      simpleDefinition:
+        "High-level business logic should depend on abstractions rather than directly depending on concrete implementation details.",
+      interviewDefinition:
+        "DIP states that high-level modules should not depend on low-level modules. Both should depend on abstractions, and abstractions should not depend on details; details should depend on abstractions.",
+      whyItMatters:
+        "It prevents business logic from becoming tightly coupled to infrastructure and makes implementations easier to replace, test, and maintain.",
+      example:
+        "OrderService depends on OrderRepository instead of directly depending on MySqlOrderRepository.",
+      whenItMatters:
+        "When business logic interacts with databases, external APIs, payment providers, messaging systems, storage systems, or other replaceable infrastructure.",
+      commonMistake:
+        "Saying DIP simply means using interfaces everywhere or saying DIP and Dependency Injection are the same thing.",
+      interviewQuestion:
+        "What is the Dependency Inversion Principle?",
+      interviewAnswer:
+        "DIP says high-level modules should not directly depend on low-level implementation details. Both should depend on abstractions, and concrete details should depend on those abstractions."
+    },
+
+    {
+      term: "High-Level Module",
+      simpleDefinition:
+        "A component that contains business rules or application policies.",
+      interviewDefinition:
+        "A high-level module represents business policy or application behavior and should remain independent of unnecessary implementation details.",
+      whyItMatters:
+        "If business logic directly depends on infrastructure, changes to infrastructure can force changes in business logic.",
+      example:
+        "OrderService deciding how an order should be processed is a high-level module.",
+      whenItMatters:
+        "When identifying which part of a system should remain independent from technical implementation details.",
+      commonMistake:
+        "Thinking high-level simply means a parent class or a class with more methods.",
+      interviewQuestion:
+        "What is a high-level module in DIP?",
+      interviewAnswer:
+        "A high-level module contains business rules or application policies. For example, OrderService containing order-processing rules is a high-level module."
+    },
+
+    {
+      term: "Low-Level Module",
+      simpleDefinition:
+        "A component that contains technical implementation details.",
+      interviewDefinition:
+        "A low-level module provides concrete implementation details such as database access, external API calls, file storage, messaging, or third-party integrations.",
+      whyItMatters:
+        "Low-level implementation details can change independently of business requirements and therefore should not tightly control business logic.",
+      example:
+        "MySqlOrderRepository, StripePaymentGateway, EmailNotifier, and S3FileStorage.",
+      whenItMatters:
+        "When separating business policy from infrastructure implementation.",
+      commonMistake:
+        "Thinking low-level means unimportant or less valuable.",
+      interviewQuestion:
+        "What is a low-level module?",
+      interviewAnswer:
+        "A low-level module contains implementation details. For example, MySqlOrderRepository is a low-level persistence implementation."
+    },
+
+    {
+      term: "Abstraction",
+      simpleDefinition:
+        "A contract that describes required behavior without exposing implementation details.",
+      interviewDefinition:
+        "An abstraction defines the behavior required by a high-level module while hiding the concrete implementation behind a stable contract.",
+      whyItMatters:
+        "It allows business logic to depend on what it needs rather than on how that behavior is implemented.",
+      example:
+        "OrderRepository defines save() and findById() without specifying whether data is stored in MySQL or PostgreSQL.",
+      whenItMatters:
+        "When business logic interacts with replaceable or independently changing implementations.",
+      commonMistake:
+        "Thinking an abstraction must always be a Java interface.",
+      interviewQuestion:
+        "What is an abstraction in DIP?",
+      interviewAnswer:
+        "An abstraction is a contract representing the behavior required by the high-level module without exposing the concrete implementation details."
+    },
+
+    {
+      term: "Concrete Implementation",
+      simpleDefinition:
+        "The actual implementation behind an abstraction.",
+      interviewDefinition:
+        "A concrete implementation provides the technical behavior defined by an abstraction and depends on that abstraction's contract.",
+      whyItMatters:
+        "It allows infrastructure implementations to change without changing the business policy that uses them.",
+      example:
+        "MySqlOrderRepository implements OrderRepository.",
+      whenItMatters:
+        "When implementing infrastructure behind a business-facing abstraction.",
+      commonMistake:
+        "Putting implementation-specific behavior into the abstraction itself.",
+      interviewQuestion:
+        "What is the role of a concrete implementation in DIP?",
+      interviewAnswer:
+        "It provides the actual technical behavior while implementing or depending on the abstraction required by the high-level module."
+    },
+
+    {
+      term: "Dependency Direction",
+      simpleDefinition:
+        "The direction in which one component depends on another component.",
+      interviewDefinition:
+        "DIP changes dependency direction so that high-level policy depends on an abstraction rather than directly depending on a low-level implementation.",
+      whyItMatters:
+        "Dependency direction determines how changes in implementation details propagate through the system.",
+      example:
+        "Instead of OrderService → MySqlOrderRepository, use OrderService → OrderRepository ← MySqlOrderRepository.",
+      whenItMatters:
+        "When designing application layers and separating business logic from infrastructure.",
+      commonMistake:
+        "Thinking dependency direction only refers to object creation.",
+      interviewQuestion:
+        "How does DIP invert dependency direction?",
+      interviewAnswer:
+        "The high-level module depends on an abstraction, while the concrete low-level implementation also depends on that abstraction."
+    },
+
+    {
+      term: "Direct Concrete Dependency",
+      simpleDefinition:
+        "A high-level module directly depends on a specific implementation.",
+      interviewDefinition:
+        "A direct concrete dependency occurs when business logic knows about and relies on a particular infrastructure implementation.",
+      whyItMatters:
+        "It increases coupling and makes replacing or testing the implementation more difficult.",
+      example:
+        "OrderService creates new MySqlOrderRepository() internally.",
+      whenItMatters:
+        "When identifying potential DIP violations.",
+      commonMistake:
+        "Thinking every use of the new keyword automatically violates DIP.",
+      interviewQuestion:
+        "Give an example of a DIP violation.",
+      interviewAnswer:
+        "If OrderService directly creates and relies on MySqlOrderRepository, its business logic is tightly coupled to a specific persistence implementation."
+    },
+
+    {
+      term: "DIP with Repository Pattern",
+      simpleDefinition:
+        "Business logic depends on a repository abstraction while persistence provides the concrete implementation.",
+      interviewDefinition:
+        "The repository abstraction acts as a boundary between application policy and persistence implementation details.",
+      whyItMatters:
+        "The persistence mechanism can change without requiring major changes to business logic.",
+      example:
+        "OrderService → OrderRepository ← MySqlOrderRepository.",
+      whenItMatters:
+        "When business logic needs database persistence but should not depend on a particular database implementation.",
+      commonMistake:
+        "Assuming that simply creating a repository interface automatically guarantees DIP.",
+      interviewQuestion:
+        "How can the Repository Pattern support DIP?",
+      interviewAnswer:
+        "The service depends on a repository abstraction while concrete database implementations provide that abstraction."
+    },
+
+    {
+      term: "DIP with Payment Gateway",
+      simpleDefinition:
+        "Payment business logic depends on a payment abstraction rather than directly on a provider.",
+      interviewDefinition:
+        "PaymentService should depend on a PaymentGateway abstraction while Stripe, Razorpay, PayPal, or another provider implements that contract.",
+      whyItMatters:
+        "The payment provider can be changed without rewriting the business rules.",
+      example:
+        "PaymentService → PaymentGateway ← StripePaymentGateway.",
+      whenItMatters:
+        "When integrating external payment providers or supporting multiple payment providers.",
+      commonMistake:
+        "Putting Stripe-specific logic directly inside PaymentService.",
+      interviewQuestion:
+        "How would you apply DIP to a payment system?",
+      interviewAnswer:
+        "PaymentService would depend on PaymentGateway, while concrete providers such as StripePaymentGateway implement that abstraction."
+    },
+
+    {
+      term: "DIP with Notification Services",
+      simpleDefinition:
+        "Business logic depends on a notification abstraction instead of a specific notification provider.",
+      interviewDefinition:
+        "Notification business logic should depend on a Notifier abstraction while EmailNotifier, SmsNotifier, or PushNotifier provide concrete implementations.",
+      whyItMatters:
+        "New notification channels can be added or existing providers changed without changing the core business workflow.",
+      example:
+        "NotificationService → Notifier ← EmailNotifier / SmsNotifier.",
+      whenItMatters:
+        "When an application supports multiple notification channels.",
+      commonMistake:
+        "Creating separate business workflows for each notification provider.",
+      interviewQuestion:
+        "How does DIP help in a notification system?",
+      interviewAnswer:
+        "The business logic depends on a Notifier abstraction, while different notification implementations provide the actual delivery mechanism."
+    },
+
+    {
+      term: "Dependency Injection",
+      simpleDefinition:
+        "A technique where dependencies are supplied to an object from outside.",
+      interviewDefinition:
+        "Dependency Injection provides an object's required dependencies externally rather than having the object create those dependencies itself.",
+      whyItMatters:
+        "It makes dependencies explicit and helps prevent high-level modules from constructing concrete infrastructure implementations.",
+      example:
+        "Spring injects OrderRepository into OrderService through constructor injection.",
+      whenItMatters:
+        "When implementing loosely coupled components and separating dependency creation from business logic.",
+      commonMistake:
+        "Saying Dependency Injection and Dependency Inversion Principle are the same.",
+      interviewQuestion:
+        "What is Dependency Injection?",
+      interviewAnswer:
+        "Dependency Injection is a technique where dependencies are supplied from outside instead of being created internally by the dependent object."
+    },
+
+    {
+      term: "DIP vs Dependency Injection",
+      simpleDefinition:
+        "DIP is a principle, while Dependency Injection is a technique.",
+      interviewDefinition:
+        "DIP defines the desired dependency direction, while Dependency Injection is one mechanism for supplying dependencies externally.",
+      whyItMatters:
+        "This is one of the most common interview distinctions.",
+      example:
+        "PaymentService depending on PaymentGateway demonstrates DIP; supplying StripePaymentGateway through a constructor demonstrates DI.",
+      whenItMatters:
+        "During SOLID and Spring Boot interviews.",
+      commonMistake:
+        "Answering that DIP simply means injecting dependencies.",
+      interviewQuestion:
+        "What is the difference between DIP and DI?",
+      interviewAnswer:
+        "DIP is a SOLID principle about dependency direction. DI is a technique for supplying dependencies from outside."
+    },
+
+    {
+      term: "Inversion of Control",
+      simpleDefinition:
+        "Control over dependency creation or management is transferred to an external mechanism.",
+      interviewDefinition:
+        "IoC is a broader concept where a component does not control the creation or management of its dependencies and that responsibility is delegated to another mechanism.",
+      whyItMatters:
+        "It allows application components to focus on their responsibilities while dependency management is handled externally.",
+      example:
+        "Spring's ApplicationContext creates and wires Spring beans.",
+      whenItMatters:
+        "When explaining how Spring manages application components.",
+      commonMistake:
+        "Using IoC, DI, and DIP as interchangeable terms.",
+      interviewQuestion:
+        "What is Inversion of Control?",
+      interviewAnswer:
+        "IoC means control over object creation or dependency management is transferred from the component itself to an external mechanism such as the Spring container."
+    },
+
+    {
+      term: "DIP vs IoC",
+      simpleDefinition:
+        "DIP is a design principle while IoC is a broader architectural concept.",
+      interviewDefinition:
+        "DIP defines how dependencies should be structured, while IoC describes transferring control of dependency creation or management to another mechanism.",
+      whyItMatters:
+        "The distinction is important when explaining Spring's architecture.",
+      example:
+        "DIP says PaymentService should depend on PaymentGateway; Spring IoC manages the creation and wiring of those components.",
+      whenItMatters:
+        "When discussing DIP with Spring Boot.",
+      commonMistake:
+        "Saying IoC and DIP are the same principle.",
+      interviewQuestion:
+        "What is the difference between DIP and IoC?",
+      interviewAnswer:
+        "DIP defines dependency direction toward abstractions, while IoC means control over dependency management is transferred to an external mechanism."
+    },
+
+    {
+      term: "Constructor Injection",
+      simpleDefinition:
+        "Dependencies are provided through a class constructor.",
+      interviewDefinition:
+        "Constructor injection supplies required dependencies through the constructor, making those dependencies explicit when the object is created.",
+      whyItMatters:
+        "It improves testability, makes required dependencies visible, and allows dependency references to remain immutable.",
+      example:
+        "OrderService(OrderRepository repository).",
+      whenItMatters:
+        "For mandatory dependencies in Java and Spring Boot applications.",
+      commonMistake:
+        "Thinking constructor injection itself is the definition of DIP.",
+      interviewQuestion:
+        "Why is constructor injection commonly preferred?",
+      interviewAnswer:
+        "It makes required dependencies explicit, supports easier unit testing, and allows dependencies to be stored as final fields."
+    },
+
+    {
+      term: "Testability",
+      simpleDefinition:
+        "The ability to test business logic without requiring real infrastructure.",
+      interviewDefinition:
+        "DIP improves testability by allowing high-level modules to depend on abstractions that can be replaced with mocks, stubs, or fakes.",
+      whyItMatters:
+        "Unit tests can remain fast, isolated, and independent of real databases or external services.",
+      example:
+        "MockPaymentGateway replaces StripePaymentGateway during PaymentService unit tests.",
+      whenItMatters:
+        "When infrastructure dependencies make unit testing slow or difficult.",
+      commonMistake:
+        "Thinking DIP exists only to make mocking possible.",
+      interviewQuestion:
+        "How does DIP improve testability?",
+      interviewAnswer:
+        "The business component depends on an abstraction, allowing tests to provide a mock or fake implementation instead of real infrastructure."
+    },
+
+    {
+      term: "Stable Abstraction",
+      simpleDefinition:
+        "An abstraction should represent stable behavior required by the business logic.",
+      interviewDefinition:
+        "A good abstraction is shaped around the needs of its clients rather than exposing unnecessary implementation-specific details.",
+      whyItMatters:
+        "A poorly designed abstraction can simply move coupling into an interface instead of actually reducing it.",
+      example:
+        "PaymentGateway exposes charge() rather than Stripe-specific configuration methods.",
+      whenItMatters:
+        "When designing abstractions between business logic and infrastructure.",
+      commonMistake:
+        "Creating an interface that simply copies every method of a concrete library.",
+      interviewQuestion:
+        "What makes a good abstraction?",
+      interviewAnswer:
+        "A good abstraction exposes the behavior required by the high-level module without leaking unnecessary implementation-specific details."
+    },
+
+    {
+      term: "Composition Root",
+      simpleDefinition:
+        "The place where concrete implementations are selected and dependencies are assembled.",
+      interviewDefinition:
+        "A composition root is the boundary where concrete implementations are wired into abstractions and application components.",
+      whyItMatters:
+        "It keeps infrastructure selection and object construction out of business logic.",
+      example:
+        "Spring's dependency injection container wires OrderService with MySqlOrderRepository.",
+      whenItMatters:
+        "When explaining where concrete implementations should be selected.",
+      commonMistake:
+        "Scattering dependency creation throughout business classes.",
+      interviewQuestion:
+        "Where should concrete implementations be selected?",
+      interviewAnswer:
+        "Ideally at the composition or configuration boundary rather than inside business logic."
+    },
+
+    {
+      term: "DIP and Loose Coupling",
+      simpleDefinition:
+        "DIP reduces direct coupling between business logic and implementation details.",
+      interviewDefinition:
+        "DIP promotes loose coupling by making high-level modules depend on abstractions instead of concrete low-level implementations.",
+      whyItMatters:
+        "Changes to infrastructure are less likely to force changes in business rules.",
+      example:
+        "PaymentService remains unchanged when StripePaymentGateway is replaced by RazorpayPaymentGateway.",
+      whenItMatters:
+        "When systems contain replaceable infrastructure or external integrations.",
+      commonMistake:
+        "Thinking DIP removes all dependencies.",
+      interviewQuestion:
+        "How does DIP promote loose coupling?",
+      interviewAnswer:
+        "It removes inappropriate direct dependencies between business policy and concrete infrastructure by introducing a suitable abstraction."
+    },
+
+    {
+      term: "DIP and SOLID",
+      simpleDefinition:
+        "DIP is the fifth SOLID principle and focuses on dependency direction.",
+      interviewDefinition:
+        "DIP complements the other SOLID principles by controlling how higher-level policy depends on abstractions and implementation details.",
+      whyItMatters:
+        "Understanding DIP as part of SOLID helps connect architectural dependency decisions with other design principles.",
+      example:
+        "SRP separates responsibilities while DIP separates business policy from infrastructure dependencies.",
+      whenItMatters:
+        "When explaining how the five SOLID principles work together.",
+      commonMistake:
+        "Treating DIP as simply another name for Dependency Injection.",
+      interviewQuestion:
+        "How does DIP fit into SOLID?",
+      interviewAnswer:
+        "DIP is the fifth SOLID principle and focuses on dependency direction, encouraging business policy to depend on abstractions instead of concrete implementation details."
+    },
+
+    {
+      term: "DIP and Overengineering",
+      simpleDefinition:
+        "DIP does not require creating an abstraction for every class.",
+      interviewDefinition:
+        "Abstractions should be introduced when they provide meaningful decoupling, variation, testability, or an architectural boundary.",
+      whyItMatters:
+        "Unnecessary abstractions create indirection and complexity without providing real design value.",
+      example:
+        "A simple stable utility may not need a separate interface merely to satisfy DIP.",
+      whenItMatters:
+        "When deciding whether a dependency actually needs abstraction.",
+      commonMistake:
+        "Creating interfaces for every class just to claim SOLID compliance.",
+      interviewQuestion:
+        "Does DIP mean every class should have an interface?",
+      interviewAnswer:
+        "No. DIP does not require interfaces everywhere. Introduce abstractions where they provide meaningful architectural or testing benefits."
+    }
+  ],
+
+  comparisonTables: [
+    {
+      title: "Direct Dependency vs Dependency Inversion",
+      items: [
+        {
+          statement: "OrderService directly depends on MySqlOrderRepository.",
+          label: "Direct Dependency"
+        },
+        {
+          statement: "OrderService depends on OrderRepository.",
+          label: "DIP"
+        },
+        {
+          statement: "MySqlOrderRepository implements OrderRepository.",
+          label: "DIP"
+        },
+        {
+          statement: "Business logic does not need to know the concrete persistence implementation.",
+          label: "DIP"
+        }
+      ]
+    },
+
+    {
+      title: "DIP vs DI vs IoC",
+      items: [
+        {
+          statement: "Defines the desired direction of dependencies.",
+          label: "DIP"
+        },
+        {
+          statement: "Supplies dependencies from outside an object.",
+          label: "DI"
+        },
+        {
+          statement: "Transfers control of object creation or dependency management.",
+          label: "IoC"
+        }
+      ]
+    },
+
+    {
+      title: "High-Level vs Low-Level Module",
+      items: [
+        {
+          statement: "Contains business rules and application policy.",
+          label: "High-Level"
+        },
+        {
+          statement: "Contains technical implementation details.",
+          label: "Low-Level"
+        },
+        {
+          statement: "High-level policy should depend on abstractions.",
+          label: "DIP"
+        },
+        {
+          statement: "Low-level implementation should depend on abstractions.",
+          label: "DIP"
+        }
+      ]
+    },
+
+    {
+      title: "Poor vs Good DIP Design",
+      items: [
+        {
+          statement: "OrderService creates new MySqlOrderRepository().",
+          label: "Poor"
+        },
+        {
+          statement: "OrderService depends on OrderRepository.",
+          label: "Good"
+        },
+        {
+          statement: "MySqlOrderRepository implements OrderRepository.",
+          label: "Good"
+        },
+        {
+          statement: "The concrete implementation is wired outside business logic.",
+          label: "Good"
+        }
+      ]
+    },
+
+    {
+      title: "DIP vs SRP",
+      items: [
+        {
+          statement: "Focuses on responsibilities and reasons for change.",
+          label: "SRP"
+        },
+        {
+          statement: "Focuses on dependency direction.",
+          label: "DIP"
+        },
+        {
+          statement: "A class can follow SRP and still violate DIP.",
+          label: "Important"
+        },
+        {
+          statement: "The principles solve different design problems.",
+          label: "Important"
+        }
+      ]
+    },
+
+    {
+      title: "Abstraction vs Concrete Implementation",
+      items: [
+        {
+          statement: "Defines required behavior.",
+          label: "Abstraction"
+        },
+        {
+          statement: "Contains technical implementation details.",
+          label: "Concrete"
+        },
+        {
+          statement: "High-level business logic depends on the abstraction.",
+          label: "DIP"
+        },
+        {
+          statement: "Concrete implementation depends on the abstraction.",
+          label: "DIP"
+        }
+      ]
+    },
+
+    {
+      title: "Constructor Injection vs Internal Construction",
+      items: [
+        {
+          statement: "Dependency is created inside the business class.",
+          label: "Internal Construction"
+        },
+        {
+          statement: "Dependency is supplied through the constructor.",
+          label: "Constructor Injection"
+        },
+        {
+          statement: "Required dependencies become explicit.",
+          label: "Constructor Injection"
+        },
+        {
+          statement: "Concrete infrastructure can be replaced more easily.",
+          label: "Constructor Injection"
+        }
+      ]
+    },
+
+    {
+      title: "Good Abstraction vs Leaky Abstraction",
+      items: [
+        {
+          statement: "Represents behavior required by the business.",
+          label: "Good Abstraction"
+        },
+        {
+          statement: "Exposes unnecessary infrastructure-specific operations.",
+          label: "Leaky Abstraction"
+        },
+        {
+          statement: "PaymentGateway.charge() represents business-required behavior.",
+          label: "Good Abstraction"
+        },
+        {
+          statement: "PaymentGateway exposing Stripe-specific internals leaks details.",
+          label: "Leaky Abstraction"
+        }
+      ]
+    }
+  ],
+
+  why: [
+    "Reduces coupling between business logic and infrastructure.",
+    "Makes implementation details replaceable.",
+    "Improves unit testability.",
+    "Allows multiple implementations behind the same abstraction.",
+    "Makes dependencies explicit.",
+    "Protects business logic from changes in databases and external providers.",
+    "Makes business code easier to maintain.",
+    "Separates business policy from technical implementation details.",
+    "Supports cleaner layered and modular architectures.",
+    "Works naturally with dependency injection frameworks such as Spring.",
+    "Allows external services to be replaced without rewriting core business rules.",
+    "Makes infrastructure decisions easier to change independently."
+  ],
+
+  how: [
+    {
+      step: "Identify the high-level module",
+      description:
+        "Find the component containing business rules or application policy."
+    },
+    {
+      step: "Identify the low-level dependency",
+      description:
+        "Find the database, external API, provider, storage, messaging, or other implementation detail used by the high-level module."
+    },
+    {
+      step: "Find direct coupling",
+      description:
+        "Check whether the high-level module directly creates or depends on the concrete implementation."
+    },
+    {
+      step: "Define the required abstraction",
+      description:
+        "Create a contract containing only the behavior required by the high-level business module."
+    },
+    {
+      step: "Make the high-level module depend on the abstraction",
+      description:
+        "Change the business module so it references the abstraction rather than the concrete implementation."
+    },
+    {
+      step: "Make the implementation depend on the abstraction",
+      description:
+        "The concrete low-level implementation implements or follows the abstraction contract."
+    },
+    {
+      step: "Move object creation outside business logic",
+      description:
+        "Do not make the business class responsible for selecting and constructing infrastructure implementations."
+    },
+    {
+      step: "Inject the dependency",
+      description:
+        "Provide the required implementation externally, commonly through constructor injection."
+    },
+    {
+      step: "Replace dependencies during testing",
+      description:
+        "Use mocks, stubs, or fakes behind the abstraction to test business logic independently."
+    },
+    {
+      step: "Avoid unnecessary abstractions",
+      description:
+        "Only introduce abstraction when it provides meaningful decoupling, replaceability, testability, or architectural value."
+    }
+  ],
+
+  interviewTraps: [
+    {
+      trap: "DIP means use interfaces everywhere.",
+      wrongApproach:
+        "Create an interface for every class regardless of whether there is a meaningful abstraction boundary.",
+      whyWrong:
+        "DIP is about dependency direction, not the number of interfaces in the application.",
+      betterApproach:
+        "Introduce abstractions where they protect business policy from replaceable implementation details."
+    },
+
+    {
+      trap: "DIP and Dependency Injection are the same.",
+      wrongApproach:
+        "Say that constructor injection itself is the Dependency Inversion Principle.",
+      whyWrong:
+        "DIP is a design principle while DI is a technique for supplying dependencies.",
+      betterApproach:
+        "Explain DIP as dependency direction and DI as one technique used to implement that direction."
+    },
+
+    {
+      trap: "DIP means high-level modules cannot use low-level modules.",
+      wrongApproach:
+        "Claim that business logic should never interact with infrastructure.",
+      whyWrong:
+        "Business logic can require persistence, payments, notifications, or other capabilities.",
+      betterApproach:
+        "The business module should depend on an appropriate abstraction rather than directly depending on the concrete implementation."
+    },
+
+    {
+      trap: "Every abstraction must be an interface.",
+      wrongApproach:
+        "Treat Java interfaces as the definition of DIP.",
+      whyWrong:
+        "DIP is a design principle, not a Java language feature.",
+      betterApproach:
+        "Use interfaces, abstract classes, or other suitable abstractions based on the design."
+    },
+
+    {
+      trap: "Spring automatically guarantees DIP.",
+      wrongApproach:
+        "Assume that using @Autowired or constructor injection automatically means the architecture follows DIP.",
+      whyWrong:
+        "Spring provides dependency management, but developers can still create poor abstractions and inappropriate dependencies.",
+      betterApproach:
+        "Use Spring DI to support a well-designed dependency direction."
+    },
+
+    {
+      trap: "Using new always violates DIP.",
+      wrongApproach:
+        "Claim every use of new represents a DIP violation.",
+      whyWrong:
+        "Object construction itself is not the problem. The concern is inappropriate coupling between business policy and replaceable implementation details.",
+      betterApproach:
+        "Check whether high-level business logic directly controls and depends on infrastructure implementation."
+    },
+
+    {
+      trap: "More abstraction means better architecture.",
+      wrongApproach:
+        "Create interfaces, factories, and wrappers for every simple dependency.",
+      whyWrong:
+        "Unnecessary abstractions increase complexity and indirection.",
+      betterApproach:
+        "Introduce abstractions only where they provide meaningful value."
+    },
+
+    {
+      trap: "DIP exists only for unit testing.",
+      wrongApproach:
+        "Explain DIP only as a way to mock dependencies.",
+      whyWrong:
+        "Testability is a benefit, but DIP primarily addresses architectural dependency direction.",
+      betterApproach:
+        "Explain dependency direction, decoupling, replaceability, maintainability, and testability."
+    },
+
+    {
+      trap: "An interface automatically creates loose coupling.",
+      wrongApproach:
+        "Create an interface that exposes all implementation-specific details.",
+      whyWrong:
+        "The abstraction can still leak implementation details and preserve unnecessary coupling.",
+      betterApproach:
+        "Design the abstraction around the behavior actually required by the high-level module."
+    },
+
+    {
+      trap: "DIP means business logic should know nothing about persistence.",
+      wrongApproach:
+        "Remove all persistence-related dependencies from business logic.",
+      whyWrong:
+        "Business logic may legitimately require persistence capabilities.",
+      betterApproach:
+        "Make business logic depend on a persistence abstraction rather than a specific database implementation."
+    }
+  ],
+
+  when: [
+    "When business logic directly depends on a database implementation.",
+    "When an external API provider may be replaced.",
+    "When multiple payment providers need to be supported.",
+    "When multiple notification channels are required.",
+    "When infrastructure makes unit testing difficult.",
+    "When business logic contains direct object creation of infrastructure dependencies.",
+    "When implementation details change independently from business requirements.",
+    "When different implementations need to support the same business capability.",
+    "When designing layered, clean, or hexagonal architectures.",
+    "When a third-party library should be isolated behind an application-facing abstraction.",
+    "When infrastructure changes are unnecessarily forcing business logic changes."
+  ],
+
+  tradeOffs: [
+    {
+      label: "Advantages",
+      points: [
+        "Lower coupling between business logic and implementation details.",
+        "Better unit testability.",
+        "Easier replacement of infrastructure.",
+        "Supports multiple implementations.",
+        "Clearer architectural boundaries.",
+        "Improved maintainability.",
+        "Business logic becomes less dependent on technology choices.",
+        "Dependencies become more explicit."
+      ]
+    },
+
+    {
+      label: "Costs",
+      points: [
+        "Additional abstractions increase code size.",
+        "Interfaces can introduce indirection.",
+        "Poorly designed abstractions can simply move coupling rather than remove it.",
+        "Dependency wiring becomes more explicit.",
+        "Overuse of DIP can make simple applications unnecessarily complex.",
+        "Developers need to understand the difference between business policy and implementation detail."
+      ]
+    }
+  ],
+
+  thirtySecondAnswer:
+    "The Dependency Inversion Principle says that high-level modules should not directly depend on low-level implementation details. Both should depend on abstractions, and the concrete details should depend on those abstractions. For example, PaymentService should depend on PaymentGateway instead of directly depending on Stripe. StripePaymentGateway can implement PaymentGateway and be injected at runtime. DIP reduces coupling, improves testability, and makes implementation details easier to replace.",
+
+  secondaryAnswer: {
+    question:
+      "Explain DIP, Dependency Injection, and IoC together using a Spring Boot example.",
+    answer:
+      "DIP is the design principle that defines the dependency direction: high-level business logic should depend on abstractions rather than concrete implementation details. Dependency Injection is the technique used to supply those dependencies from outside. IoC is the broader concept of transferring control of dependency creation and management to an external mechanism. In Spring Boot, PaymentService can depend on PaymentGateway, StripePaymentGateway can implement PaymentGateway, and Spring's container can create and inject the concrete implementation into PaymentService."
+  },
+
+  keyTakeaways: [
+    "DIP is about dependency direction.",
+    "High-level modules should not directly depend on low-level implementation details.",
+    "Both high-level and low-level modules should depend on abstractions.",
+    "Abstractions should not depend on implementation details.",
+    "Implementation details should depend on abstractions.",
+    "The core mental model is: High-Level Policy → Abstraction ← Low-Level Implementation.",
+    "DIP is not the same as Dependency Injection.",
+    "Dependency Injection is a technique commonly used to implement DIP.",
+    "IoC is broader than Dependency Injection and DIP.",
+    "Constructor injection is a common way to supply dependencies in Java and Spring Boot.",
+    "DIP improves testability because infrastructure implementations can be replaced with mocks or fakes.",
+    "DIP makes databases, payment providers, notification systems, and external APIs easier to replace.",
+    "A good abstraction represents the needs of its client rather than exposing implementation-specific details.",
+    "DIP does not mean every class needs an interface.",
+    "Spring supports DIP through dependency injection but does not automatically guarantee a good DIP design."
+  ],
+
+  interviewQuestions: [
+    {
+      level: "Basic",
+      questions: [
+        {
+          id: "dip-basic-01",
+          question: "What is the Dependency Inversion Principle?",
+          answer:
+            "High-level modules should not directly depend on low-level modules. Both should depend on abstractions, and details should depend on abstractions."
+        },
+        {
+          id: "dip-basic-02",
+          question: "What are the two statements of DIP?",
+          answer:
+            "High-level modules should not depend on low-level modules; both should depend on abstractions. Abstractions should not depend on details; details should depend on abstractions."
+        },
+        {
+          id: "dip-basic-03",
+          question: "What is a high-level module?",
+          answer:
+            "A module containing business rules or application policy."
+        },
+        {
+          id: "dip-basic-04",
+          question: "What is a low-level module?",
+          answer:
+            "A module containing technical implementation details such as database access, APIs, messaging, or storage."
+        },
+        {
+          id: "dip-basic-05",
+          question: "What is an abstraction?",
+          answer:
+            "A contract that defines required behavior without exposing implementation details."
+        },
+        {
+          id: "dip-basic-06",
+          question: "Why is DIP important?",
+          answer:
+            "It reduces coupling, improves testability, and makes implementation details easier to replace."
+        },
+        {
+          id: "dip-basic-07",
+          question: "Does DIP require interfaces?",
+          answer:
+            "No. Interfaces are commonly used, but abstractions can also be represented using abstract classes or other suitable contracts."
+        },
+        {
+          id: "dip-basic-08",
+          question: "What is Dependency Injection?",
+          answer:
+            "A technique where dependencies are supplied externally rather than created internally."
+        },
+        {
+          id: "dip-basic-09",
+          question: "Is DIP the same as Dependency Injection?",
+          answer:
+            "No. DIP is a design principle while DI is a technique for supplying dependencies."
+        },
+        {
+          id: "dip-basic-10",
+          question: "What is the simplest mental model for DIP?",
+          answer:
+            "High-Level Policy → Abstraction ← Low-Level Implementation."
+        }
+      ]
+    },
+
+    {
+      level: "Intermediate",
+      questions: [
+        {
+          id: "dip-intermediate-01",
+          question: "How does DIP invert dependency direction?",
+          answer:
+            "The high-level module stops depending directly on the concrete low-level implementation and instead depends on an abstraction that the low-level implementation also follows."
+        },
+        {
+          id: "dip-intermediate-02",
+          question:
+            "Why is OrderService → MySqlOrderRepository tightly coupled?",
+          answer:
+            "Because the business service directly knows and depends on a specific database implementation."
+        },
+        {
+          id: "dip-intermediate-03",
+          question: "How would you redesign OrderService using DIP?",
+          answer:
+            "Make OrderService depend on OrderRepository and make MySqlOrderRepository implement OrderRepository."
+        },
+        {
+          id: "dip-intermediate-04",
+          question: "How does DIP improve testability?",
+          answer:
+            "A test can provide a mock, stub, or fake implementation of the abstraction instead of using real infrastructure."
+        },
+        {
+          id: "dip-intermediate-05",
+          question: "Why is constructor injection useful for DIP?",
+          answer:
+            "It allows dependencies to be supplied externally and makes required dependencies explicit."
+        },
+        {
+          id: "dip-intermediate-06",
+          question: "How would you apply DIP to a payment system?",
+          answer:
+            "PaymentService depends on PaymentGateway while StripePaymentGateway or another provider implements PaymentGateway."
+        },
+        {
+          id: "dip-intermediate-07",
+          question: "How would you apply DIP to notifications?",
+          answer:
+            "NotificationService depends on a Notifier abstraction while EmailNotifier, SmsNotifier, or PushNotifier implement it."
+        },
+        {
+          id: "dip-intermediate-08",
+          question: "How are DIP and IoC related?",
+          answer:
+            "DIP defines dependency direction, while IoC is the broader concept of transferring control of dependency creation or management."
+        },
+        {
+          id: "dip-intermediate-09",
+          question: "Does Spring automatically guarantee DIP?",
+          answer:
+            "No. Spring provides dependency injection, but developers still need to design appropriate abstractions and dependency directions."
+        },
+        {
+          id: "dip-intermediate-10",
+          question: "Should every class have an interface?",
+          answer:
+            "No. Abstractions should be introduced when they provide meaningful decoupling, replaceability, testability, or architectural value."
+        }
+      ]
+    },
+
+    {
+      level: "Advanced",
+      questions: [
+        {
+          id: "dip-advanced-01",
+          question:
+            "Why should abstractions not depend on implementation details?",
+          answer:
+            "Because abstractions should represent stable behavior required by business policy rather than being controlled by infrastructure-specific details."
+        },
+        {
+          id: "dip-advanced-02",
+          question:
+            "What happens if PaymentGateway exposes Stripe-specific methods?",
+          answer:
+            "The abstraction leaks infrastructure details and becomes coupled to Stripe, weakening the intended dependency inversion."
+        },
+        {
+          id: "dip-advanced-03",
+          question:
+            "Can a class use a concrete implementation without violating DIP?",
+          answer:
+            "Yes. DIP does not require every dependency to be abstracted. The important question is whether a high-level policy is inappropriately coupled to replaceable implementation details."
+        },
+        {
+          id: "dip-advanced-04",
+          question: "Why can excessive abstraction be harmful?",
+          answer:
+            "It creates unnecessary indirection and complexity without providing meaningful decoupling."
+        },
+        {
+          id: "dip-advanced-05",
+          question: "How does DIP relate to the Repository Pattern?",
+          answer:
+            "A repository abstraction can isolate business logic from persistence implementation details."
+        },
+        {
+          id: "dip-advanced-06",
+          question: "How does DIP help with third-party APIs?",
+          answer:
+            "Business logic can depend on an application-facing abstraction while a concrete adapter handles communication with the external provider."
+        },
+        {
+          id: "dip-advanced-07",
+          question: "What is a composition root?",
+          answer:
+            "It is the boundary where concrete implementations are selected and dependencies are assembled."
+        },
+        {
+          id: "dip-advanced-08",
+          question:
+            "Can Dependency Injection exist without following DIP?",
+          answer:
+            "Yes. A concrete implementation can be injected directly. DI alone does not guarantee that the overall architecture follows DIP."
+        },
+        {
+          id: "dip-advanced-09",
+          question: "Can DIP be implemented without a DI framework?",
+          answer:
+            "Yes. Dependencies can be supplied manually through constructors or another composition mechanism."
+        },
+        {
+          id: "dip-advanced-10",
+          question:
+            "What is more important: using an interface or controlling dependency direction?",
+          answer:
+            "Dependency direction is more important. An interface is only one tool for creating an abstraction."
+        }
+      ]
+    },
+
+    {
+      level: "Scenario",
+      questions: [
+        {
+          id: "dip-scenario-01",
+          question:
+            "OrderService directly creates MySqlOrderRepository. What would you change?",
+          answer:
+            "Introduce an OrderRepository abstraction, make OrderService depend on it, make MySqlOrderRepository implement it, and inject the implementation externally."
+        },
+        {
+          id: "dip-scenario-02",
+          question:
+            "Your company wants to replace Stripe with Razorpay. How does DIP help?",
+          answer:
+            "PaymentService can continue depending on PaymentGateway while StripePaymentGateway is replaced by RazorpayPaymentGateway."
+        },
+        {
+          id: "dip-scenario-03",
+          question:
+            "A unit test requires a real database because the service creates its repository internally. What principle is relevant?",
+          answer:
+            "DIP. The service should depend on a repository abstraction so a test implementation can be supplied."
+        },
+        {
+          id: "dip-scenario-04",
+          question:
+            "A developer creates an interface for every class. Is that good DIP?",
+          answer:
+            "Not necessarily. DIP does not require interfaces everywhere. Abstractions should provide meaningful design value."
+        },
+        {
+          id: "dip-scenario-05",
+          question:
+            "PaymentGateway contains Stripe-specific methods. What is wrong?",
+          answer:
+            "The abstraction leaks implementation-specific details and becomes coupled to Stripe."
+        },
+        {
+          id: "dip-scenario-06",
+          question:
+            "Can Spring Boot implement DIP for you?",
+          answer:
+            "Spring can provide dependency injection and wiring, but developers still need to design proper abstractions and dependency directions."
+        },
+        {
+          id: "dip-scenario-07",
+          question:
+            "You need EmailNotifier and SmsNotifier. How would DIP help?",
+          answer:
+            "Business logic can depend on Notifier while EmailNotifier and SmsNotifier provide different implementations."
+        },
+        {
+          id: "dip-scenario-08",
+          question:
+            "Your service contains new StripeClient(). What problem do you see?",
+          answer:
+            "The business service is tightly coupled to Stripe and controls creation of the infrastructure dependency."
+        },
+        {
+          id: "dip-scenario-09",
+          question:
+            "A developer says constructor injection automatically means DIP is followed. Is that correct?",
+          answer:
+            "No. Constructor injection is a technique. DIP also requires appropriate dependency direction and abstraction."
+        },
+        {
+          id: "dip-scenario-10",
+          question:
+            "A simple utility has only one stable implementation. Should you automatically create an interface?",
+          answer:
+            "No. First determine whether abstraction provides meaningful decoupling, testing, variation, or architectural value."
+        }
+      ]
+    }
+  ]
+},
+
 };
 
 export const getTopicContent = (blockId: string): TopicContent | undefined =>

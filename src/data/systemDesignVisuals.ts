@@ -5164,6 +5164,631 @@ export const systemDesignVisuals: Record<string, TopicVisualization> = {
     },
   ],
 },
+"dependency-inversion-principle": {
+  topicId: "dependency-inversion-principle",
+  type: "stage-flow",
+
+  summary:
+    "DIP changes dependency direction so high-level modules depend on abstractions while low-level implementation details depend on those abstractions.",
+
+  stages: [
+    {
+      title: "1. The DIP Problem",
+      caption:
+        "A high-level module becomes tightly coupled when it directly depends on a concrete low-level implementation.",
+
+      layers: [
+        {
+          boxes: [
+            "High-Level Module",
+          ],
+        },
+        {
+          boxes: [
+            "Concrete Low-Level Module",
+          ],
+        },
+        {
+          boxes: [
+            "Tight Coupling",
+            "Hard to Replace",
+            "Harder to Test",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "2. What DIP Means",
+      caption:
+        "High-level modules should not directly depend on low-level modules. Both should depend on abstractions.",
+
+      layers: [
+        {
+          boxes: [
+            "High-Level Module",
+          ],
+        },
+        {
+          boxes: [
+            "Abstraction",
+          ],
+        },
+        {
+          boxes: [
+            "Low-Level Module",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "3. High-Level Module",
+      caption:
+        "High-level modules contain business rules and application policies.",
+
+      layers: [
+        {
+          boxes: [
+            "OrderService",
+            "PaymentService",
+            "CheckoutService",
+          ],
+        },
+        {
+          boxes: [
+            "Business Rules",
+            "Application Policy",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "4. Low-Level Module",
+      caption:
+        "Low-level modules contain technical implementation details.",
+
+      layers: [
+        {
+          boxes: [
+            "MySqlOrderRepository",
+            "StripePaymentGateway",
+            "EmailNotifier",
+          ],
+        },
+        {
+          boxes: [
+            "Database",
+            "External API",
+            "Notification Provider",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "5. Direct Concrete Dependency",
+      caption:
+        "Without DIP, business logic directly knows and depends on a specific implementation.",
+
+      layers: [
+        {
+          boxes: [
+            "OrderService",
+          ],
+        },
+        {
+          boxes: [
+            "MySqlOrderRepository",
+          ],
+        },
+        {
+          boxes: [
+            "Direct Dependency",
+            "Tight Coupling",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "6. Identify the Required Behavior",
+      caption:
+        "First identify what the high-level module actually needs from the low-level implementation.",
+
+      layers: [
+        {
+          boxes: [
+            "OrderService",
+          ],
+        },
+        {
+          boxes: [
+            "Save Order",
+            "Find Order",
+            "Delete Order",
+          ],
+        },
+        {
+          boxes: [
+            "Required Business Capability",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "7. Introduce an Abstraction",
+      caption:
+        "Create a contract around the behavior required by the high-level module.",
+
+      layers: [
+        {
+          boxes: [
+            "OrderRepository",
+          ],
+        },
+        {
+          boxes: [
+            "save()",
+            "findById()",
+            "delete()",
+          ],
+        },
+        {
+          boxes: [
+            "Persistence Abstraction",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "8. Invert the Dependency",
+      caption:
+        "The high-level module now depends on the abstraction instead of the concrete implementation.",
+
+      layers: [
+        {
+          boxes: [
+            "OrderService",
+          ],
+        },
+        {
+          boxes: [
+            "OrderRepository",
+          ],
+        },
+        {
+          boxes: [
+            "MySqlOrderRepository",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "9. The Core DIP Structure",
+      caption:
+        "Both high-level and low-level modules depend on the abstraction.",
+
+      layers: [
+        {
+          boxes: [
+            "High-Level Policy",
+          ],
+        },
+        {
+          boxes: [
+            "Abstraction",
+          ],
+        },
+        {
+          boxes: [
+            "Low-Level Detail",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "10. Dependency Direction",
+      caption:
+        "The dependency direction is inverted around the abstraction.",
+
+      layers: [
+        {
+          boxes: [
+            "OrderService",
+          ],
+        },
+        {
+          boxes: [
+            "OrderRepository",
+          ],
+        },
+        {
+          boxes: [
+            "MySqlOrderRepository",
+          ],
+        },
+        {
+          boxes: [
+            "Business Logic → Abstraction ← Implementation",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "11. Payment Gateway Example",
+      caption:
+        "Payment business logic should depend on a payment abstraction rather than directly on a specific provider.",
+
+      layers: [
+        {
+          boxes: [
+            "PaymentService",
+          ],
+        },
+        {
+          boxes: [
+            "PaymentGateway",
+          ],
+        },
+        {
+          boxes: [
+            "StripePaymentGateway",
+            "RazorpayPaymentGateway",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "12. Notification Example",
+      caption:
+        "Business logic can remain independent of the notification delivery mechanism.",
+
+      layers: [
+        {
+          boxes: [
+            "NotificationService",
+          ],
+        },
+        {
+          boxes: [
+            "Notifier",
+          ],
+        },
+        {
+          boxes: [
+            "EmailNotifier",
+            "SmsNotifier",
+            "PushNotifier",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "13. Dependency Injection",
+      caption:
+        "Dependency Injection supplies the concrete implementation from outside the high-level module.",
+
+      layers: [
+        {
+          boxes: [
+            "OrderService",
+          ],
+        },
+        {
+          boxes: [
+            "OrderRepository",
+          ],
+        },
+        {
+          boxes: [
+            "MySqlOrderRepository",
+          ],
+        },
+        {
+          boxes: [
+            "Injected Dependency",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "14. Constructor Injection",
+      caption:
+        "Required dependencies become explicit through the constructor.",
+
+      layers: [
+        {
+          boxes: [
+            "OrderService",
+          ],
+        },
+        {
+          boxes: [
+            "OrderService(OrderRepository repository)",
+          ],
+        },
+        {
+          boxes: [
+            "OrderRepository",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "15. Spring Boot Example",
+      caption:
+        "Spring's IoC container can create and wire the concrete implementation into the high-level service.",
+
+      layers: [
+        {
+          boxes: [
+            "Spring IoC Container",
+          ],
+        },
+        {
+          boxes: [
+            "OrderService",
+            "OrderRepository",
+          ],
+        },
+        {
+          boxes: [
+            "MySqlOrderRepository",
+          ],
+        },
+        {
+          boxes: [
+            "Dependency Wiring",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "16. DIP and Testability",
+      caption:
+        "The real infrastructure can be replaced with a test implementation behind the same abstraction.",
+
+      layers: [
+        {
+          boxes: [
+            "OrderService",
+          ],
+        },
+        {
+          boxes: [
+            "OrderRepository",
+          ],
+        },
+        {
+          boxes: [
+            "MockOrderRepository",
+            "FakeOrderRepository",
+          ],
+        },
+        {
+          boxes: [
+            "Isolated Unit Test",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "17. DIP vs Dependency Injection",
+      caption:
+        "DIP is the design principle; Dependency Injection is a technique used to supply dependencies.",
+
+      layers: [
+        {
+          boxes: [
+            "DIP",
+          ],
+        },
+        {
+          boxes: [
+            "Dependency Direction",
+          ],
+        },
+        {
+          boxes: [
+            "Dependency Injection",
+          ],
+        },
+        {
+          boxes: [
+            "Dependency Supply Technique",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "18. DIP vs IoC",
+      caption:
+        "IoC is broader than Dependency Injection and DIP.",
+
+      layers: [
+        {
+          boxes: [
+            "DIP",
+            "DI",
+            "IoC",
+          ],
+        },
+        {
+          boxes: [
+            "Design Principle",
+            "Dependency Technique",
+            "Control Transfer",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "19. Good Abstraction",
+      caption:
+        "A good abstraction represents the behavior required by the business rather than exposing infrastructure-specific details.",
+
+      layers: [
+        {
+          boxes: [
+            "PaymentGateway",
+          ],
+        },
+        {
+          boxes: [
+            "charge()",
+            "refund()",
+          ],
+        },
+        {
+          boxes: [
+            "Business Payment Behavior",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "20. Leaky Abstraction",
+      caption:
+        "An abstraction becomes weak when it exposes unnecessary implementation-specific details.",
+
+      layers: [
+        {
+          boxes: [
+            "PaymentGateway",
+          ],
+        },
+        {
+          boxes: [
+            "Stripe-Specific Methods",
+            "Provider-Specific Configuration",
+          ],
+        },
+        {
+          boxes: [
+            "Implementation Details Leak",
+            "Higher Coupling",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "21. DIP Does Not Mean Interfaces Everywhere",
+      caption:
+        "DIP does not require an abstraction for every class or dependency.",
+
+      layers: [
+        {
+          boxes: [
+            "Useful Abstraction",
+          ],
+        },
+        {
+          boxes: [
+            "Replaceability",
+            "Testing",
+            "Architectural Boundary",
+          ],
+        },
+        {
+          boxes: [
+            "Unnecessary Abstraction",
+            "Extra Indirection",
+            "More Complexity",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "22. DIP Decision Framework",
+      caption:
+        "Apply DIP when a high-level policy is unnecessarily coupled to a replaceable implementation detail.",
+
+      layers: [
+        {
+          boxes: [
+            "Identify High-Level Policy",
+          ],
+        },
+        {
+          boxes: [
+            "Identify Low-Level Detail",
+          ],
+        },
+        {
+          boxes: [
+            "Find Direct Coupling",
+          ],
+        },
+        {
+          boxes: [
+            "Create Meaningful Abstraction",
+          ],
+        },
+        {
+          boxes: [
+            "Invert Dependency",
+          ],
+        },
+        {
+          boxes: [
+            "Inject Implementation",
+          ],
+        },
+      ],
+    },
+
+    {
+      title: "23. Final DIP Mental Model",
+      caption:
+        "The goal is not interfaces everywhere; the goal is correct dependency direction.",
+
+      layers: [
+        {
+          boxes: [
+            "High-Level Policy",
+          ],
+        },
+        {
+          boxes: [
+            "Abstraction",
+          ],
+        },
+        {
+          boxes: [
+            "Low-Level Implementation",
+          ],
+        },
+        {
+          boxes: [
+            "Lower Coupling",
+            "Better Testability",
+            "Better Replaceability",
+            "Better Maintainability",
+          ],
+        },
+      ],
+    },
+  ],
+},
+
 };
 
 export const getTopicVisualization = (
