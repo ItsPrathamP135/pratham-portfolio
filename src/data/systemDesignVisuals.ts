@@ -2838,22 +2838,204 @@ export const systemDesignVisuals: Record<string, TopicVisualization> = {
     },
   ],
 },
+//
+//
+//
+//
+//
+//
+
+//
+//
+//
+//
+//
+//
+//
+
+//
+
+//
+//
 
 
+"loose-coupling-and-high-cohesion": {
+  topicId: "loose-coupling-high-cohesion",
+  type: "stage-flow",
+  summary:
+    "Design focused classes with related responsibilities, then connect them through intentional and stable dependencies.",
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+  stages: [
+    {
+      title: "1. Understand the Two Dimensions",
+      caption:
+        "Evaluate the internal focus of a class and its external dependencies separately.",
+      layers: [
+        {
+          boxes: [
+            "COHESION — Inside a class",
+            "Are its responsibilities related?",
+            "COUPLING — Between classes",
+            "How much does each class depend on others?"
+          ]
+        }
+      ]
+    },
+    {
+      title: "2. Identify Low Cohesion",
+      caption:
+        "One class is responsible for unrelated business and technical tasks.",
+      layers: [
+        {
+          boxes: [
+            "OrderService",
+            "Validate orders",
+            "Calculate totals",
+            "Process payments",
+            "Send emails",
+            "Generate reports"
+          ]
+        }
+      ]
+    },
+    {
+      title: "3. Group Related Responsibilities",
+      caption:
+        "Extract meaningful responsibilities into focused components.",
+      layers: [
+        {
+          boxes: [
+            "OrderService — Order business rules",
+            "PaymentService — Payment processing",
+            "NotificationService — Message delivery",
+            "ReportService — Report generation"
+          ]
+        }
+      ]
+    },
+    {
+      title: "4. Identify Tight Coupling",
+      caption:
+        "A consumer creates and directly relies on a particular implementation.",
+      layers: [
+        {
+          boxes: [
+            "OrderService",
+            "new StripePaymentGateway()",
+            "Stripe-specific operations",
+            "Provider change may require consumer changes"
+          ]
+        }
+      ]
+    },
+    {
+      title: "5. Introduce a Meaningful Contract",
+      caption:
+        "Define the operations the consumer needs without exposing provider details.",
+      layers: [
+        {
+          boxes: [
+            "PaymentGateway — Interface",
+            "authorizePayment()",
+            "capturePayment()",
+            "refundPayment()"
+          ]
+        }
+      ]
+    },
+    {
+      title: "6. Provide Implementations",
+      caption:
+        "Different providers implement the contract while the consumer uses the same abstraction.",
+      layers: [
+        {
+          boxes: [
+            "PaymentGateway",
+            "StripePaymentGateway",
+            "RazorpayPaymentGateway",
+            "Alternative compatible implementation"
+          ]
+        }
+      ]
+    },
+    {
+      title: "7. Inject the Dependency",
+      caption:
+        "Supply the required collaborator instead of constructing it inside the business class.",
+      layers: [
+        {
+          boxes: [
+            "Application configuration / Spring container",
+            "Provides PaymentGateway implementation",
+            "OrderService receives PaymentGateway",
+            "OrderService invokes the contract"
+          ]
+        }
+      ]
+    },
+    {
+      title: "8. Test Responsibilities Independently",
+      caption:
+        "Focused classes and controlled collaborators make unit tests easier.",
+      layers: [
+        {
+          boxes: [
+            "OrderService unit test",
+            "Fake or mock PaymentGateway",
+            "Verify order behavior",
+            "No real payment-provider call required"
+          ]
+        }
+      ]
+    },
+    {
+      title: "9. Apply SRP",
+      caption:
+        "Use a focused responsibility as a guide when deciding whether a class needs refactoring.",
+      layers: [
+        {
+          boxes: [
+            "One cohesive responsibility",
+            "One primary reason to change",
+            "Related data and operations together",
+            "Not one method per class"
+          ]
+        }
+      ]
+    },
+    {
+      title: "10. Avoid Overengineering",
+      caption:
+        "Do not confuse the number of abstractions with design quality.",
+      layers: [
+        {
+          boxes: [
+            "Keep natural dependencies",
+            "Add abstractions where they provide value",
+            "Avoid unnecessary wrappers and factories",
+            "Prefer clarity over needless indirection"
+          ]
+        }
+      ]
+    },
+    {
+      title: "11. Final Design Checklist",
+      caption:
+        "Evaluate both principles together before considering the design complete.",
+      layers: [
+        {
+          boxes: [
+            "Are class responsibilities cohesive?",
+            "Are dependencies intentional?",
+            "Can changing a provider remain localized?",
+            "Can business logic be tested in isolation?",
+            "Is the design simpler without unnecessary layers?"
+          ]
+        }
+      ]
+    }
+  ]
+},
 "solid-principles": {
   topicId: "solid-principles",
   type: "stage-flow",
@@ -5788,6 +5970,2366 @@ export const systemDesignVisuals: Record<string, TopicVisualization> = {
     },
   ],
 },
+"solid-real-world-examples": {
+  topicId: "solid-real-world-examples",
+  type: "stage-flow",
+  summary:
+    "Apply all five SOLID principles to real backend workflows. Identify responsibility boundaries, introduce appropriate extension points, preserve behavioral contracts, keep interfaces focused, and invert dependencies without unnecessary abstraction.",
+  stages: [
+    {
+      title: "1. The Real-World Problem",
+      caption:
+        "A growing application often starts with one class doing everything. New requirements make that class increasingly difficult to change and test.",
+      layers: [
+        {
+          boxes: [
+            "CheckoutManager",
+            "Calculate Order Total",
+            "Save Order to Database",
+            "Charge Payment",
+            "Generate Invoice",
+            "Send Email and SMS",
+          ],
+        },
+        {
+          boxes: [
+            "Too Many Responsibilities",
+            "Tight Coupling",
+            "Large Conditional Statements",
+            "Difficult Unit Testing",
+            "Higher Regression Risk",
+          ],
+        },
+      ],
+    },
+    {
+      title: "2. The Five SOLID Principles",
+      caption:
+        "Each principle addresses a different design concern. A single refactoring may help several principles, but one does not automatically guarantee the others.",
+      layers: [
+        {
+          boxes: [
+            "S — Single Responsibility",
+            "O — Open/Closed",
+            "L — Liskov Substitution",
+            "I — Interface Segregation",
+            "D — Dependency Inversion",
+          ],
+        },
+      ],
+    },
+    {
+      title: "3. SRP — Separate Responsibilities",
+      caption:
+        "Keep each class focused on one cohesive responsibility and one primary reason to change.",
+      layers: [
+        {
+          boxes: [
+            "CheckoutService — Coordinates Checkout",
+            "PricingService — Calculates Prices",
+            "OrderRepository — Persists Orders",
+            "PaymentService — Coordinates Payment",
+            "InvoiceGenerator — Creates Invoices",
+            "NotificationService — Sends Notifications",
+          ],
+        },
+        {
+          boxes: [
+            "Cohesive Responsibilities",
+            "Clear Ownership",
+            "Focused Tests",
+            "Smaller Change Impact",
+          ],
+        },
+      ],
+    },
+    {
+      title: "4. OCP — Extend Payment Methods",
+      caption:
+        "Adding a supported payment method should not require repeatedly changing the stable checkout workflow.",
+      layers: [
+        {
+          boxes: [
+            "CheckoutService",
+            "PaymentGateway Contract",
+            "CardPaymentGateway",
+            "UpiPaymentGateway",
+            "WalletPaymentGateway — New Extension",
+          ],
+        },
+        {
+          boxes: [
+            "New Behavior Through Implementations",
+            "Minimal Changes to Stable Workflow",
+            "Appropriate Provider Selection",
+          ],
+        },
+      ],
+    },
+    {
+      title: "5. LSP — Preserve the Contract",
+      caption:
+        "Every payment implementation must honor the behavior that clients expect from PaymentGateway.",
+      layers: [
+        {
+          boxes: [
+            "PaymentGateway.charge(amount)",
+            "Card Gateway Honors the Contract",
+            "UPI Gateway Honors the Contract",
+            "Wallet Gateway Honors the Contract",
+          ],
+        },
+        {
+          boxes: [
+            "Expected Outcomes",
+            "Documented Failure Behavior",
+            "No Misleading Success",
+            "No Unexpected Contract Violations",
+          ],
+        },
+      ],
+    },
+    {
+      title: "6. ISP — Focused Interfaces",
+      caption:
+        "Clients should depend only on the capabilities they actually use.",
+      layers: [
+        {
+          boxes: [
+            "EmailSender — sendEmail()",
+            "SmsSender — sendSms()",
+            "PushNotifier — sendPush()",
+          ],
+        },
+        {
+          boxes: [
+            "Email Implementation Uses Email Capability",
+            "SMS Implementation Uses SMS Capability",
+            "Implementations Need Not Support Irrelevant Methods",
+          ],
+        },
+      ],
+    },
+    {
+      title: "7. DIP — Depend on Abstractions",
+      caption:
+        "High-level business logic should not directly depend on concrete infrastructure details when a useful abstraction is appropriate.",
+      layers: [
+        {
+          boxes: [
+            "OrderService",
+            "OrderRepository Contract",
+            "JpaOrderRepository Implementation",
+            "Database Infrastructure",
+          ],
+        },
+        {
+          boxes: [
+            "Business Logic Depends on Contract",
+            "Infrastructure Implements Contract",
+            "Implementation Supplied Externally",
+          ],
+        },
+      ],
+    },
+    {
+      title: "8. Putting the Principles Together",
+      caption:
+        "The checkout service coordinates the use case while specialized collaborators own their responsibilities and infrastructure details remain behind suitable contracts.",
+      layers: [
+        {
+          boxes: [
+            "CheckoutService",
+            "PricingService",
+            "PaymentGateway",
+            "OrderRepository",
+            "NotificationService",
+          ],
+        },
+        {
+          boxes: [
+            "SRP — Responsibilities Are Cohesive",
+            "OCP — Payment Providers Can Be Extended",
+            "LSP — Providers Honor Their Contract",
+            "ISP — Contracts Match Client Capabilities",
+            "DIP — High-Level Logic Uses Abstractions",
+          ],
+        },
+      ],
+    },
+    {
+      title: "9. Java — Payment Abstraction",
+      caption:
+        "A focused interface provides the contract. Each implementation supplies provider-specific behavior.",
+      layers: [
+        {
+          boxes: [
+            "interface PaymentGateway",
+            "PaymentResult charge(BigDecimal amount)",
+            "CardPaymentGateway implements PaymentGateway",
+            "UpiPaymentGateway implements PaymentGateway",
+          ],
+        },
+        {
+          boxes: [
+            "CheckoutService Uses PaymentGateway",
+            "Provider Details Stay in Implementations",
+            "Each Implementation Honors the Contract",
+          ],
+        },
+      ],
+    },
+    {
+      title: "10. Java — Constructor Injection",
+      caption:
+        "Inject dependencies rather than constructing infrastructure implementations inside the business workflow.",
+      layers: [
+        {
+          boxes: [
+            "CheckoutService(PaymentGateway gateway)",
+            "private final PaymentGateway gateway",
+            "gateway.charge(amount)",
+          ],
+        },
+        {
+          boxes: [
+            "Dependency Supplied by the Caller or Container",
+            "Business Logic Is Easier to Isolate",
+            "No Need to Construct a Concrete Gateway Inside the Service",
+          ],
+        },
+      ],
+    },
+    {
+      title: "11. Spring Boot — Wiring Implementations",
+      caption:
+        "Spring can assemble collaborators using dependency injection. The application design must still define sensible abstractions and responsibilities.",
+      layers: [
+        {
+          boxes: [
+            "@Service CheckoutService",
+            "@Component CardPaymentGateway",
+            "PaymentGateway Constructor Parameter",
+            "Spring Dependency Injection",
+          ],
+        },
+        {
+          boxes: [
+            "Container Supplies a Compatible Bean",
+            "Multiple Candidates May Need Explicit Selection",
+            "Spring Does Not Automatically Guarantee SOLID",
+          ],
+        },
+      ],
+    },
+    {
+      title: "12. Testing the Business Workflow",
+      caption:
+        "Abstraction boundaries allow the checkout workflow to be tested without contacting a real payment provider or database.",
+      layers: [
+        {
+          boxes: [
+            "CheckoutService Unit Test",
+            "Mock or Fake PaymentGateway",
+            "Controlled OrderRepository",
+            "Execute Checkout Scenario",
+          ],
+        },
+        {
+          boxes: [
+            "Verify Correct Payment Amount",
+            "Verify Order Handling",
+            "Verify Failure Behavior",
+            "Avoid Unnecessary External Calls",
+          ],
+        },
+      ],
+    },
+    {
+      title: "13. Storage Provider Example",
+      caption:
+        "The same principles apply when an application supports multiple cloud storage providers.",
+      layers: [
+        {
+          boxes: [
+            "PhotoService",
+            "StorageProvider Contract",
+            "GoogleDriveProvider",
+            "ProtonDriveProvider",
+            "PCloudProvider",
+          ],
+        },
+        {
+          boxes: [
+            "Photo Workflow Is Separate from Provider Details",
+            "New Providers Can Be Added Where the Contract Fits",
+            "Provider Implementations Honor Shared Behavior",
+            "Optional Capabilities Can Use Focused Contracts",
+          ],
+        },
+      ],
+    },
+    {
+      title: "14. Refactoring a God Class",
+      caption:
+        "Refactor incrementally around real responsibilities while preserving existing behavior.",
+      layers: [
+        {
+          boxes: [
+            "Identify Responsibilities",
+            "Map Dependencies",
+            "Add Characterization Tests",
+            "Extract One Cohesive Component",
+            "Verify Existing Behavior",
+            "Repeat Where Valuable",
+          ],
+        },
+        {
+          boxes: [
+            "Avoid Large Unverified Rewrites",
+            "Avoid Classes That Only Forward Calls",
+            "Preserve Useful Simplicity",
+          ],
+        },
+      ],
+    },
+    {
+      title: "15. Recognizing the Right Principle",
+      caption:
+        "Diagnose the actual design problem before choosing a refactoring.",
+      layers: [
+        {
+          boxes: [
+            "Unrelated Reasons to Change → SRP",
+            "Repeated Changes for New Variants → OCP",
+            "Implementation Breaks Expectations → LSP",
+            "Unused Methods Forced on Clients → ISP",
+            "Business Logic Coupled to Infrastructure → DIP",
+          ],
+        },
+      ],
+    },
+    {
+      title: "16. Common Overengineering Trap",
+      caption:
+        "More interfaces and classes do not automatically mean better design.",
+      layers: [
+        {
+          boxes: [
+            "Avoid Interfaces Without a Useful Purpose",
+            "Avoid One Class per Method",
+            "Avoid Speculative Extension Frameworks",
+            "Avoid Unnecessary Indirection",
+          ],
+        },
+        {
+          boxes: [
+            "Prefer Cohesion",
+            "Prefer Clear Contracts",
+            "Prefer Useful Boundaries",
+            "Keep Complexity Proportionate to Requirements",
+          ],
+        },
+      ],
+    },
+    {
+      title: "17. Final Decision Framework",
+      caption:
+        "Use SOLID as a practical review framework when designing or refactoring application code.",
+      layers: [
+        {
+          boxes: [
+            "1. What Is Changing?",
+            "2. Which Responsibility Owns It?",
+            "3. Is the Variation Worth an Extension Point?",
+            "4. Do Implementations Honor Their Contracts?",
+            "5. Are Clients Forced to Depend on Unused Methods?",
+            "6. Does Business Logic Depend on Suitable Abstractions?",
+            "7. Does the Added Complexity Provide Real Value?",
+          ],
+        },
+      ],
+    },
+    {
+      title: "18. Final Mental Model",
+      caption:
+        "SOLID is about controlling change and dependencies while keeping object-oriented designs understandable.",
+      layers: [
+        {
+          boxes: [
+            "SRP — Separate Responsibilities",
+            "OCP — Extend with Minimal Stable-Code Changes",
+            "LSP — Preserve Behavioral Substitutability",
+            "ISP — Keep Interfaces Focused",
+            "DIP — Invert Dependency Direction",
+          ],
+        },
+        {
+          boxes: [
+            "Understand Requirements",
+            "Choose Cohesive Boundaries",
+            "Use Appropriate Abstractions",
+            "Test Important Behavior",
+            "Avoid Unnecessary Complexity",
+          ],
+        },
+      ],
+    },
+  ],
+},
+"refactoring-examples": {
+  topicId: "refactoring-examples",
+  type: "stage-flow",
+  summary:
+    "Refactoring improves the internal structure of existing code while preserving externally observable behavior. Identify a code smell, establish a safety net, apply the smallest useful transformation, verify behavior, and reassess the design.",
+  stages: [
+    {
+      title: "1. Identify the Problem",
+      caption:
+        "Start with a concrete design problem rather than choosing a pattern first.",
+      layers: [
+        {
+          boxes: [
+            "God Class",
+            "Long Method",
+            "Duplicated Business Logic",
+            "Large Conditional",
+            "Tight Concrete Dependency",
+            "Fat Interface",
+          ],
+        },
+        {
+          boxes: [
+            "Difficult Maintenance",
+            "Poor Testability",
+            "Repeated Changes",
+            "Regression Risk",
+          ],
+        },
+      ],
+    },
+    {
+      title: "2. Understand Existing Behavior",
+      caption:
+        "Trace the current implementation before changing its internal structure.",
+      layers: [
+        {
+          boxes: [
+            "Inputs and Outputs",
+            "Business Rules",
+            "Exception Handling",
+            "Database Writes",
+            "External API Calls",
+            "Transaction Boundaries",
+          ],
+        },
+        {
+          boxes: [
+            "Identify Observable Behavior",
+            "Identify Edge Cases",
+            "Identify Side Effects",
+          ],
+        },
+      ],
+    },
+    {
+      title: "3. Establish a Safety Net",
+      caption:
+        "Tests provide evidence that existing behavior remains correct after structural changes.",
+      layers: [
+        {
+          boxes: [
+            "Inspect Existing Tests",
+            "Add Characterization Tests",
+            "Cover Important Edge Cases",
+            "Capture Important Side Effects",
+          ],
+        },
+        {
+          boxes: [
+            "Baseline Behavior Recorded",
+            "Regression Checks Available",
+          ],
+        },
+      ],
+    },
+    {
+      title: "4. Extract Method",
+      caption:
+        "Move a coherent block of logic into a clearly named method.",
+      layers: [
+        {
+          boxes: [
+            "Before: Long placeOrder() Method",
+            "Validate Order",
+            "Calculate Total",
+            "Persist Order",
+            "After: Named Cohesive Operations",
+          ],
+        },
+        {
+          boxes: [
+            "Improved Readability",
+            "Clearer Intent",
+            "Easier Local Reasoning",
+          ],
+        },
+      ],
+    },
+    {
+      title: "5. Extract Class",
+      caption:
+        "Separate responsibilities that have distinct reasons to change.",
+      layers: [
+        {
+          boxes: [
+            "Before: OrderService Does Everything",
+            "Order Workflow",
+            "Invoice Generation",
+            "Notification Delivery",
+            "After: Focused Collaborators",
+          ],
+        },
+        {
+          boxes: [
+            "OrderService",
+            "InvoiceGenerator",
+            "NotificationService",
+          ],
+        },
+      ],
+    },
+    {
+      title: "6. Replace Conditional with Polymorphism",
+      caption:
+        "Use interchangeable implementations when branches represent meaningful variants.",
+      layers: [
+        {
+          boxes: [
+            "Before: switch(paymentType)",
+            "Card Payment Branch",
+            "UPI Payment Branch",
+            "Wallet Payment Branch",
+          ],
+        },
+        {
+          boxes: [
+            "PaymentGateway Contract",
+            "CardPaymentGateway",
+            "UpiPaymentGateway",
+            "WalletPaymentGateway",
+          ],
+        },
+        {
+          boxes: [
+            "New Variants Can Be Added",
+            "Stable Workflow Changes Less Often",
+          ],
+        },
+      ],
+    },
+    {
+      title: "7. Remove Duplicated Business Logic",
+      caption:
+        "Centralize a rule when its copies represent the same concept and should evolve together.",
+      layers: [
+        {
+          boxes: [
+            "Checkout Path A: Eligibility Check",
+            "Checkout Path B: Duplicate Eligibility Check",
+            "Checkout Path C: Duplicate Eligibility Check",
+          ],
+        },
+        {
+          boxes: [
+            "Shared OrderEligibilityPolicy",
+            "Consistent Rule Application",
+            "One Place to Change the Rule",
+          ],
+        },
+        {
+          boxes: [
+            "Do Not Merge Rules with Different Business Meanings",
+          ],
+        },
+      ],
+    },
+    {
+      title: "8. Introduce an Abstraction",
+      caption:
+        "Separate business logic from a concrete implementation when a useful boundary is needed.",
+      layers: [
+        {
+          boxes: [
+            "Before: OrderService Constructs MySqlOrderRepository",
+            "Direct Infrastructure Dependency",
+          ],
+        },
+        {
+          boxes: [
+            "OrderRepository Contract",
+            "JpaOrderRepository Implementation",
+            "OrderService Depends on Contract",
+          ],
+        },
+        {
+          boxes: [
+            "Replaceable Implementation",
+            "Improved Testing Boundary",
+          ],
+        },
+      ],
+    },
+    {
+      title: "9. Refactor Toward Dependency Inversion",
+      caption:
+        "High-level policy depends on a suitable abstraction instead of constructing a concrete external client.",
+      layers: [
+        {
+          boxes: [
+            "Before: CheckoutService Creates StripePaymentClient",
+            "Business Logic Tied to Provider",
+          ],
+        },
+        {
+          boxes: [
+            "PaymentGateway Contract",
+            "StripePaymentGateway Adapter",
+            "Constructor Injection",
+          ],
+        },
+        {
+          boxes: [
+            "Business Logic Isolatable",
+            "Alternative Implementations Can Be Supplied",
+          ],
+        },
+      ],
+    },
+    {
+      title: "10. Apply SRP During Refactoring",
+      caption:
+        "Separate cohesive responsibilities without mechanically creating a class for every method.",
+      layers: [
+        {
+          boxes: [
+            "Identify Reasons to Change",
+            "Identify Cohesive Behavior",
+            "Define Responsibility Ownership",
+            "Extract Only Where Valuable",
+          ],
+        },
+        {
+          boxes: [
+            "Focused Classes",
+            "Clear Collaborations",
+            "Fewer Unrelated Changes",
+          ],
+        },
+      ],
+    },
+    {
+      title: "11. Apply OCP During Refactoring",
+      caption:
+        "Protect stable workflow logic from anticipated variations where an extension point is justified.",
+      layers: [
+        {
+          boxes: [
+            "Identify Likely Variations",
+            "Define Stable Contract",
+            "Move Variant Behavior into Implementations",
+            "Keep Selection Logic Understandable",
+          ],
+        },
+        {
+          boxes: [
+            "Extension Without Repeated Central Changes",
+            "Avoid Speculative Frameworks",
+          ],
+        },
+      ],
+    },
+    {
+      title: "12. Apply LSP During Refactoring",
+      caption:
+        "Every implementation must preserve the expected behavior of its abstraction.",
+      layers: [
+        {
+          boxes: [
+            "Define Contract Expectations",
+            "Check Valid Inputs",
+            "Check Expected Outcomes",
+            "Check Error Behavior",
+          ],
+        },
+        {
+          boxes: [
+            "Implementations Remain Substitutable",
+            "No Misleading Success",
+            "No Unexpected Contract Violations",
+          ],
+        },
+      ],
+    },
+    {
+      title: "13. Apply ISP During Refactoring",
+      caption:
+        "Split a broad interface when clients or implementations need independently varying capabilities.",
+      layers: [
+        {
+          boxes: [
+            "Before: Email + SMS + Push + Fax Interface",
+            "Email-Only Implementation",
+            "SMS-Only Implementation",
+          ],
+        },
+        {
+          boxes: [
+            "EmailSender",
+            "SmsSender",
+            "PushNotifier",
+          ],
+        },
+        {
+          boxes: [
+            "Clients Depend on Required Capabilities",
+            "Avoid Unused Methods",
+          ],
+        },
+      ],
+    },
+    {
+      title: "14. Apply DIP During Refactoring",
+      caption:
+        "Separate high-level business logic from replaceable infrastructure details.",
+      layers: [
+        {
+          boxes: [
+            "Identify Direct Concrete Dependencies",
+            "Define a Useful Contract",
+            "Implement the Contract",
+            "Inject the Dependency",
+          ],
+        },
+        {
+          boxes: [
+            "Business Logic Depends on Abstraction",
+            "Infrastructure Implements Abstraction",
+            "Tests Can Supply Controlled Implementations",
+          ],
+        },
+      ],
+    },
+    {
+      title: "15. Run Focused Tests",
+      caption:
+        "Verify the component immediately after each meaningful structural change.",
+      layers: [
+        {
+          boxes: [
+            "Compile the Code",
+            "Run Unit Tests",
+            "Check Error Paths",
+            "Check Edge Cases",
+          ],
+        },
+        {
+          boxes: [
+            "Fix Differences Before Continuing",
+            "Keep Changes Small and Reviewable",
+          ],
+        },
+      ],
+    },
+    {
+      title: "16. Run Regression Tests",
+      caption:
+        "A locally passing unit test does not guarantee that the complete workflow remains correct.",
+      layers: [
+        {
+          boxes: [
+            "Integration Tests",
+            "Database Behavior",
+            "Transaction Behavior",
+            "External Service Interactions",
+            "API Compatibility",
+          ],
+        },
+        {
+          boxes: [
+            "Existing Workflows Still Behave Correctly",
+            "Side Effects Remain Correct",
+          ],
+        },
+      ],
+    },
+    {
+      title: "17. Review the Result",
+      caption:
+        "Evaluate whether the refactoring genuinely improves the design.",
+      layers: [
+        {
+          boxes: [
+            "Are Responsibilities Clearer?",
+            "Are Dependencies More Appropriate?",
+            "Are Contracts Easier to Understand?",
+            "Are Tests More Focused?",
+            "Is the Complexity Justified?",
+          ],
+        },
+        {
+          boxes: [
+            "Keep Useful Abstractions",
+            "Remove Unnecessary Indirection",
+          ],
+        },
+      ],
+    },
+    {
+      title: "18. Refactoring vs Feature vs Rewrite",
+      caption:
+        "Keep the purpose and risk of each type of change clear.",
+      layers: [
+        {
+          boxes: [
+            "Refactoring — Improve Internal Structure",
+            "Feature — Change or Add Functionality",
+            "Rewrite — Replace a Larger Implementation",
+          ],
+        },
+        {
+          boxes: [
+            "Separate Behavior Changes Where Practical",
+            "Plan Migration for Rewrites",
+            "Verify Existing Behavior During Refactoring",
+          ],
+        },
+      ],
+    },
+    {
+      title: "19. Common Refactoring Mistakes",
+      caption:
+        "A refactoring is not successful merely because the code is shorter or contains more classes.",
+      layers: [
+        {
+          boxes: [
+            "Splitting Classes by Line Count Alone",
+            "Turning Every Conditional into Polymorphism",
+            "Merging Unrelated Business Rules",
+            "Adding Interfaces Without Purpose",
+            "Testing Only the Happy Path",
+            "Rewriting Without a Safety Net",
+          ],
+        },
+        {
+          boxes: [
+            "Choose the Smallest Useful Change",
+            "Preserve Behavior",
+            "Validate the Result",
+          ],
+        },
+      ],
+    },
+    {
+      title: "20. Final Refactoring Workflow",
+      caption:
+        "Follow a repeatable process from identifying a smell to verifying the improved design.",
+      layers: [
+        {
+          boxes: [
+            "1. Identify the Problem",
+            "2. Understand Existing Behavior",
+            "3. Establish Tests",
+            "4. Select the Refactoring",
+            "5. Make a Small Change",
+            "6. Run Focused Tests",
+            "7. Run Regression Tests",
+            "8. Review and Repeat",
+          ],
+        },
+      ],
+    },
+    {
+      title: "21. Final Mental Model",
+      caption:
+        "Refactoring is controlled structural improvement supported by evidence that existing behavior remains correct.",
+      layers: [
+        {
+          boxes: [
+            "Understand Before Changing",
+            "Improve Structure Incrementally",
+            "Use SOLID Where It Helps",
+            "Test Observable Behavior",
+            "Avoid Unnecessary Complexity",
+          ],
+        },
+        {
+          boxes: [
+            "Clearer Code",
+            "Better Responsibility Boundaries",
+            "Safer Future Changes",
+          ],
+        },
+      ],
+    },
+  ],
+},
+"uml-diagrams": {
+  topicId: "uml-diagrams",
+  type: "stage-flow",
+  summary:
+    "Read UML systematically: identify the diagram type, decode notation, interpret relationships and multiplicity, trace behavior where relevant, and translate the model into Java without assuming unspecified implementation details.",
+  stages: [
+    {
+      title: "1. What Is UML?",
+      caption:
+        "UML provides standardized notation for communicating software structure and behavior.",
+      layers: [
+        {
+          boxes: [
+            "Unified Modeling Language",
+            "Standardized Visual Notation",
+            "Model Structure",
+            "Model Behavior",
+            "Communicate Design Decisions",
+          ],
+        },
+      ],
+    },
+    {
+      title: "2. Structural vs Behavioral",
+      caption:
+        "Select the diagram based on the question you need to answer.",
+      layers: [
+        {
+          boxes: [
+            "Structural: What Exists?",
+            "Class Diagram",
+            "Object Diagram",
+            "Component Diagram",
+            "Deployment Diagram",
+          ],
+        },
+        {
+          boxes: [
+            "Behavioral: What Happens?",
+            "Sequence Diagram",
+            "Activity Diagram",
+            "State Machine Diagram",
+            "Use-Case Diagram",
+          ],
+        },
+      ],
+    },
+    {
+      title: "3. Class Diagram Anatomy",
+      caption:
+        "A class box commonly contains the name, attributes, and operations.",
+      layers: [
+        {
+          boxes: [
+            "Order",
+            "-orderId: Long",
+            "-status: OrderStatus",
+            "+calculateTotal(): BigDecimal",
+          ],
+        },
+        {
+          boxes: [
+            "Name",
+            "Attributes",
+            "Operations",
+            "Visibility",
+          ],
+        },
+      ],
+    },
+    {
+      title: "4. Visibility Symbols",
+      caption:
+        "Visibility notation communicates access to attributes and operations.",
+      layers: [
+        {
+          boxes: [
+            "+ Public",
+            "- Private",
+            "# Protected",
+            "~ Package Visibility",
+          ],
+        },
+        {
+          boxes: [
+            "Encapsulation",
+            "Access Control",
+            "Java Member Mapping",
+          ],
+        },
+      ],
+    },
+    {
+      title: "5. Association",
+      caption:
+        "Association represents a structural relationship between classifiers.",
+      layers: [
+        {
+          boxes: [
+            "Customer",
+            "Customer — Order",
+            "One Customer Can Have Many Orders",
+          ],
+        },
+        {
+          boxes: [
+            "Structural Link",
+            "Multiplicity",
+            "Optional Navigability",
+            "Ownership Not Implied Automatically",
+          ],
+        },
+      ],
+    },
+    {
+      title: "6. Multiplicity",
+      caption:
+        "Read multiplicity at the association end it constrains.",
+      layers: [
+        {
+          boxes: [
+            "1 — Exactly One",
+            "0..1 — Zero or One",
+            "0..* — Zero or Many",
+            "1..* — One or More",
+            "2..5 — Bounded Range",
+          ],
+        },
+        {
+          boxes: [
+            "Single Reference",
+            "Optional Reference",
+            "Collection",
+            "Domain Constraint",
+          ],
+        },
+      ],
+    },
+    {
+      title: "7. Navigability",
+      caption:
+        "An association does not automatically require references in both directions.",
+      layers: [
+        {
+          boxes: [
+            "Order Holds Customer Reference",
+            "Customer Need Not Hold Orders Collection",
+          ],
+        },
+        {
+          boxes: [
+            "One-Way Navigation",
+            "Two-Way Navigation",
+            "Choose Fields Based on Requirements",
+          ],
+        },
+      ],
+    },
+    {
+      title: "8. Dependency",
+      caption:
+        "A dependency indicates usage or reliance, commonly drawn as a dashed arrow.",
+      layers: [
+        {
+          boxes: [
+            "ReportService",
+            "Uses PdfGenerator",
+            "Dashed Arrow Toward Supplier",
+          ],
+        },
+        {
+          boxes: [
+            "Usage Relationship",
+            "Changes May Affect Client",
+            "Persistent Field Not Required in Every Case",
+          ],
+        },
+      ],
+    },
+    {
+      title: "9. Generalization",
+      caption:
+        "A solid line with a hollow triangle points toward the general classifier.",
+      layers: [
+        {
+          boxes: [
+            "SavingsAccount",
+            "CurrentAccount",
+            "Account",
+          ],
+        },
+        {
+          boxes: [
+            "Solid Line",
+            "Hollow Triangle at Parent",
+            "Java: extends",
+          ],
+        },
+      ],
+    },
+    {
+      title: "10. Realization",
+      caption:
+        "A dashed line with a hollow triangle points toward the interface or specification.",
+      layers: [
+        {
+          boxes: [
+            "CardPaymentGateway",
+            "PaymentGateway",
+          ],
+        },
+        {
+          boxes: [
+            "Dashed Line",
+            "Hollow Triangle at Interface",
+            "Java: implements",
+            "Contract Fulfillment",
+          ],
+        },
+      ],
+    },
+    {
+      title: "11. Aggregation vs Composition",
+      caption:
+        "Both model whole-part relationships, but composition expresses stronger ownership.",
+      layers: [
+        {
+          boxes: [
+            "Aggregation: Hollow Diamond",
+            "Parts Can Exist Independently",
+          ],
+        },
+        {
+          boxes: [
+            "Composition: Filled Diamond",
+            "Strong Whole-Part Ownership",
+            "Lifecycle Constraints",
+          ],
+        },
+        {
+          boxes: [
+            "Diamond at Whole End",
+            "Model Domain Semantics",
+            "Not Automatic Java Object Deletion",
+          ],
+        },
+      ],
+    },
+    {
+      title: "12. Relationship Quick Reference",
+      caption:
+        "Decode the line and arrowhead before interpreting the design.",
+      layers: [
+        {
+          boxes: [
+            "Association: Solid Line",
+            "Dependency: Dashed Arrow",
+            "Generalization: Solid Line + Hollow Triangle",
+            "Realization: Dashed Line + Hollow Triangle",
+            "Aggregation: Hollow Diamond",
+            "Composition: Filled Diamond",
+          ],
+        },
+      ],
+    },
+    {
+      title: "13. Sequence Diagram",
+      caption:
+        "Sequence diagrams show participants and messages in time order.",
+      layers: [
+        {
+          boxes: [
+            "Customer",
+            "CheckoutController",
+            "CheckoutService",
+            "PaymentGateway",
+            "OrderRepository",
+          ],
+        },
+        {
+          boxes: [
+            "Participants",
+            "Lifelines",
+            "Activation Bars",
+            "Messages",
+            "Return Messages",
+          ],
+        },
+      ],
+    },
+    {
+      title: "14. Sequence Fragment Operators",
+      caption:
+        "Combined fragments express alternatives, optional behavior, and repetition.",
+      layers: [
+        {
+          boxes: [
+            "alt — Alternative Paths",
+            "opt — Optional Interaction",
+            "loop — Repeated Interaction",
+          ],
+        },
+        {
+          boxes: [
+            "Guard Conditions",
+            "Success and Failure Branches",
+            "Explicit Loop Conditions",
+          ],
+        },
+      ],
+    },
+    {
+      title: "15. Object Diagram",
+      caption:
+        "An object diagram shows concrete instances and links at one point in time.",
+      layers: [
+        {
+          boxes: [
+            "customer1:Customer",
+            "order101:Order",
+            "item1:OrderItem",
+            "item2:OrderItem",
+          ],
+        },
+        {
+          boxes: [
+            "Concrete Instances",
+            "Instance-Level Links",
+            "Snapshot of Object Structure",
+          ],
+        },
+      ],
+    },
+    {
+      title: "16. Use-Case Diagram",
+      caption:
+        "Use-case diagrams show actors and the goals they interact with.",
+      layers: [
+        {
+          boxes: [
+            "Member",
+            "Search Books",
+            "Borrow Book",
+            "Return Book",
+          ],
+        },
+        {
+          boxes: [
+            "Actors",
+            "System Goals",
+            "Functional Scope",
+          ],
+        },
+      ],
+    },
+    {
+      title: "17. Activity Diagram",
+      caption:
+        "Activity diagrams describe workflow, decisions, and potentially parallel paths.",
+      layers: [
+        {
+          boxes: [
+            "Place Order",
+            "Validate Cart",
+            "Decision: Valid?",
+            "Process Payment",
+            "Confirm Order",
+          ],
+        },
+        {
+          boxes: [
+            "Actions",
+            "Decision Nodes",
+            "Merge Nodes",
+            "Fork and Join",
+            "Start and End",
+          ],
+        },
+      ],
+    },
+    {
+      title: "18. State Machine Diagram",
+      caption:
+        "State machines model lifecycle states and the events or conditions that trigger transitions.",
+      layers: [
+        {
+          boxes: [
+            "CREATED",
+            "CONFIRMED",
+            "SHIPPED",
+            "DELIVERED",
+            "CANCELLED",
+          ],
+        },
+        {
+          boxes: [
+            "Events",
+            "Transitions",
+            "Guards",
+            "Actions",
+            "Valid and Invalid State Changes",
+          ],
+        },
+      ],
+    },
+    {
+      title: "19. Component vs Deployment",
+      caption:
+        "Use component diagrams for software modules and deployment diagrams for runtime placement.",
+      layers: [
+        {
+          boxes: [
+            "Component Diagram",
+            "Order Module",
+            "Payment Module",
+            "Notification Module",
+          ],
+        },
+        {
+          boxes: [
+            "Deployment Diagram",
+            "Application Runtime",
+            "Database Node",
+            "Deployed Artifacts",
+          ],
+        },
+      ],
+    },
+    {
+      title: "20. Translate UML into Java",
+      caption:
+        "Map diagram elements to Java constructs only after understanding the relationship semantics.",
+      layers: [
+        {
+          boxes: [
+            "Class → Java Class",
+            "Interface → Java Interface",
+            "Generalization → extends",
+            "Realization → implements",
+            "Attribute → Field",
+            "Operation → Method",
+          ],
+        },
+        {
+          boxes: [
+            "Association → Reference or Collection",
+            "Multiplicity → Cardinality Constraint",
+            "Composition → Ownership Rules",
+            "Dependency → Usage Relationship",
+          ],
+        },
+      ],
+    },
+    {
+      title: "21. Read an Unfamiliar Diagram",
+      caption:
+        "Follow a systematic interpretation process rather than guessing from the lines.",
+      layers: [
+        {
+          boxes: [
+            "1. Identify Diagram Type",
+            "2. Identify Elements",
+            "3. Decode Notation",
+            "4. Read Multiplicity",
+            "5. Check Direction",
+            "6. Explain in Domain Terms",
+          ],
+        },
+        {
+          boxes: [
+            "Separate Facts from Assumptions",
+            "Identify Unspecified Details",
+            "Translate Only What Requirements Support",
+          ],
+        },
+      ],
+    },
+    {
+      title: "22. UML Interview Mental Model",
+      caption:
+        "Choose the diagram that answers the question and keep it appropriately detailed.",
+      layers: [
+        {
+          boxes: [
+            "Class Diagram — Static Structure",
+            "Sequence Diagram — Interactions",
+            "Object Diagram — Instance Snapshot",
+            "Use-Case Diagram — Actor Goals",
+            "Activity Diagram — Workflow",
+            "State Machine — Lifecycle",
+            "Component Diagram — Software Modules",
+            "Deployment Diagram — Runtime Placement",
+          ],
+        },
+      ],
+    },
+  ],
+},
+"class-diagram-design": {
+  topicId: "class-diagram-design",
+  type: "stage-flow",
+  summary: "Translate requirements into a cohesive object-oriented model by identifying classes, assigning responsibilities, defining relationships and multiplicities, choosing useful abstractions, and validating the design against real use cases.",
+  stages: [
+    {
+      title: "1. Start with Requirements",
+      caption: "Understand what the system must do before drawing classes.",
+      layers: [
+        {
+          boxes: [
+            "Identify actors and use cases",
+            "Clarify functional requirements",
+            "Identify business rules and invariants",
+            "Capture important edge cases"
+          ]
+        },
+        {
+          boxes: [
+            "Do not start with design patterns",
+            "Do not turn every noun into a class"
+          ]
+        }
+      ]
+    },
+    {
+      title: "2. Discover Domain Concepts",
+      caption: "Identify the objects that represent meaningful domain concepts.",
+      layers: [
+        {
+          boxes: [
+            "Entities: identity over time",
+            "Value Objects: meaning through values",
+            "Services: coordination or domain operations",
+            "External Systems: integration boundaries"
+          ]
+        },
+        {
+          boxes: [
+            "Customer",
+            "Product",
+            "Order",
+            "Payment"
+          ]
+        }
+      ]
+    },
+    {
+      title: "3. Assign Responsibilities",
+      caption: "Decide which object owns each piece of state and behavior.",
+      layers: [
+        {
+          boxes: [
+            "Order owns order state",
+            "OrderItem represents a purchased line",
+            "Payment handles payment-related state",
+            "CheckoutService coordinates checkout"
+          ]
+        },
+        {
+          boxes: [
+            "High Cohesion",
+            "Low Unnecessary Coupling",
+            "Protected Invariants"
+          ]
+        }
+      ]
+    },
+    {
+      title: "4. Define Class Structure",
+      caption: "Describe the state and behavior needed for each class.",
+      layers: [
+        {
+          boxes: [
+            "Class Name",
+            "Attributes",
+            "Operations"
+          ]
+        },
+        {
+          boxes: [
+            "Field types and meaningful visibility",
+            "Important method parameters and return types",
+            "Business behavior and invariants"
+          ]
+        },
+        {
+          boxes: [
+            "Avoid clutter from every getter and setter",
+            "Encapsulate mutable state"
+          ]
+        }
+      ]
+    },
+    {
+      title: "5. Choose Relationships",
+      caption: "Use the relationship that accurately represents the domain.",
+      layers: [
+        {
+          boxes: [
+            "Association: structural relationship",
+            "Dependency: usage relationship",
+            "Generalization: inheritance",
+            "Realization: implements a contract",
+            "Aggregation: weak whole-part",
+            "Composition: strong ownership"
+          ]
+        },
+        {
+          boxes: [
+            "Do not confuse reference with ownership",
+            "Do not confuse inheritance with realization"
+          ]
+        }
+      ]
+    },
+    {
+      title: "6. Define Multiplicity",
+      caption: "Specify how many objects may participate in each relationship.",
+      layers: [
+        {
+          boxes: [
+            "1 = exactly one",
+            "0..1 = optional single",
+            "0..* = zero or many",
+            "1..* = one or many"
+          ]
+        },
+        {
+          boxes: [
+            "Customer 1 → Order 0..*",
+            "Order 1 → OrderItem 1..*"
+          ]
+        },
+        {
+          boxes: [
+            "Validate optional versus mandatory relationships",
+            "Enforce required constraints in code"
+          ]
+        }
+      ]
+    },
+    {
+      title: "7. Decide Navigability",
+      caption: "Add references only in the directions needed by the use cases.",
+      layers: [
+        {
+          boxes: [
+            "Unidirectional association",
+            "Bidirectional association"
+          ]
+        },
+        {
+          boxes: [
+            "Reduce unnecessary references",
+            "Avoid redundant relationship state",
+            "Keep navigation requirements explicit"
+          ]
+        }
+      ]
+    },
+    {
+      title: "8. Choose Abstractions",
+      caption: "Separate stable contracts from implementations where it adds value.",
+      layers: [
+        {
+          boxes: [
+            "PaymentProcessor",
+            "CardPaymentProcessor",
+            "UpiPaymentProcessor"
+          ]
+        },
+        {
+          boxes: [
+            "Service depends on the interface",
+            "Implementations realize the contract",
+            "Composition enables replacement"
+          ]
+        },
+        {
+          boxes: [
+            "Use abstractions for real variation",
+            "Avoid speculative interfaces"
+          ]
+        }
+      ]
+    },
+    {
+      title: "9. Protect Domain Rules",
+      caption: "Keep the object model capable of enforcing valid state.",
+      layers: [
+        {
+          boxes: [
+            "Private state",
+            "Controlled state transitions",
+            "Validation of invariants"
+          ]
+        },
+        {
+          boxes: [
+            "Prevent invalid order confirmation",
+            "Handle payment success and failure",
+            "Keep business rules out of controllers"
+          ]
+        }
+      ]
+    },
+    {
+      title: "10. Apply Design Principles",
+      caption: "Check the model for maintainability and sensible responsibilities.",
+      layers: [
+        {
+          boxes: [
+            "SRP: focused responsibilities",
+            "OCP: extension without unnecessary modification",
+            "LSP: valid behavioral substitutability",
+            "ISP: focused contracts",
+            "DIP: depend on abstractions"
+          ]
+        },
+        {
+          boxes: [
+            "Prefer composition for flexible behavior",
+            "Use inheritance for genuine is-a relationships",
+            "Avoid God classes and deep fragile hierarchies"
+          ]
+        }
+      ]
+    },
+    {
+      title: "11. Trace the Main Use Case",
+      caption: "Check that the classes can collaborate to complete the required workflow.",
+      layers: [
+        {
+          boxes: [
+            "Customer adds products to Cart",
+            "Cart contains CartItems",
+            "CheckoutService creates an Order",
+            "PaymentProcessor processes payment",
+            "Order transitions to the appropriate state"
+          ]
+        },
+        {
+          boxes: [
+            "Check responsibility ownership",
+            "Check relationship multiplicity",
+            "Check state transitions"
+          ]
+        }
+      ]
+    },
+    {
+      title: "12. Test Failure Scenarios",
+      caption: "A valid model must also account for important errors and edge cases.",
+      layers: [
+        {
+          boxes: [
+            "Payment declined",
+            "Insufficient inventory",
+            "Duplicate checkout request",
+            "Cancellation or refund",
+            "Invalid state transition"
+          ]
+        },
+        {
+          boxes: [
+            "Identify missing responsibilities",
+            "Clarify recovery and consistency rules",
+            "Update the model where necessary"
+          ]
+        }
+      ]
+    },
+    {
+      title: "13. Translate to Java",
+      caption: "Turn the model into suitable implementation structures.",
+      layers: [
+        {
+          boxes: [
+            "Classes → Java classes",
+            "Contracts → Java interfaces",
+            "Multiplicity → references or collections",
+            "Operations → methods",
+            "Constraints → validation and business rules"
+          ]
+        },
+        {
+          boxes: [
+            "Use persistence mappings where required",
+            "Do not assume UML alone enforces constraints"
+          ]
+        }
+      ]
+    },
+    {
+      title: "14. Final Design Review",
+      caption: "Explain the model and defend its important decisions.",
+      layers: [
+        {
+          boxes: [
+            "Are all required use cases supported?",
+            "Does every class have a clear responsibility?",
+            "Are relationships and multiplicities correct?",
+            "Are abstractions justified?",
+            "Are important edge cases covered?"
+          ]
+        },
+        {
+          boxes: [
+            "Explain one main flow",
+            "Explain one failure case",
+            "Justify the key trade-offs"
+          ]
+        }
+      ]
+    }
+  ]
+},
+"object-interaction-sequence-diagrams": {
+  topicId: "object-interaction-sequence-diagrams",
+  type: "stage-flow",
+  summary: "Model how runtime objects collaborate to execute a use case. Identify participants, arrange lifelines, show messages in time order, express alternatives and loops, account for failure paths, and validate the interaction against the class design.",
+  stages: [
+    {
+      title: "1. Select a Use Case",
+      caption: "Model one meaningful scenario rather than the whole application.",
+      layers: [
+        {
+          boxes: [
+            "Checkout",
+            "Booking",
+            "Login",
+            "Payment"
+          ]
+        },
+        {
+          boxes: [
+            "Identify the trigger",
+            "Define the expected result",
+            "Capture preconditions",
+            "Identify important failure outcomes"
+          ]
+        }
+      ]
+    },
+    {
+      title: "2. Identify Participants",
+      caption: "Choose the objects or components that collaborate in this scenario.",
+      layers: [
+        {
+          boxes: [
+            "Customer",
+            "CheckoutController",
+            "CheckoutService",
+            "PaymentProcessor",
+            "OrderRepository"
+          ]
+        },
+        {
+          boxes: [
+            "Use meaningful runtime participants",
+            "Avoid creating a participant for every method",
+            "Reuse the class diagram's responsibilities"
+          ]
+        }
+      ]
+    },
+    {
+      title: "3. Draw Lifelines",
+      caption: "Place participants horizontally and show their vertical lifelines.",
+      layers: [
+        {
+          boxes: [
+            "Participant A",
+            "Participant B",
+            "Participant C"
+          ]
+        },
+        {
+          boxes: [
+            "Vertical line = lifeline",
+            "Horizontal separation = participants",
+            "Top-to-bottom ordering = time"
+          ]
+        }
+      ]
+    },
+    {
+      title: "4. Establish Message Order",
+      caption: "Show the important operations in the order they occur.",
+      layers: [
+        {
+          boxes: [
+            "Customer → CheckoutController",
+            "CheckoutController → CheckoutService",
+            "CheckoutService → InventoryService",
+            "CheckoutService → PaymentProcessor"
+          ]
+        },
+        {
+          boxes: [
+            "Use meaningful operation names",
+            "Show important dependencies",
+            "Avoid unnecessary low-level calls"
+          ]
+        }
+      ]
+    },
+    {
+      title: "5. Show Execution and Responses",
+      caption: "Clarify nested calls and results that affect subsequent behavior.",
+      layers: [
+        {
+          boxes: [
+            "Activation bar = execution specification",
+            "Synchronous call = caller waits",
+            "Return message = response",
+            "Self-message = internal invocation"
+          ]
+        },
+        {
+          boxes: [
+            "PaymentResult",
+            "InventoryReservationResult",
+            "OrderStatus"
+          ]
+        }
+      ]
+    },
+    {
+      title: "6. Model Alternatives",
+      caption: "Represent mutually exclusive outcomes with conditional branches.",
+      layers: [
+        {
+          boxes: [
+            "alt [payment succeeds]",
+            "Confirm the order"
+          ]
+        },
+        {
+          boxes: [
+            "else [payment fails]",
+            "Record the appropriate failure or pending state"
+          ]
+        },
+        {
+          boxes: [
+            "Use guards to explain branch selection",
+            "Do not execute mutually exclusive paths together"
+          ]
+        }
+      ]
+    },
+    {
+      title: "7. Model Optional Behavior",
+      caption: "Represent interactions that occur only when a condition holds.",
+      layers: [
+        {
+          boxes: [
+            "opt [customer opted in]",
+            "Send notification"
+          ]
+        },
+        {
+          boxes: [
+            "Condition true → execute interaction",
+            "Condition false → skip interaction"
+          ]
+        }
+      ]
+    },
+    {
+      title: "8. Model Repetition",
+      caption: "Represent repeated interactions without drawing the same calls over and over.",
+      layers: [
+        {
+          boxes: [
+            "loop [for each order item]",
+            "Validate item",
+            "Check inventory"
+          ]
+        },
+        {
+          boxes: [
+            "Specify a meaningful guard",
+            "Bound retries when applicable",
+            "Show what happens when processing stops"
+          ]
+        }
+      ]
+    },
+    {
+      title: "9. Handle Validation Failures",
+      caption: "Show how invalid requests and business-rule violations affect the flow.",
+      layers: [
+        {
+          boxes: [
+            "Invalid request",
+            "Insufficient inventory",
+            "Unauthorized operation"
+          ]
+        },
+        {
+          boxes: [
+            "Identify the responsible validator",
+            "Return or propagate the appropriate failure",
+            "Prevent invalid state transitions"
+          ]
+        }
+      ]
+    },
+    {
+      title: "10. Handle External Failures",
+      caption: "Make remote dependency behavior explicit where correctness depends on it.",
+      layers: [
+        {
+          boxes: [
+            "Timeout",
+            "Connection failure",
+            "Rejected request",
+            "Unknown operation outcome"
+          ]
+        },
+        {
+          boxes: [
+            "Bound waiting time",
+            "Retry only when appropriate",
+            "Use idempotency for repeated side effects",
+            "Reconcile ambiguous payment results"
+          ]
+        }
+      ]
+    },
+    {
+      title: "11. Model Asynchronous Work",
+      caption: "Separate request acceptance from background processing.",
+      layers: [
+        {
+          boxes: [
+            "OrderService publishes OrderPlaced",
+            "Message broker accepts the event",
+            "NotificationConsumer processes the event"
+          ]
+        },
+        {
+          boxes: [
+            "Sender need not wait for processing",
+            "Account for delivery and processing failures",
+            "Handle duplicates where required",
+            "Consider eventual consistency"
+          ]
+        }
+      ]
+    },
+    {
+      title: "12. Keep Responsibilities Clear",
+      caption: "Ensure each participant performs the behavior it should own.",
+      layers: [
+        {
+          boxes: [
+            "Controller: request entry point",
+            "Application Service: workflow coordination",
+            "Domain Object: business invariants",
+            "Repository: persistence",
+            "External Adapter: provider integration"
+          ]
+        },
+        {
+          boxes: [
+            "Avoid God services",
+            "Avoid business logic in controllers",
+            "Use abstractions at meaningful boundaries"
+          ]
+        }
+      ]
+    },
+    {
+      title: "13. Validate Against the Class Diagram",
+      caption: "Check that every important message has a plausible owner and contract.",
+      layers: [
+        {
+          boxes: [
+            "Participants exist in the static model",
+            "Operations match responsibilities",
+            "Dependencies are justified",
+            "State transitions are valid"
+          ]
+        },
+        {
+          boxes: [
+            "Fix missing operations",
+            "Revise incorrect responsibilities",
+            "Update either model when the design changes"
+          ]
+        }
+      ]
+    },
+    {
+      title: "14. Review the Trade-Offs",
+      caption: "Discuss the implications of the chosen interaction design.",
+      layers: [
+        {
+          boxes: [
+            "Synchronous vs asynchronous",
+            "Direct calls vs orchestration",
+            "Simple flow vs detailed alternatives",
+            "Retries vs duplicate side effects"
+          ]
+        },
+        {
+          boxes: [
+            "Latency",
+            "Availability",
+            "Consistency",
+            "Complexity",
+            "Recoverability"
+          ]
+        }
+      ]
+    },
+    {
+      title: "15. Explain the Final Design",
+      caption: "Walk the interviewer through the normal flow and one important failure.",
+      layers: [
+        {
+          boxes: [
+            "Start with the triggering request",
+            "Explain the main message sequence",
+            "Describe key decisions",
+            "Show the result returned to the caller"
+          ]
+        },
+        {
+          boxes: [
+            "Trace one failure path",
+            "Explain important design choices",
+            "Confirm consistency with the class diagram"
+          ]
+        }
+      ]
+    }
+  ]
+},
+"lld-interview-approach": {
+  topicId: "lld-interview-approach",
+  type: "stage-flow",
+  summary: "A repeatable interview workflow that moves from requirements to domain modeling, class design, object interactions, edge-case validation, implementation decisions, and trade-off explanations.",
+  stages: [
+    {
+      title: "1. Understand the Problem",
+      caption: "Establish what you are actually being asked to design.",
+      layers: [
+        {
+          boxes: [
+            "Restate the problem",
+            "Identify the expected outcome",
+            "Clarify the scope"
+          ]
+        },
+        {
+          boxes: [
+            "Avoid premature coding",
+            "Avoid assumptions that change the design"
+          ]
+        }
+      ]
+    },
+    {
+      title: "2. Clarify Requirements",
+      caption: "Ask high-value questions and state reasonable assumptions.",
+      layers: [
+        {
+          boxes: [
+            "Functional requirements",
+            "Business rules",
+            "Constraints",
+            "Important edge cases"
+          ]
+        },
+        {
+          boxes: [
+            "What must the system support?",
+            "What is explicitly out of scope?",
+            "What assumptions are reasonable?"
+          ]
+        }
+      ]
+    },
+    {
+      title: "3. Identify Domain Objects",
+      caption: "Discover meaningful concepts from the requirements.",
+      layers: [
+        {
+          boxes: [
+            "Entities",
+            "Value Objects",
+            "Domain Services",
+            "Application Services"
+          ]
+        },
+        {
+          boxes: [
+            "Identity and lifecycle",
+            "State and behavior",
+            "Business rules",
+            "External boundaries"
+          ]
+        }
+      ]
+    },
+    {
+      title: "4. Assign Responsibilities",
+      caption: "Decide which object owns each behavior and piece of state.",
+      layers: [
+        {
+          boxes: [
+            "State ownership",
+            "Business invariants",
+            "Validation",
+            "Workflow coordination"
+          ]
+        },
+        {
+          boxes: [
+            "High cohesion",
+            "Low unnecessary coupling",
+            "Avoid God classes"
+          ]
+        }
+      ]
+    },
+    {
+      title: "5. Design the Class Model",
+      caption: "Define the core classes and their relationships.",
+      layers: [
+        {
+          boxes: [
+            "Class names",
+            "Important attributes",
+            "Operations",
+            "Visibility and types"
+          ]
+        },
+        {
+          boxes: [
+            "Association",
+            "Dependency",
+            "Inheritance",
+            "Realization",
+            "Aggregation and composition"
+          ]
+        }
+      ]
+    },
+    {
+      title: "6. Choose Abstractions",
+      caption: "Introduce interfaces and patterns only when they solve a real problem.",
+      layers: [
+        {
+          boxes: [
+            "Identify implementation variation",
+            "Define meaningful contracts",
+            "Use dependency injection where appropriate"
+          ]
+        },
+        {
+          boxes: [
+            "Apply SOLID thoughtfully",
+            "Prefer composition when appropriate",
+            "Avoid speculative abstraction"
+          ]
+        }
+      ]
+    },
+    {
+      title: "7. Explain the Class Diagram",
+      caption: "Communicate the structure before tracing runtime behavior.",
+      layers: [
+        {
+          boxes: [
+            "Core classes",
+            "Responsibilities",
+            "Relationships",
+            "Important multiplicities"
+          ]
+        },
+        {
+          boxes: [
+            "Justify key decisions",
+            "Explain ownership",
+            "Keep the diagram readable"
+          ]
+        }
+      ]
+    },
+    {
+      title: "8. Trace the Main Use Case",
+      caption: "Show how the objects collaborate to complete the workflow.",
+      layers: [
+        {
+          boxes: [
+            "Triggering request",
+            "Application service",
+            "Domain behavior",
+            "Persistence or external calls",
+            "Final result"
+          ]
+        },
+        {
+          boxes: [
+            "Sequence diagram",
+            "Message ordering",
+            "Relevant responses",
+            "State transitions"
+          ]
+        }
+      ]
+    },
+    {
+      title: "9. Validate Edge Cases",
+      caption: "Test the design mentally against important alternative outcomes.",
+      layers: [
+        {
+          boxes: [
+            "Invalid input",
+            "Resource unavailable",
+            "Operation rejected",
+            "Duplicate request"
+          ]
+        },
+        {
+          boxes: [
+            "Explicit failure behavior",
+            "Valid state transitions",
+            "Recovery or compensation where needed"
+          ]
+        }
+      ]
+    },
+    {
+      title: "10. Consider Concurrency",
+      caption: "Protect invariants when operations can overlap.",
+      layers: [
+        {
+          boxes: [
+            "Identify shared mutable state",
+            "Define the atomicity boundary",
+            "Choose a suitable protection mechanism"
+          ]
+        },
+        {
+          boxes: [
+            "Transactions",
+            "Conditional updates",
+            "Database constraints",
+            "Scoped synchronization"
+          ]
+        },
+        {
+          boxes: [
+            "Avoid unnecessary locks",
+            "Account for multiple application instances"
+          ]
+        }
+      ]
+    },
+    {
+      title: "11. Review SOLID and Patterns",
+      caption: "Improve the design where a real weakness exists.",
+      layers: [
+        {
+          boxes: [
+            "SRP: cohesive responsibility",
+            "OCP: justified extension",
+            "LSP: safe substitution",
+            "ISP: focused contracts",
+            "DIP: appropriate abstractions"
+          ]
+        },
+        {
+          boxes: [
+            "Identify the design pressure first",
+            "Use patterns when justified",
+            "Remove unnecessary complexity"
+          ]
+        }
+      ]
+    },
+    {
+      title: "12. Translate to Java",
+      caption: "Turn the model into an implementable design.",
+      layers: [
+        {
+          boxes: [
+            "Classes and interfaces",
+            "Collections and relationships",
+            "Methods and encapsulation",
+            "Exceptions and validation"
+          ]
+        },
+        {
+          boxes: [
+            "Persistence boundaries",
+            "Dependency injection",
+            "Unit testing",
+            "Concurrency mechanisms where required"
+          ]
+        }
+      ]
+    },
+    {
+      title: "13. Discuss Trade-Offs",
+      caption: "Explain why your design fits the stated constraints.",
+      layers: [
+        {
+          boxes: [
+            "Simplicity vs extensibility",
+            "Inheritance vs composition",
+            "Direct calls vs abstractions",
+            "Concurrency safety vs complexity"
+          ]
+        },
+        {
+          boxes: [
+            "What does the design improve?",
+            "What complexity does it introduce?",
+            "What would change if requirements changed?"
+          ]
+        }
+      ]
+    },
+    {
+      title: "14. Refine and Conclude",
+      caption: "Validate completeness and correct weaknesses before finalizing.",
+      layers: [
+        {
+          boxes: [
+            "Trace required use cases",
+            "Check class responsibilities",
+            "Verify invariants",
+            "Review failure paths"
+          ]
+        },
+        {
+          boxes: [
+            "Correct missing behavior",
+            "Remove unnecessary abstractions",
+            "Summarize the final design",
+            "Explain the main trade-offs"
+          ]
+        }
+      ]
+    }
+  ]
+},
+
+
+
 
 };
 

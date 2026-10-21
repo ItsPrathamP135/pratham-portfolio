@@ -61,7 +61,7 @@ const TopicPage = () => {
 
   return (
     <div className={`min-h-screen transition-colors ${darkMode ? "bg-gray-900" : "bg-gray-50"}`}>
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+      <div className="max-w-full mx-auto px-4 sm:px-6 lg:px-8 py-10">
         <Breadcrumbs
           items={[
             { label: "System Design", path: "/system-design" },
